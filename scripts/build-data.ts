@@ -336,8 +336,8 @@ const buildReconstructions = (raw: { reconstructions: Reconstruction[] }) => {
         label: `${r.name} · RECONSTRUCTION`,
         desc:
           `Published candidate route for the SATCOM-only final hours (18:22-00:19 UTC), ` +
-          `${r.points.length} path points ending on the 7th arc. A model consistent with ` +
-          `the satellite data, not a recorded track.`,
+          `${r.points.length} path points ending at or near the 7th arc. A model claimed ` +
+          `consistent with the satellite data by its authors, not a recorded track.`,
         citation: r.citation,
         synthesized: r.synthesizedFromParameters,
         confidence: 'modelled',
@@ -359,6 +359,8 @@ interface DebrisItem {
   status: string
   discoverer: string | null
   source: string
+  /** Why this piece matters to the investigation (optional, display-grade). */
+  significance?: string
 }
 
 const DEBRIS_STATUSES = new Set([
@@ -379,7 +381,8 @@ const buildDebris = (raw: { items: DebrisItem[] }) => {
         desc:
           `${d.partId}, found ${d.findDate} at ${d.locationName}` +
           `${d.discoverer ? ` by ${d.discoverer}` : ''}. ` +
-          `Official identification status: ${statusText}.`,
+          `Official identification status: ${statusText}.` +
+          `${d.significance ? ` ${d.significance}` : ''}`,
         confidence: 'recorded',
       },
     }

@@ -28,6 +28,7 @@
       "Speed of light: the paper writes the range equation with the symbol c and does not print a numerical value; use the standard c = 299792458 m/s (299.792458 km/ms).",
       "Aircraft altitude assumption: the paper notes a nominal cruising altitude of ~10,000 m (10 km) for the analysis; the widely used convention for the 7th (final, 00:19) arc is a 0-40,000 ft altitude band. No altitude is embedded in the BTO range equation itself (it constrains slant range to the satellite).",
       "BFO values are included per handshake for completeness but are NOT used to compute the BTO distance arcs.",
+      "unansweredCalls (added 2026-07-16): the two ground-initiated satellite phone calls are carried separately from the handshakes - they produced BFO measurements but no usable BTO, so they define no distance arc. Ashton et al. verbatim: MH370 'exchanged signalling messages with the Perth GES at 18:40 and 23:14 UTC related to unanswered ground to air telephone calls' which 'did give BFO measurements of 88 and 217 Hz respectively.' The 18:40 BFO is analytically decisive: the refined BFO model 'fits the northern path until 18:25, but switches to the southern path by 18:40', i.e. the turn south had already happened by the first call.",
       "Cross-check parameterization (DSTG book): expresses the same physics differently as T_nom = 499,962 us (nominal round trip via Perth GES) and a channel-dependent term T_channel = -4,283 us for R1200 messages, plus a log-on anomaly correction of N x 7,820 us. This is algebraically consistent with Ashton's single -495,679 us bias plus 4,600 us log-on offset but is a different bookkeeping; this file uses the Ashton et al. convention."
     ]
   },
@@ -161,6 +162,26 @@
       "excluded": true,
       "excludedReason": "Anomalously large BTO. Ashton et al. treat messages immediately following a Log-on Request as having unreliable delay (an artefact of the terminal switching channel/frequency during logon); this value is not used to define an arc. Not corrected by the 4600 us logon offset.",
       "satellite": { "frame": "ECEF-km", "x": 18178.4, "y": 38050.8, "z": 390.5, "vx": 0.00150, "vy": -0.00158, "vz": -0.08321, "satEpochUtc": "2014-03-08T00:20:00Z", "satNote": "nearest tabulated row (~23s after handshake)" }
+    }
+  ],
+  "unansweredCalls": [
+    {
+      "id": "call1",
+      "timeUtc": "2014-03-07T18:39:52Z",
+      "description": "First ground-to-air satellite telephone call (from Malaysia Airlines ops), unanswered; acknowledged by the aircraft's SATCOM terminal",
+      "bfoHz": 88,
+      "btoUsable": false,
+      "significance": "BFO consistent with the aircraft already established on a southerly track - the turn south occurred between 18:28 and 18:40 UTC",
+      "source": "Ashton et al. (2015); Wikipedia MH370 satellite communications (both fetched 2026-07-16)"
+    },
+    {
+      "id": "call2",
+      "timeUtc": "2014-03-07T23:13:58Z",
+      "description": "Second ground-to-air satellite telephone call, unanswered; acknowledged by the SATCOM terminal",
+      "bfoHz": 217,
+      "btoUsable": false,
+      "significance": "BFO consistent with continued southerly flight between the 22:41 and 00:11 handshake arcs",
+      "source": "Ashton et al. (2015); Wikipedia MH370 satellite communications (both fetched 2026-07-16)"
     }
   ],
   "crossChecks": [

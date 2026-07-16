@@ -159,8 +159,10 @@ describe('flight track geojson', () => {
 })
 
 describe('flight-epoch3.geojson (candidate reconstructions)', () => {
-  it('has at least two named reconstructions, all labeled modelled (FR-5.1.3)', () => {
-    expect(epoch3.features.length).toBeGreaterThanOrEqual(2)
+  it('has at least four named reconstructions, all labeled modelled (FR-5.1.3)', () => {
+    expect(epoch3.features.length).toBeGreaterThanOrEqual(4)
+    const ids = epoch3.features.map((f) => String(f.properties?.id)).sort()
+    expect(ids).toEqual(['ashton-2015', 'captio-2022', 'ugib-2020', 'wspr-gdtaaa-2023'])
     for (const f of epoch3.features) {
       expect(f.properties?.confidence).toBe('modelled')
       expect(String(f.properties?.label)).toContain('RECONSTRUCTION')
@@ -168,16 +170,29 @@ describe('flight-epoch3.geojson (candidate reconstructions)', () => {
     }
   })
 
-  it('every reconstruction starts in Epoch 3 (after last radar) and ends on the 7th arc region', () => {
+  it('every reconstruction starts in Epoch 3 (after last radar) and ends near the 7th arc in the SIO', () => {
     for (const f of epoch3.features) {
       const coords = lineCoords(f)
       const [, startLat] = coords[0]
       const [endLon, endLat] = coords[coords.length - 1]
       expect(startLat).toBeGreaterThan(5) // near the Strait of Malacca
-      expect(endLat).toBeLessThan(-30) // southern Indian Ocean
+      // Southern Indian Ocean termini: 34-36S near 93E for Ashton/UGIB/CAPTIO,
+      // 29.3S 99.9E for the contested WSPR/GDTAAA path (44 NM past the arc).
+      expect(endLat).toBeLessThan(-29)
       expect(endLon).toBeGreaterThan(90)
-      expect(endLon).toBeLessThan(96)
+      expect(endLon).toBeLessThan(101)
     }
+  })
+
+  it('pins each published terminus exactly as fetched from its paper', () => {
+    const endOf = (id: string) => {
+      const f = epoch3.features.find((x) => x.properties?.id === id)
+      return f ? lineCoords(f).at(-1) : undefined
+    }
+    expect(endOf('ashton-2015')).toEqual([93.0, -34.7])
+    expect(endOf('ugib-2020')).toEqual([93.7875, -34.2342])
+    expect(endOf('captio-2022')).toEqual([93.0167, -35.65])
+    expect(endOf('wspr-gdtaaa-2023')).toEqual([99.934, -29.317])
   })
 })
 
@@ -201,6 +216,28 @@ describe('debris.geojson', () => {
       : [0, 0]
     expect(lat).toBeCloseTo(-20.92, 1)
     expect(lon).toBeCloseTo(55.65, 1)
+  })
+
+  it('includes the post-2017 independent finds, never with an official-tier status', () => {
+    const post2017 = [
+      'broken-o-panel-antsiraka',
+      'nose-wheel-door-2019-antsiraka',
+      'tataly-trunnion-door-claim',
+      'spoiler-fragment-jeffreys-bay',
+      'no-step-2-evatra',
+    ]
+    for (const id of post2017) {
+      const f = debris.features.find((x) => x.properties?.id === id)
+      expect(f, `missing post-2017 debris ${id}`).toBeDefined()
+      // These carry no official Malaysian classification: only the editorial
+      // mappings 'likely' / 'unidentifiable' are permitted.
+      expect(['likely', 'unidentifiable']).toContain(f!.properties?.status)
+    }
+    // The disputed Tataly piece must carry the dispute in its description.
+    const tataly = debris.features.find(
+      (x) => x.properties?.id === 'tataly-trunnion-door-claim',
+    )
+    expect(String(tataly!.properties?.desc)).toMatch(/DISPUTED/i)
   })
 
   it('every find is in the western Indian Ocean basin (drift direction sanity)', () => {
@@ -289,9 +326,19 @@ describe('pois.geojson', () => {
 
   it('includes the load-bearing POIs', () => {
     const ids = new Set(pois.features.map((f) => f.properties?.id))
-    for (const required of ['igari', 'mekar', 'vampi']) {
+    for (const required of ['igari', 'mekar', 'vampi', 'kate-tee-sighting']) {
       const found = [...ids].some((id) => String(id).includes(required))
       expect(found, `missing POI ${required}`).toBe(true)
     }
+  })
+
+  it('the Kate Tee sighting sits at the published yacht position with the timing caveat', () => {
+    const kt = pois.features.find((f) => f.properties?.id === 'kate-tee-sighting')
+    expect(kt).toBeDefined()
+    const [lon, lat] = kt!.geometry.type === 'Point' ? kt!.geometry.coordinates : [0, 0]
+    // N 6°37.7' E 94°26.4' as published in the Gibson-assisted report.
+    expect(lat).toBeCloseTo(6.6283, 3)
+    expect(lon).toBeCloseTo(94.44, 2)
+    expect(String(kt!.properties?.oneLiner)).toContain('Uncorroborated')
   })
 })

@@ -26,8 +26,8 @@
     "lat": 6.16685,
     "lon": 102.293,
     "rank": 2,
-    "oneLiner": "MH370 crossed the peninsula coast just north of Kota Bharu at ~17:37 UTC on the turnback leg.",
-    "source": "OurAirports airports.csv; coast-crossing time FI p7 via Gilbert PDF (vridar.org), mh370search.com gives 17:36:43"
+    "oneLiner": "MH370 crossed the peninsula coast just north of Kota Bharu at ~17:37 UTC on the turnback leg; the airport's own primary radar recorded the pass at ~4 s resolution (last inbound return 17:36:54).",
+    "source": "OurAirports airports.csv; coast-crossing time FI p7 via Gilbert PDF (vridar.org), mh370search.com gives 17:36:43; PSR returns from ATC-Caption-2025 decode (fetched 2026-07-16)"
   },
   {
     "id": "igari",
@@ -116,8 +116,18 @@
     "lat": 6.984,
     "lon": 103.664,
     "rank": 1,
-    "oneLiner": "Transponder symbol disappeared from KL ATCC radar just past IGARI; end of Epoch 1.",
-    "source": "time FI p2 via Gilbert PDF (vridar.org); position interpolated ~42 s past IGARI on 059° toward BITOD (exact FI coords not verifiable from fetched sources)"
+    "oneLiner": "SSR position symbol dropped off the KL ATCC display 3.2 NM past IGARI (SIR Table 2.2C); end of Epoch 1. The last actual SSR return was ~30 s earlier: 17:20:42, 6.9518N 103.5978E (Kota Bharu radar head).",
+    "source": "time + '3.2 nm after passing IGARI': SIR Table 2.2C p.344 / FI p2; position interpolated ~42 s past IGARI on 059° toward BITOD (official reports publish no coordinate); last actual return from ATC-Caption-2025 KB_SSR decode (fetched 2026-07-16)"
+  },
+  {
+    "id": "kate-tee-sighting",
+    "name": "Kate Tee yacht sighting (~19:10-19:25 UTC)",
+    "category": "event",
+    "lat": 6.6283,
+    "lon": 94.44,
+    "rank": 3,
+    "oneLiner": "Sailor Kate Tee reported a low-flying aircraft 'that appeared to be descending' with 'black smoke coming from the tail' from her yacht at ~6°37.7'N 94°26.4'E; her report gives initial sighting ~19:10 UTC, closest approach ~19:20-19:25 (the UGIB 2020 model instead puts MH370's closest approach at 18:53:46). Uncorroborated eyewitness account.",
+    "source": "Position and quotes: saucysailoress.wordpress.com/2017/02/02/2299/ (Gibson-assisted report, fetched 2026-07-16, HTTP 200); timing caveat per the same report vs UGIB 2020 App. E.3.5"
   },
   {
     "id": "last-primary-radar",

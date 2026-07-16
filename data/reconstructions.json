@@ -21,6 +21,14 @@
       {
         "label": "OpenNav navigation database: waypoint coordinates BEDAX (5°21'51.58\"N 93°47'15.27\"E), IGOGU (7°31'01\"N 94°25'00\"E), ANOKO (7°08'10\"N 94°24'58\"E), fetched this session",
         "url": "https://opennav.com/waypoint/ID/BEDAX"
+      },
+      {
+        "label": "Godfrey, Coetzee, Maskell (31 August 2023), 'MH370 Flight Path Analysis - Case Study', 232 pp (Table 5 'WSPR Anomalous Links and MH370 Positions', pp.50-53), PDF fetched 2026-07-16 via mh370search.com/2023/08/31/mh370-case-study/",
+        "url": "https://www.mh370search.com/2023/08/31/mh370-case-study/"
+      },
+      {
+        "label": "Blelly, Marchand (CAPTIO, v4a 13 May 2022, upd. 24 June 2022), 'Analysis of Flight MH370 - From waypoint VAMPI until the estimated touch down', 21 pp (Tables 4, 9, 10), PDF fetched 2026-07-16",
+        "url": "https://www.mh370-caption.net/wp-content/uploads/Blelly-Analysis-of-Flight-MH370.pdf"
       }
     ],
     "notes": [
@@ -31,7 +39,10 @@
       "ugib-2020 synthesized/flagged items: (1) the IGOGU vertex has no published passage time - Appendix E.3.4 says the 90-deg turn began just after the first call ended (~18:41) and the descent ended 'about 2 minutes later' at 18:43:41 - so timeUtc is null there; (2) UGIB's FMT model computes bank-angle-limited turn arcs at 1-second resolution, while this polyline renders the four turns (IGOGU, 6NFIR, 6NFIRWEST, BEDAX) as sharp corners - the real modelled corners are rounded by a few NM; (3) the 18:53:46 closest approach to sailor Kate Tee and the 19:27:52 M300 airway crossing (FL212) are described in Appendix E but without published lat/lon rows, so they appear only in labels; (4) the 18:22:12 position is 6.547N 96.344E per Appendix E.1 text, while the Figure 3 label reads 6.578N 96.341E - the Appendix E value is used.",
       "ugib-2020 longitude convention: the paper states the SIO route runs at constant longitude E93.7875 (BEDAX longitude, pp.128, 135); Figure 3/4 labels round this to 93.788E. The exact 93.7875 is used for every point on the BEDAX meridian. BEDAX latitude 5.3643N (p.163 and OpenNav 5°21'51.58\"N agree). BEDAX passage time is 19:19:04 per Appendix E.3.8; main text p.25 says 'circa 19:19:16' - the Appendix E FMT-model value is used.",
       "ugib-2020 ground speeds (groundSpeedKt) and tracks are the published Figure 3/Figure 4 annotations (knots, deg true).",
-      "A third reconstruction (DSTG Bayesian / ATSB most-probable path) was not included: no coordinate table for it was fetched in this session, and no memory-only values are permitted in this file."
+      "A DSTG Bayesian / ATSB most-probable path was evaluated and excluded (checked again 2026-07-16 against the full Springer PDF, 124 pp): the book publishes the posterior distribution and most-probable paths only as raster figures (Figs 1.1, 10.1, 10.2) with no tabulated coordinates, so no memory-free vertices exist to plot.",
+      "wspr-gdtaaa-2023 (added 2026-07-16): all vertices are from Table 5 'WSPR Anomalous Links and MH370 Positions' (pp.50-53) of the fetched Godfrey/Coetzee/Maskell case-study PDF. The table is an embedded image; coordinates were transcribed from 200-dpi page renders in-session and spot-checked against the archive.org OCR mirror (first row 5.589117920N 99.165228400E and endpoint 29.128S 99.934E match). Rows with an anomalous link but no position fix are omitted. Treat as transcription-grade (typo risk on individual interior vertices), endpoint and arc-crossing rows double-checked.",
+      "wspr-gdtaaa-2023 methodology is CONTESTED: WSPR aircraft-scatter tracking is rejected by several MH370 analysts (Victor Iannello, Duncan Steel and others) and is not peer-reviewed; the 29.1S endpoint also contradicts the CSIRO drift and Boeing end-of-flight work favouring 33-36S. Included as a notable, clearly-flagged alternative hypothesis, not as an endorsed track. Its rows before 18:22:12 (18:01-18:14) overlap the recorded Epoch 2 window and are sliced off at build time.",
+      "captio-2022 (added 2026-07-16): vertices are the decimal-degree values printed in Tables 4 and 9 of the fetched CAPTIO v4a PDF; times converted from MYT (UTC+8) as printed. Known source typo: the 18:40 phone-call point is printed 94°37'37.44\"E in Table 4 vs 94°34'37.44\"E in Table 9, but the decimal 94.5771 is consistent in both and is used. The post-glide Point of Impact 35°39'S 93°01'E (Executive Summary p.1) is an un-timed terminal vertex. The CAPTIO endpoint region was substantially covered by the failed Ocean Infinity 2025-26 search."
     ]
   },
   "reconstructions": [
@@ -95,6 +106,110 @@
         { "timeUtc": "2014-03-07T22:41:22Z", "lat": -21.42, "lon": 93.7875, "trackDegTrue": 180, "groundSpeedKt": 478, "label": "5th arc, fuel 8,828 kg (Fig. 4)" },
         { "timeUtc": "2014-03-08T00:11:00Z", "lat": -33.365, "lon": 93.7875, "trackDegTrue": 180, "groundSpeedKt": 472, "label": "6th arc, fuel 483 kg (Fig. 4)" },
         { "timeUtc": "2014-03-08T00:19:29Z", "lat": -34.2342, "lon": 93.7875, "trackDegTrue": 180, "groundSpeedKt": 345, "label": "7th arc - Last Estimated Position S34.2342 E93.7875 (pp.52, 57); FL192, descending 4,304 fpm, fuel exhausted (Fig. 4)" }
+      ]
+    },
+    {
+      "id": "wspr-gdtaaa-2023",
+      "name": "WSPR/GDTAAA 2023 (Godfrey, Coetzee, Maskell) - contested",
+      "citation": {
+        "label": "Godfrey, Coetzee, Maskell (31 Aug 2023), 'MH370 Flight Path Analysis - Case Study', Table 5 pp.50-53; prime crash location p.5/p.49. Methodology contested (not peer-reviewed; rejected by Iannello, Steel and others)",
+        "url": "https://www.mh370search.com/2023/08/31/mh370-case-study/"
+      },
+      "synthesizedFromParameters": false,
+      "points": [
+        { "timeUtc": "2014-03-07T18:01:00Z", "lat": 5.58911792, "lon": 99.1652284, "label": "Table 5 row 1: last known position (overlaps recorded Epoch 2; sliced at build)" },
+        { "timeUtc": "2014-03-07T18:08:00Z", "lat": 5.413, "lon": 98.2 },
+        { "timeUtc": "2014-03-07T18:14:00Z", "lat": 5.728, "lon": 97.502 },
+        { "timeUtc": "2014-03-07T18:24:00Z", "lat": 6.142, "lon": 96.202, "label": "First WSPR position after the 18:22:12 last radar fix" },
+        { "timeUtc": "2014-03-07T18:28:00Z", "lat": 6.493, "lon": 95.871 },
+        { "timeUtc": "2014-03-07T18:46:00Z", "lat": 5.402, "lon": 94.36, "label": "Turn south west of Sumatra" },
+        { "timeUtc": "2014-03-07T18:54:00Z", "lat": 4.374, "lon": 94.146 },
+        { "timeUtc": "2014-03-07T19:16:00Z", "lat": 1.815, "lon": 94.732 },
+        { "timeUtc": "2014-03-07T19:28:00Z", "lat": 0.695, "lon": 93.729 },
+        { "timeUtc": "2014-03-07T19:38:00Z", "lat": -0.422, "lon": 93.732 },
+        { "timeUtc": "2014-03-07T19:40:00Z", "lat": -0.643, "lon": 93.906, "label": "Nearest position to the 2nd arc (19:41)" },
+        { "timeUtc": "2014-03-07T19:48:00Z", "lat": -1.42, "lon": 92.8 },
+        { "timeUtc": "2014-03-07T20:16:00Z", "lat": -4.3, "lon": 92.595 },
+        { "timeUtc": "2014-03-07T20:24:00Z", "lat": -5.226, "lon": 93.221 },
+        { "timeUtc": "2014-03-07T20:30:00Z", "lat": -6.008, "lon": 93.522 },
+        { "timeUtc": "2014-03-07T20:36:00Z", "lat": -6.836, "lon": 93.758 },
+        { "timeUtc": "2014-03-07T20:44:00Z", "lat": -7.815, "lon": 93.149, "label": "Nearest position to the 3rd arc (20:41)" },
+        { "timeUtc": "2014-03-07T20:54:00Z", "lat": -8.931, "lon": 93.984 },
+        { "timeUtc": "2014-03-07T21:10:00Z", "lat": -10.742, "lon": 93.917 },
+        { "timeUtc": "2014-03-07T21:14:00Z", "lat": -10.903, "lon": 93.397 },
+        { "timeUtc": "2014-03-07T21:16:00Z", "lat": -11.116, "lon": 93.544 },
+        { "timeUtc": "2014-03-07T21:38:00Z", "lat": -13.273, "lon": 94.127, "label": "Nearest position to the 4th arc (21:41)" },
+        { "timeUtc": "2014-03-07T21:44:00Z", "lat": -13.979, "lon": 93.934 },
+        { "timeUtc": "2014-03-07T21:50:00Z", "lat": -14.667, "lon": 93.405 },
+        { "timeUtc": "2014-03-07T21:56:00Z", "lat": -15.486, "lon": 93.673 },
+        { "timeUtc": "2014-03-07T22:02:00Z", "lat": -16.174, "lon": 94.205 },
+        { "timeUtc": "2014-03-07T22:08:00Z", "lat": -16.861, "lon": 94.741 },
+        { "timeUtc": "2014-03-07T22:10:00Z", "lat": -17.073, "lon": 94.941 },
+        { "timeUtc": "2014-03-07T22:16:00Z", "lat": -17.709, "lon": 95.545 },
+        { "timeUtc": "2014-03-07T22:22:00Z", "lat": -18.116, "lon": 94.331 },
+        { "timeUtc": "2014-03-07T22:30:00Z", "lat": -19.255, "lon": 94.33 },
+        { "timeUtc": "2014-03-07T22:32:00Z", "lat": -19.51, "lon": 94.48 },
+        { "timeUtc": "2014-03-07T22:36:00Z", "lat": -20.02, "lon": 94.781 },
+        { "timeUtc": "2014-03-07T22:42:00Z", "lat": -20.788, "lon": 94.319, "label": "Nearest position to the 5th arc (22:41)" },
+        { "timeUtc": "2014-03-07T22:44:00Z", "lat": -21.044, "lon": 94.164 },
+        { "timeUtc": "2014-03-07T22:48:00Z", "lat": -21.603, "lon": 94.358 },
+        { "timeUtc": "2014-03-07T22:52:00Z", "lat": -21.502, "lon": 94.972 },
+        { "timeUtc": "2014-03-07T22:58:00Z", "lat": -22.358, "lon": 95.172 },
+        { "timeUtc": "2014-03-07T23:00:00Z", "lat": -22.643, "lon": 95.239 },
+        { "timeUtc": "2014-03-07T23:02:00Z", "lat": -22.79, "lon": 94.97 },
+        { "timeUtc": "2014-03-07T23:04:00Z", "lat": -22.818, "lon": 94.651 },
+        { "timeUtc": "2014-03-07T23:08:00Z", "lat": -23.445, "lon": 94.633 },
+        { "timeUtc": "2014-03-07T23:12:00Z", "lat": -24.02, "lon": 94.783 },
+        { "timeUtc": "2014-03-07T23:14:00Z", "lat": -24.25, "lon": 94.987 },
+        { "timeUtc": "2014-03-07T23:18:00Z", "lat": -24.788, "lon": 95.279 },
+        { "timeUtc": "2014-03-07T23:20:00Z", "lat": -24.915, "lon": 95.553 },
+        { "timeUtc": "2014-03-07T23:22:00Z", "lat": -25.193, "lon": 95.679 },
+        { "timeUtc": "2014-03-07T23:26:00Z", "lat": -25.58, "lon": 96.184 },
+        { "timeUtc": "2014-03-07T23:28:00Z", "lat": -25.773, "lon": 96.438 },
+        { "timeUtc": "2014-03-07T23:30:00Z", "lat": -25.965, "lon": 96.692 },
+        { "timeUtc": "2014-03-07T23:32:00Z", "lat": -26.18, "lon": 96.935 },
+        { "timeUtc": "2014-03-07T23:36:00Z", "lat": -26.572, "lon": 97.443 },
+        { "timeUtc": "2014-03-07T23:38:00Z", "lat": -26.844, "lon": 97.595 },
+        { "timeUtc": "2014-03-07T23:40:00Z", "lat": -27.116, "lon": 97.747 },
+        { "timeUtc": "2014-03-07T23:44:00Z", "lat": -27.512, "lon": 98.258 },
+        { "timeUtc": "2014-03-07T23:46:00Z", "lat": -27.809, "lon": 98.202 },
+        { "timeUtc": "2014-03-07T23:48:00Z", "lat": -28.048, "lon": 98.412 },
+        { "timeUtc": "2014-03-07T23:50:00Z", "lat": -28.109, "lon": 98.711 },
+        { "timeUtc": "2014-03-07T23:54:00Z", "lat": -28.473, "lon": 99.267 },
+        { "timeUtc": "2014-03-07T23:56:00Z", "lat": -28.758, "lon": 99.151 },
+        { "timeUtc": "2014-03-07T23:58:00Z", "lat": -28.624, "lon": 98.916 },
+        { "timeUtc": "2014-03-08T00:00:00Z", "lat": -28.28, "lon": 98.862, "label": "Claimed holding-pattern region" },
+        { "timeUtc": "2014-03-08T00:04:00Z", "lat": -28.636, "lon": 99.421 },
+        { "timeUtc": "2014-03-08T00:12:00Z", "lat": -28.44, "lon": 98.32, "label": "Nearest position to the 6th arc (00:11)" },
+        { "timeUtc": "2014-03-08T00:16:00Z", "lat": -28.7, "lon": 98.82 },
+        { "timeUtc": "2014-03-08T00:20:00Z", "lat": -28.782, "lon": 99.362, "label": "Nearest position to the 7th arc (00:19)" },
+        { "timeUtc": "2014-03-08T00:26:00Z", "lat": -29.128, "lon": 99.934, "label": "Final WSPR position = prime crash location (29.128S 99.934E), 44.27 NM from the 7th arc" },
+        { "timeUtc": "2014-03-08T00:28:00Z", "lat": -29.317, "lon": 99.934, "label": "Last anomalous link; estimated impact ~00:27:51 UTC (Fig. 81)" }
+      ]
+    },
+    {
+      "id": "captio-2022",
+      "name": "CAPTIO 2022 (Blelly & Marchand) piloted ditching",
+      "citation": {
+        "label": "Blelly & Marchand (CAPTIO v4a, May/June 2022), 'Analysis of Flight MH370 - From waypoint VAMPI until the estimated touch down', Tables 4, 9, 10; Executive Summary p.1",
+        "url": "https://www.mh370-caption.net/wp-content/uploads/Blelly-Analysis-of-Flight-MH370.pdf"
+      },
+      "synthesizedFromParameters": false,
+      "points": [
+        { "timeUtc": "2014-03-07T18:13:00Z", "lat": 6.1692, "lon": 97.5836, "label": "VAMPI, last precisely known location (Table 4; overlaps recorded Epoch 2; sliced at build)" },
+        { "timeUtc": null, "lat": 6.5006, "lon": 96.4847, "label": "MEKAR (Table 4)" },
+        { "timeUtc": "2014-03-07T18:25:27Z", "lat": 6.6503, "lon": 96.0401, "label": "Arc 1 crossing (Table 4)" },
+        { "timeUtc": "2014-03-07T18:28:15Z", "lat": 6.7562, "lon": 95.687, "label": "Final major turn begins: heading 287 -> 223 (Table 4)" },
+        { "timeUtc": null, "lat": 6.0007, "lon": 94.6655, "label": "Waypoint POVUS (Table 4)" },
+        { "timeUtc": "2014-03-07T18:40:00Z", "lat": 5.7096, "lon": 94.5771, "label": "First unanswered SATCOM phone call; start of the constant Mach 0.706 southern leg (Tables 4, 9)" },
+        { "timeUtc": "2014-03-07T19:41:00Z", "lat": -1.5216, "lon": 93.6246, "label": "Arc 2 crossing (Table 9)" },
+        { "timeUtc": "2014-03-07T20:41:00Z", "lat": -8.758, "lon": 92.677, "label": "Arc 3 crossing (Table 9)" },
+        { "timeUtc": "2014-03-07T21:41:00Z", "lat": -16.1237, "lon": 92.3116, "label": "Arc 4 crossing (Table 9)" },
+        { "timeUtc": "2014-03-07T22:41:00Z", "lat": -23.4083, "lon": 92.376, "label": "Arc 5 crossing (Table 9)" },
+        { "timeUtc": "2014-03-08T00:11:00Z", "lat": -33.9139, "lon": 92.9006, "label": "Arc 6 crossing (Table 9)" },
+        { "timeUtc": "2014-03-08T00:19:29Z", "lat": -34.9149, "lon": 92.9649, "label": "Arc 7 crossing (Table 9)" },
+        { "timeUtc": "2014-03-08T00:19:38Z", "lat": -34.9415, "lon": 92.9687, "label": "Last powered point; piloted glide follows (Table 9)" },
+        { "timeUtc": null, "lat": -35.65, "lon": 93.0167, "label": "Northernmost probable Point of Impact after glide and controlled ditching, 35°39'S 93°01'E (Executive Summary p.1)" }
       ]
     }
   ]

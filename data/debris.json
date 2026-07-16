@@ -13,7 +13,10 @@
       "Coordinates: decimal latitudes/longitudes are taken verbatim from Godfrey's drift-analysis paper (Appendix D crosswire positions and body text) where available. Cross-validation: Godfrey's 'reporting day N after 8 March 2014' reproduces the MOT find date exactly for every overlapping item (e.g. day 753 = 2016-03-30 Rodrigues, day 835 = 2016-06-20 Pemba, day 1056 = 2017-01-27 Mpame).",
       "Items found at the same beach share that location's coordinate (Riake Beach -16.7869/49.9853, Antsiraka Beach -15.4469/49.7187, Saint Luce -24.7579/47.1925, Kosi Bay area -26.8938/32.8809); treat those as location-level, not item-level, precision.",
       "The MOT summary lists the flaperon location as 'Saint-Denis, La Reunion'; the find beach was in fact at Saint-Andre, Reunion, which is what the coordinate points to.",
-      "Month-only official dates are recorded as the first of the month and flagged in the item's source field. No coordinates were invented; where only a place name is published the coordinate is geocoded from the named beach/town and flagged as such."
+      "Month-only official dates are recorded as the first of the month and flagged in the item's source field. No coordinates were invented; where only a place name is published the coordinate is geocoded from the named beach/town and flagged as such.",
+      "BATCH 2 (researched 2026-07-16): items 35-39 are post-2017/independent finds verified against fetched sources this session (mh370.radiantphysics.com 2021-03-07 and 2022-12-18 posts, mh370search.com/2023/12/07/new-clues/, simpleflying.com and airlineratings.com Jul 2023 coverage, changingtimes.media 2025-12-11 - all HTTP 200). None has an official Malaysian classification; statuses are editorial mappings flagged per item ('likely' for independent expert identifications, 'unidentifiable' for tentative or disputed pieces). Find dates for these items are approximate (year- or report-level) and flagged; coordinates are region/town-level geocodes and flagged.",
+      "Godfrey's running tally (Dec 2023, fetched): '43 pieces of floating debris have been found and 41 delivered to the Malaysian authorities', 19 of them in Madagascar - so even this extended list is not exhaustive; unnamed fragments without published locations are not mapped.",
+      "significance fields (added 2026-07-16) carry the interpretive weight of a piece for the investigation, kept to statements verified in-session or to the repo's previously fetched reports (e.g. ATSB First Principles Review flap analysis)."
     ]
   },
   "items": [
@@ -26,8 +29,9 @@
       "partId": "Right flaperon (Boeing 777 part 657BB)",
       "status": "confirmed",
       "discoverer": "Johnny Begue (municipal beach-cleaning team)",
-      "examiner": "French judicial authority / DGA Toulouse; confirmed from MH370 on 3 September 2015",
-      "source": "MOT summary item 1 (status/date; lists location as 'Saint-Denis', actual beach at Saint-Andre); coordinates from Godfrey drift analysis (C2), beach-level precision"
+      "examiner": "French judicial authority / DGA Toulouse; PM Najib announced 'conclusively confirmed' 5 Aug 2015; Paris prosecutor stated certainty 3 Sep 2015 after serial-number match",
+      "source": "MOT summary item 1 (status/date; lists location as 'Saint-Denis', actual beach at Saint-Andre); coordinates from Godfrey drift analysis (C2), beach-level precision; confirmation dates verified 2026-07-16 (aljazeera.com 2015-08-05, worldofaviation.com 2015-09-03)",
+      "significance": "The first physical proof that MH370 ended in the Indian Ocean, found 508 days after the disappearance and ~4,000 km west of the search area. Its barnacle colonisation and flotation behaviour fed every subsequent drift model, and its damaged trailing edge opened the still-running debate over the aircraft's final configuration."
     },
     {
       "id": "flap-support-fairing-676eb-daghatane",
@@ -39,7 +43,8 @@
       "status": "almost-certain",
       "discoverer": "Liam Lotter",
       "examiner": "Malaysian ICAO Annex 13 Safety Investigation Team",
-      "source": "MOT summary item 2 (status/date/location); coordinates from Godfrey drift analysis (C5, Appendix D)"
+      "source": "MOT summary item 2 (status/date/location); coordinates from Godfrey drift analysis (C5, Appendix D)",
+      "significance": "Found by a South African teenager on holiday; the stencilled '676EB' matched the right wing No. 7 flap support fairing of a 777. One of the first African-shore finds that validated the drift-model prediction that debris would reach the western Indian Ocean rim by late 2015."
     },
     {
       "id": "no-step-stabiliser-panel-vilankulo",
@@ -51,7 +56,8 @@
       "status": "almost-certain",
       "discoverer": "Blaine Gibson",
       "examiner": "Malaysian ICAO Annex 13 Safety Investigation Team",
-      "source": "MOT summary item 3 (status/date/location); coordinates from Godfrey drift analysis (C8, Appendix D)"
+      "source": "MOT summary item 3 (status/date/location); coordinates from Godfrey drift analysis (C8, Appendix D)",
+      "significance": "The first find by Blaine Gibson, the independent searcher who went on to recover or receive more MH370 debris than anyone else. A tailplane skin panel: separation of horizontal-stabiliser parts is consistent with an energetic impact rather than an intact ditching."
     },
     {
       "id": "engine-nose-cowl-roy-mossel-bay",
@@ -63,7 +69,8 @@
       "status": "almost-certain",
       "discoverer": "Schalk Luckhoff (first sighting Dec 2015); recovered by Neels Kruger, March 2016",
       "examiner": "Malaysian ICAO Annex 13 Safety Investigation Team",
-      "source": "MOT summary item 4 (status; MOT lists 22 March 2016, the recovery date); first-sighting date and coordinates from Godfrey drift analysis (C4, Appendix D)"
+      "source": "MOT summary item 4 (status; MOT lists 22 March 2016, the recovery date); first-sighting date and coordinates from Godfrey drift analysis (C4, Appendix D)",
+      "significance": "Carries part of the Rolls-Royce logo ('Roy') in Malaysia Airlines' stencil style - an engine nacelle fragment, evidence that engine cowlings broke up, and the westernmost cluster of finds (South African south coast) matched drift-model timing."
     },
     {
       "id": "door-r1-stowage-closet-rodrigues",
@@ -135,7 +142,8 @@
       "status": "confirmed",
       "discoverer": "Tourists on a boat excursion (handed to tour guide 'Captain Rod'); found ~March 2016, reported 10 May 2016",
       "examiner": "ATSB (Canberra); identified to 9M-MRO via internal date stamp",
-      "source": "MOT summary item 10 (status; date is the reporting date); find circumstances and coordinates from Godfrey drift analysis (C12, Appendix D)"
+      "source": "MOT summary item 10 (status; date is the reporting date); find circumstances and coordinates from Godfrey drift analysis (C12, Appendix D)",
+      "significance": "One of only three officially confirmed pieces: a build-date stamp inside the flap section tied it uniquely to airframe 9M-MRO, not just to the 777 type."
     },
     {
       "id": "seat-back-trim-panel-riake",
@@ -147,7 +155,8 @@
       "status": "highly-likely",
       "discoverer": "Blaine Gibson",
       "examiner": "Malaysian ICAO Annex 13 Safety Investigation Team",
-      "source": "MOT summary item 11 (status/date/location); coordinates from Godfrey drift analysis (C15, Appendix D), location-level precision shared by all Riake Beach items"
+      "source": "MOT summary item 11 (status/date/location); coordinates from Godfrey drift analysis (C15, Appendix D), location-level precision shared by all Riake Beach items",
+      "significance": "A cabin-interior piece (the panel around a seat-back entertainment screen): interior items reaching the ocean surface imply the fuselage was breached in the impact - hard to reconcile with a gentle ditching."
     },
     {
       "id": "unidentified-part-riake-2016-06-06",
@@ -231,7 +240,8 @@
       "status": "highly-likely",
       "discoverer": "Blaine Gibson and local residents",
       "examiner": "Malaysian ICAO Annex 13 Safety Investigation Team",
-      "source": "MOT summary item 18 (status/date/location); shared Antsiraka coordinate from Godfrey drift analysis, location-level precision"
+      "source": "MOT summary item 18 (status/date/location); shared Antsiraka coordinate from Godfrey drift analysis, location-level precision",
+      "significance": "A nose-gear bay door fragment; landing-gear-area pieces later became central to the disputed 2022 'gear extended' claim (see the Tataly item). This piece is the officially catalogued one (SIR item 18)."
     },
     {
       "id": "right-outboard-flap-pemba",
@@ -243,7 +253,8 @@
       "status": "confirmed",
       "discoverer": "Local fishermen",
       "examiner": "ATSB (Canberra); part numbers linked to 9M-MRO",
-      "source": "MOT summary item 19 (status/date/location); coordinates from Godfrey drift analysis (C23; item was trapped in a sea cave at 5.056 S 39.868 E)"
+      "source": "MOT summary item 19 (status/date/location); coordinates from Godfrey drift analysis (C23; item was trapped in a sea cave at 5.056 S 39.868 E)",
+      "significance": "The largest piece recovered and analytically the most important: ATSB's examination concluded the flap was most likely retracted (not extended) when it separated, weighing against a controlled ditching - a key input to the First Principles Review's end-of-flight analysis and the 'within ~25 NM of the 7th arc' search constraint."
     },
     {
       "id": "wing-body-fairing-kosi-bay",
@@ -424,6 +435,71 @@
       "discoverer": "Local fisherman",
       "examiner": null,
       "source": "Godfrey drift analysis (C33, reported 20 August 2018 at the same Riake Beach location as six earlier items) - post-dates MOT April 2017 summary; status is Godfrey's grouping, no official classification"
+    },
+    {
+      "id": "broken-o-panel-antsiraka",
+      "findDate": "2019-01-01",
+      "lat": -16.4,
+      "lon": 49.85,
+      "locationName": "Antsiraka Peninsula South Beach, near Riake, Madagascar",
+      "partId": "'Broken O' panel, possibly vertical stabiliser skin near the rudder hinges",
+      "status": "unidentifiable",
+      "discoverer": "Blaine Gibson (reported 2019)",
+      "examiner": null,
+      "source": "mh370search.com 'New Clues' (7 Dec 2023, fetched 2026-07-16): tentatively 'possibly from the tail of MH370'; find location matched the UWA drift-model prediction. findDate is YEAR-ONLY (recorded as 1 Jan); coordinates are region-level (Antsiraka Peninsula, no precise coords published). No official classification",
+      "significance": "Tentative tail piece from the beach that produced more MH370 debris than any other; its arrival point was where the University of Western Australia drift model predicted tail debris would land."
+    },
+    {
+      "id": "nose-wheel-door-2019-antsiraka",
+      "findDate": "2019-01-01",
+      "lat": -16.4,
+      "lon": 49.85,
+      "locationName": "Antsiraka Peninsula, Madagascar",
+      "partId": "Probable nose landing gear door fragment (second nose-wheel-door item from this area)",
+      "status": "likely",
+      "discoverer": "Blaine Gibson (found 2019; a related piece retrieved from a fisherman's home 17 Nov 2022 - sources conflate the dates)",
+      "examiner": "Independent: Richard Godfrey report (coverage 29 Jul 2023) - lightning-strike protection, honeycomb structure, dimensions, paint and lettering consistent with 9M-MRO",
+      "source": "simpleflying.com and airlineratings.com (Jul 2023, fetched 2026-07-16); 'Official aviation authorities have yet to corroborate the findings'. findDate YEAR-ONLY; coordinates region-level. Status is an editorial mapping of the independent identification, no official classification",
+      "significance": "Independently attributed to 9M-MRO via manufacturing details; a second landing-gear-bay piece from the same peninsula as the official SIR item 18 nose gear door."
+    },
+    {
+      "id": "tataly-trunnion-door-claim",
+      "findDate": "2017-03-01",
+      "lat": -16.4,
+      "lon": 49.85,
+      "locationName": "Antsiraka Peninsula South Beach, Madagascar",
+      "partId": "Claimed left main landing gear trunnion door - identification DISPUTED, later reassessed as likely a flap/slat fragment",
+      "status": "unidentifiable",
+      "discoverer": "Washed ashore ~March 2014-2017, kept in fisherman Tataly's yard after tropical storm Fernando (Mar 2017); recovered by Blaine Gibson November 2022",
+      "examiner": "Godfrey & Gibson report 12 Dec 2022 (trunnion door, penetration damage, 'gear highly likely extended on impact'); REBUTTED by Iannello et al. 18 Dec 2022 ('wrong size... missing the through holes for the attachment brackets', wrong paint, possibly from the yacht Vestas Wind); Godfrey later: 'more likely a remnant of a flap or slat'",
+      "source": "mh370.radiantphysics.com/2022/12/18 and mh370search.com/2023/12/07/new-clues/ (both fetched 2026-07-16, HTTP 200). findDate is the approximate month it was noticed ashore (flagged); coordinates region-level. No official classification",
+      "significance": "Briefly headline news as claimed evidence that the landing gear was extended at impact (implying an active pilot to the end); the identification collapsed within a week and the 'gear extended' conclusion should NOT be treated as established. Kept here because the claim and its rebuttal are both part of the evidence record."
+    },
+    {
+      "id": "spoiler-fragment-jeffreys-bay",
+      "findDate": "2020-08-01",
+      "lat": -34.05,
+      "lon": 24.92,
+      "locationName": "Jeffreys Bay, Eastern Cape, South Africa",
+      "partId": "Right wing inboard spoiler fragment (spoiler #8 or #9)",
+      "status": "likely",
+      "discoverer": null,
+      "examiner": "Independent: Mike Exner & Don Thompson (published ~Mar 2021) - 'positively identified the part as either spoiler #8 or spoiler #9 from the right wing from a Boeing 777', almost certainly MH370",
+      "source": "mh370.radiantphysics.com/2021/03/07 (fetched 2026-07-16, HTTP 200). findDate MONTH-ONLY (recorded as the 1st); coordinates town-level geocode of Jeffreys Bay, flagged. Not officially confirmed by Malaysia; status is an editorial mapping of the independent identification",
+      "significance": "Its fracture pattern indicates the spoiler separated in flight during a high-speed descent - independent physical support for the BFO-derived rapid final descent and against a controlled glide/ditching."
+    },
+    {
+      "id": "no-step-2-evatra",
+      "findDate": "2025-12-11",
+      "lat": -25.0,
+      "lon": 47.0,
+      "locationName": "Near Evatra, southeast Madagascar",
+      "partId": "'NO STEP 2' - probable right-wing inboard leading-edge panel",
+      "status": "likely",
+      "discoverer": "Local residents (recognized long after washing ashore); publicised by Blaine Gibson",
+      "examiner": "Assessed from photographs by an anonymous senior British B777 captain: 'a high possibility that this is part of an inboard leading-edge panel from the right wing on 9M-MRO'; not physically examined by any authority",
+      "source": "changingtimes.media (11 Dec 2025, fetched 2026-07-16, HTTP 200). findDate is the REPORTING date (actual find date unknown); coordinates region-level (~25S 47E as published). No official classification; status is an editorial mapping",
+      "significance": "The most recent reported find (Dec 2025). Gibson argues a torn-off leading-edge panel further refutes the controlled-ditching theory; assessment is photo-only and unconfirmed."
     }
   ]
 }

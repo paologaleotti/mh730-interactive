@@ -42,7 +42,7 @@ export const LAYERS: LayerDef[] = [
     group: 'Flight path',
     // Spec §2: recorded, lower precision. Dashed styling conveys the lower
     // precision; the epistemic status stays "recorded".
-    desc: 'Primary radar track (recorded, lower precision), turnback → Strait of Malacca → last fix past MEKAR (17:21–18:22 UTC).',
+    desc: 'Primary radar track: military-derived turnback at IGARI + recorded Kota Bharu/Butterworth civil PSR returns → Strait of Malacca → last fix past MEKAR (17:21–18:22 UTC).',
     confidence: 'recorded',
     citation: {
       label: 'Malaysian SIR 2018; ATSB search-area definition',
@@ -54,7 +54,7 @@ export const LAYERS: LayerDef[] = [
     id: 'flight-epoch3',
     label: 'Epoch 3 · candidate reconstructions',
     group: 'Flight path',
-    desc: 'SATCOM-only period (18:25–00:19 UTC). No recorded positions; ≥2 named, cited reconstructions.',
+    desc: 'SATCOM-only period (18:25–00:19 UTC). No recorded positions; 4 named, cited reconstructions (Ashton 2015, UGIB 2020, CAPTIO 2022, WSPR 2023 — contested).',
     confidence: 'modelled',
     citation: {
       label: 'ATSB reports; UGIB 2020; independent groups',

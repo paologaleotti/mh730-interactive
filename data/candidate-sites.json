@@ -75,7 +75,7 @@
       },
       "methodology": "WSPR-based (Weak Signal Propagation Reporter): claimed detection and tracking of the aircraft via anomalies in amateur-radio propagation links (GDTAAA software), cross-referenced with Inmarsat arcs, fuel and drift analyses. DISPUTED METHODOLOGY: the physical basis (aircraft scatter detectable in global WSPR logs) is rejected by several MH370 analysts, including UGIB co-author Victor Iannello",
       "status": "unsearched",
-      "note": "About 43 NM east of the 7th arc at 29.1S per the repo arc model - outside every searched corridor; also lies in the latitude band contra-indicated by the CSIRO drift analysis (impact 'likely not north of 32S'). An earlier GDTAAA preliminary finding (30 Nov 2021) was 33.177S 95.300E, 6 NM east of the arc; the 29.128S location is the later refinement publicised 2021-2023."
+      "note": "About 43 NM east of the 7th arc at 29.1S per the repo arc model - outside every searched corridor; also lies in the latitude band contra-indicated by the CSIRO drift analysis (impact 'likely not north of 32S'). An earlier GDTAAA preliminary finding (30 Nov 2021) was 33.177S 95.300E, 6 NM east of the arc; the 29.128S location is the later refinement publicised 2021-2023. The full WSPR/GDTAAA candidate track is plotted as the wspr-gdtaaa-2023 Epoch 3 reconstruction. Still unsearched after the 2025-26 Ocean Infinity campaign, which targeted the 33-36S zone and ended Jan 2026 without a find (Godfrey's 2023 paper claims ~46% of his 70x40 NM crash area was previously searched)."
     },
     {
       "id": "inmarsat-2015-hotspot",

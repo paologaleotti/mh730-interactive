@@ -6,6 +6,7 @@
       "Wikipedia - 'Search for Malaysia Airlines Flight 370' and 'Malaysia Airlines Flight 370' (retrieved 2026-07-16; surface search progression narrative: 315,000 km2 ~2,600 km SW of Perth 18-27 Mar; moved 1,100 km NE on 28 Mar to 319,000 km2 ~1,850 km W of Perth; 217,000 km2 areas 1,060-2,100 km W of Learmonth from 4 Apr; ended 28 Apr 2014)",
       "Ocean Infinity weekly operational search updates 2018 (as tabulated in Wikipedia revision 852853710)",
       "Changing Times - 'Ocean Infinity resumes its search for MH370' (31 Dec 2025), https://changingtimes.media/2025/12/31/ocean-infinity-resumes-its-search-for-mh370/ and Victor Iannello, 'The Search for MH370 Continues into 2026', https://mh370.radiantphysics.com/2026/01/01/the-search-for-mh370-continues-into-2026/ (2025-26 zone: 15,000 km2 between latitudes 33 S and 36 S, wider off the 7th arc than previously searched)",
+      "Ocean Infinity - 'Conclusion of the search for Malaysian Airlines Flight MH370' (8 Mar 2026), https://oceaninfinity.com/news/conclusion-of-the-search-for-malaysian-airlines-flight-mh370/ (fetched 2026-07-16: departed search area 23 Jan 2026; 151 days at sea and >140,000 km2 mapped cumulatively since 2018); Malaysian MOT via AviationA2Z (10 Mar 2026): 7,571 km2 surveyed in the 2025-26 campaign, no wreckage identified; agreement extension to 30 Jun 2027 announced 1 Jul 2026 (airlive.net, 4 Jul 2026), ~7,428.54 km2 remaining",
       "Richard Godfrey / UGIB last estimated position 34.2342 S 93.7875 E, https://www.mh370search.com/2021/01/21/mh370-debris-drift-analysis/ (used to calibrate the 7th-arc model)"
     ],
     "notes": [
@@ -208,10 +209,10 @@
       "name": "Ocean Infinity underwater search 2025-26 (Armada fleet), 15,000 km2 refined zone",
       "kind": "underwater",
       "startDate": "2025-02-23",
-      "endDate": null,
+      "endDate": "2026-01-23",
       "areaKm2": 15000,
       "operator": "Ocean Infinity (Armada 78 06 in Feb-Apr 2025; Armada 86 05 from 30 Dec 2025), 'no find, no fee' agreement with Malaysian Ministry of Transport (~USD 70M on success)",
-      "outcome": "First phase Feb-Apr 2025 paused for southern winter; search resumed 30 December 2025 for a window of up to 55 days into 2026; aircraft not located as of retrieval date (2026-07-16)",
+      "outcome": "Concluded without a find: two phases (25-28 Mar 2025 and 31 Dec 2025 - 23 Jan 2026, vessel departed the search area 23 Jan 2026) surveyed 7,571 km2 of the ~15,000 km2 target zone over 28 operational days; 'none of the collected data identified the location of the wreckage' (Malaysian MOT). Agreement extended 1 Jul 2026 to 30 Jun 2027 with ~7,428 km2 remaining, operations paused for southern winter Nov 2026 - Apr 2027",
       "source": "Position backed by fetched statements: OI/MOT describe a 15,000 km2 zone between latitudes 33 S and 36 S, wider off the 7th arc than previously searched, in the region of the UGIB LEP (-34.2342, 93.7875); polygon is a computed-7th-arc band 36 S to 33 S with half-width scaled to enclose ~15,000 km2 - the real zone is irregular (hotspot boxes extending beyond the previously searched corridor), so this is a strong approximation",
       "polygon": [
         [91.466, -36.106],

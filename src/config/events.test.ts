@@ -38,8 +38,9 @@ describe('eventsForScale', () => {
 
   it('sorts even when the source order is unsorted (calendar list is out of order)', () => {
     const calendar = eventsForScale('calendar')
-    expect(calendar[0].id).toBe('atsb-search')
-    expect(calendar[1].id).toBe('flaperon')
+    expect(calendar[0].id).toBe('najib')
+    expect(calendar[1].id).toBe('atsb-search')
+    expect(calendar[2].id).toBe('accident')
   })
 
   it('the two scales partition the full event list', () => {
