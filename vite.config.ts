@@ -1,3 +1,4 @@
+/// <reference types="vitest/config" />
 import { defineConfig } from 'vite'
 import react, { reactCompilerPreset } from '@vitejs/plugin-react'
 import babel from '@rolldown/plugin-babel'
@@ -6,6 +7,14 @@ import babel from '@rolldown/plugin-babel'
 export default defineConfig({
   plugins: [
     react(),
-    babel({ presets: [reactCompilerPreset()] })
+    // include: restrict the React Compiler pass to JSX files; the default
+    // also feeds plain .ts (stores, configs) through babel for nothing.
+    babel({ presets: [reactCompilerPreset()], include: /\.[jt]sx(?:$|\?)/ })
   ],
+  test: {
+    // Pure-logic tests run in node; DOM tests opt into jsdom via a
+    // per-file `// @vitest-environment jsdom` comment.
+    environment: 'node',
+    globals: false,
+  },
 })

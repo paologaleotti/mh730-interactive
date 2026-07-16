@@ -1,0 +1,152 @@
+// Layer registry (P1/P2). Every data layer the globe will render is declared
+// here with its epistemic confidence and a primary-source citation. The map
+// engine and the layer panel both read from this single source of truth.
+
+export type Confidence = 'recorded' | 'derived' | 'modelled'
+
+export interface Citation {
+  label: string
+  url: string
+}
+
+export interface LayerDef {
+  id: string
+  label: string
+  group: string
+  desc: string
+  confidence?: Confidence
+  citation?: Citation
+  /** Visible on first load (before any URL override). */
+  defaultVisible: boolean
+}
+
+// Groups are display-ordered by first appearance below.
+export const LAYERS: LayerDef[] = [
+  {
+    id: 'flight-epoch1',
+    label: 'Epoch 1 · ADS-B track',
+    group: 'Flight path',
+    desc: 'Recorded civil positions, WMKK departure → IGARI (16:42–17:21 UTC).',
+    confidence: 'recorded',
+    citation: {
+      label: 'SIR 2018 / Factual Information 2015',
+      url: 'https://www.mot.gov.my/en/MH370%20Investigation%20Report/01-Report/MH370SafetyInvestigationReport.pdf',
+    },
+    defaultVisible: true,
+  },
+  {
+    id: 'flight-epoch2',
+    label: 'Epoch 2 · military radar',
+    group: 'Flight path',
+    // Spec §2: recorded, lower precision. Dashed styling conveys the lower
+    // precision; the epistemic status stays "recorded".
+    desc: 'Primary radar track (recorded, lower precision), turnback → Strait of Malacca → last fix past MEKAR (17:21–18:22 UTC).',
+    confidence: 'recorded',
+    citation: {
+      label: 'Malaysian SIR 2018; ATSB search-area definition',
+      url: 'https://www.atsb.gov.au/mh370',
+    },
+    defaultVisible: true,
+  },
+  {
+    id: 'flight-epoch3',
+    label: 'Epoch 3 · candidate reconstructions',
+    group: 'Flight path',
+    desc: 'SATCOM-only period (18:25–00:19 UTC). No recorded positions; ≥2 named, cited reconstructions.',
+    confidence: 'modelled',
+    citation: {
+      label: 'ATSB reports; UGIB 2020; independent groups',
+      url: 'https://mh370.radiantphysics.com/papers/',
+    },
+    defaultVisible: false,
+  },
+  {
+    id: 'arcs',
+    label: 'Inmarsat arcs (HS1–HS7)',
+    group: 'Satellite',
+    desc: 'Seven BTO-derived handshake rings. The 7th arc constrains every search area.',
+    confidence: 'derived',
+    citation: {
+      label: 'Ashton et al. 2015 (J. Navigation, open access)',
+      url: 'https://www.cambridge.org/core/journals/journal-of-navigation/article/search-for-mh370/D2D1C4C99E7BFDE35841CFD70081114A',
+    },
+    defaultVisible: true,
+  },
+  {
+    id: 'satellite',
+    label: 'Satellite sub-point (3F1)',
+    group: 'Satellite',
+    desc: 'Inmarsat-3F1 sub-satellite point with sightline to the active arc during playback.',
+    confidence: 'derived',
+    defaultVisible: false,
+  },
+  {
+    id: 'search',
+    label: 'Search areas',
+    group: 'Search history',
+    // Spec B.10: no official geometry exists; all polygons are digitized from
+    // report figures, so P2 classifies them as derived.
+    desc: '2014 surface phases, ATSB underwater zone, Ocean Infinity 2018 & 2025–26 (surveyed vs pending to Jun 2027). Digitized from report figures.',
+    confidence: 'derived',
+    citation: {
+      label: 'ATSB & MOT reports; Ocean Infinity releases',
+      url: 'https://www.atsb.gov.au/mh370-pages/updates/reports',
+    },
+    defaultVisible: true,
+  },
+  {
+    id: 'bathymetry',
+    label: 'Bathymetry (seabed)',
+    group: 'Seabed',
+    desc: 'Hillshaded, hypsometric seabed. Phase 1 survey footprint at native resolution; global grid fills gaps.',
+    confidence: 'recorded',
+    citation: {
+      label: 'Geoscience Australia MH370 release; GEBCO 2025',
+      url: 'https://www.ga.gov.au/about/projects/marine/mh370-data-release',
+    },
+    defaultVisible: false,
+  },
+  {
+    id: 'debris',
+    label: 'Recovered debris',
+    group: 'Debris & drift',
+    desc: '~30+ recovered items at documented find locations, styled by confirmation status.',
+    confidence: 'recorded',
+    citation: {
+      label: 'MOT debris examination reports',
+      url: 'https://www.mot.gov.my/en/Laporan%20MH%20370/Debris%20Examination%20Reports%20-%2028Feb2017.pdf',
+    },
+    defaultVisible: true,
+  },
+  {
+    id: 'drift',
+    label: 'Drift modelling',
+    group: 'Debris & drift',
+    desc: 'Modelled oceanographic drift trajectories from candidate 7th-arc origins.',
+    confidence: 'modelled',
+    citation: {
+      label: 'CSIRO drift studies for ATSB',
+      url: 'http://www.marine.csiro.au/~griffin/MH370/',
+    },
+    defaultVisible: false,
+  },
+  {
+    id: 'poi',
+    label: 'Points of interest & labels',
+    group: 'Reference',
+    desc: 'Airports, waypoints, event markers, handshake labels, seafloor features, hydroacoustic stations.',
+    defaultVisible: true,
+  },
+]
+
+export const LAYER_GROUPS: string[] = [...new Set(LAYERS.map((l) => l.group))]
+
+export const DEFAULT_LAYER_VIS: Record<string, boolean> = Object.fromEntries(
+  LAYERS.map((l) => [l.id, l.defaultVisible]),
+)
+
+export const CONFIDENCE_META: Record<Confidence, { label: string; hint: string }> = {
+  recorded: { label: 'RECORDED', hint: 'Measured / instrument data' },
+  derived: { label: 'DERIVED', hint: 'Computed from recorded data' },
+  modelled: { label: 'MODELLED', hint: 'Simulated or reconstructed, illustrative' },
+}

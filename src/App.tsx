@@ -1,121 +1,65 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { useEffect } from 'react'
+import { GlobeMap } from './map/globe-map'
+import { TopBar } from './ui/top-bar'
+import { LayerPanel } from './ui/layer-panel'
+import { Timeline } from './ui/timeline'
+import { CursorReadout } from './ui/cursor-readout'
+import { Database } from './ui/database'
+import { ClockDriver } from './state/clock-driver'
+import { ErrorBoundary } from './ui/error-boundary'
+import { startUrlSync } from './state/url'
+import { useView } from './state/view'
 
-function App() {
-  const [count, setCount] = useState(0)
+const BasemapBanner = () => {
+  const degraded = useView((s) => s.basemapDegraded)
+  if (!degraded) return null
+  return (
+    <div className="basemap-banner" role="status">
+      PRIMARY BASEMAP UNREACHABLE · using fallback. Check ad-blocker / proxy for
+      tiles.openfreemap.org
+    </div>
+  )
+}
+
+const App = () => {
+  const mode = useView((s) => s.mode)
+  const panelOpen = useView((s) => s.panelOpen)
+  const onMap = mode !== 'database'
+  const hasTimeline = mode === 'flight'
+  useEffect(() => startUrlSync(), [])
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <div
+      className="app"
+      data-panel={panelOpen && onMap ? 'open' : 'closed'}
+      data-timeline={hasTimeline ? 'on' : 'off'}
+    >
+      {/* The map stays mounted in database mode (display: none) so switching
+          back is instant and the WebGL context survives. */}
+      <div className="map-wrap" style={{ display: onMap ? undefined : 'none' }}>
+        <ErrorBoundary>
+          <GlobeMap />
+        </ErrorBoundary>
+      </div>
 
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
+      {onMap && (
+        <div className="frame" aria-hidden="true">
+          <span className="corner tl" />
+          <span className="corner tr" />
+          <span className="corner bl" />
+          <span className="corner br" />
         </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+      )}
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
+      <TopBar />
+      {onMap && <BasemapBanner />}
+      {onMap && <LayerPanel />}
+      {onMap && <CursorReadout />}
+      {hasTimeline && <Timeline />}
+      {mode === 'database' && <Database />}
+
+      <ClockDriver />
+    </div>
   )
 }
 
