@@ -18,6 +18,8 @@ export interface LayerDef {
   citation?: Citation
   /** Visible on first load (before any URL override). */
   defaultVisible: boolean
+  /** Declared in the spec but not yet rendered; toggle disabled in the UI. */
+  planned?: boolean
 }
 
 // Groups are display-ordered by first appearance below.
@@ -79,6 +81,7 @@ export const LAYERS: LayerDef[] = [
     desc: 'Inmarsat-3F1 sub-satellite point with sightline to the active arc during playback.',
     confidence: 'derived',
     defaultVisible: false,
+    planned: true,
   },
   {
     id: 'search',
@@ -119,6 +122,18 @@ export const LAYERS: LayerDef[] = [
     defaultVisible: true,
   },
   {
+    id: 'candidate-sites',
+    label: 'Candidate crash sites',
+    group: 'Debris & drift',
+    desc: 'Published candidate impact locations from named analyses (UGIB, CSIRO drift, ATSB review, WSPR). All modelled.',
+    confidence: 'modelled',
+    citation: {
+      label: 'UGIB 2020; CSIRO; ATSB; mh370search.com',
+      url: 'https://mh370.radiantphysics.com/papers/',
+    },
+    defaultVisible: true,
+  },
+  {
     id: 'drift',
     label: 'Drift modelling',
     group: 'Debris & drift',
@@ -129,6 +144,7 @@ export const LAYERS: LayerDef[] = [
       url: 'http://www.marine.csiro.au/~griffin/MH370/',
     },
     defaultVisible: false,
+    planned: true,
   },
   {
     id: 'poi',

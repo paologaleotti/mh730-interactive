@@ -1,0 +1,182 @@
+{
+  "meta": {
+    "retrieved": "2026-07-16",
+    "sources": [
+      {
+        "label": "Inmarsat SATCOM log (validated CSV conversion of released PDF), davetaz/mh370-data, mh370-post_take_off.csv",
+        "url": "https://raw.githubusercontent.com/davetaz/mh370-data/master/mh370-post_take_off.csv"
+      },
+      {
+        "label": "Inmarsat SATCOM log source PDF (Malaysia/Inmarsat release), davetaz/mh370-data",
+        "url": "https://github.com/davetaz/mh370-data/blob/master/MH370%20Data%20Communication%20Logs.pdf"
+      },
+      {
+        "label": "Ashton, Bruce, Colledge, Dickinson, 'The Search for MH370', Journal of Navigation 68(1), 2015 (open access, CC-BY), official Cambridge PDF",
+        "url": "https://www.cambridge.org/core/services/aop-cambridge-core/content/view/D2D1C4C99E7BFDE35841CFD70081114A/S037346331400068Xa.pdf/the-search-for-mh370.pdf"
+      },
+      {
+        "label": "DSTG, 'Bayesian Methods in the Search for MH370' (Springer, open access) - cross-check of BTO parameterization",
+        "url": "https://link.springer.com/content/pdf/10.1007/978-981-10-0379-0.pdf"
+      }
+    ],
+    "notes": [
+      "All 7 handshake BTO/BFO values and UTC timestamps were read from the davetaz/mh370-data CSV (a table-extraction of the officially released Inmarsat communication log PDF). The measured BTO values were independently cross-checked against the values reproduced verbatim in Ashton et al. (2015): all matched exactly.",
+      "Three literature sanity anchors all matched the CSV exactly: 18:25:27 raw BTO = 17120 us; 00:19:29 BTO = 23000 us; 00:19:37 BTO = 49660 us.",
+      "CSV timestamps carry sub-second precision (e.g. 18:25:27.421). The 'timeUtc' field is rounded to the whole second matching the literature convention; 'timeUtcExact' preserves the CSV sub-second value.",
+      "IMPORTANT (satellite positions): Ashton et al. Table 4 tabulates the Inmarsat-3F1 ECEF position/velocity only at ROUNDED clock times (18:25:00, 19:40:00, 20:40:00, 21:40:00, 22:40:00, 00:10:00, 00:20:00), NOT at the exact handshake epochs. For precise arc computation you MUST interpolate the full ephemeris table (field 'satelliteEphemeris') to each exact handshake time. Each handshake's 'satellite' field below carries the NEAREST tabulated row (see 'satEpochUtc' and 'satNote'), which is a convenience only, not the interpolated position.",
+      "The satellite ephemeris and Perth GES ECEF coordinates in Ashton et al. are quoted to only 0.1 km (position) / 1e-5 km/s (velocity) and 0.1 deg (GES lat/lon); higher-precision Inmarsat station-keeping ephemeris was not published. Perth GES altitude is not stated; the paper uses an ellipsoidal Earth model.",
+      "Speed of light: the paper writes the range equation with the symbol c and does not print a numerical value; use the standard c = 299792458 m/s (299.792458 km/ms).",
+      "Aircraft altitude assumption: the paper notes a nominal cruising altitude of ~10,000 m (10 km) for the analysis; the widely used convention for the 7th (final, 00:19) arc is a 0-40,000 ft altitude band. No altitude is embedded in the BTO range equation itself (it constrains slant range to the satellite).",
+      "BFO values are included per handshake for completeness but are NOT used to compute the BTO distance arcs.",
+      "Cross-check parameterization (DSTG book): expresses the same physics differently as T_nom = 499,962 us (nominal round trip via Perth GES) and a channel-dependent term T_channel = -4,283 us for R1200 messages, plus a log-on anomaly correction of N x 7,820 us. This is algebraically consistent with Ashton's single -495,679 us bias plus 4,600 us log-on offset but is a different bookkeeping; this file uses the Ashton et al. convention."
+    ]
+  },
+  "gesPerth": {
+    "lat": -31.8,
+    "lon": 115.9,
+    "altM": null,
+    "ecefKm": { "x": -2368.8, "y": 4881.1, "z": -3342.0 },
+    "source": "Ashton et al. (2015) Table 2",
+    "note": "Perth Inmarsat GES. Altitude not published; paper uses ellipsoidal Earth model. Lat/lon quoted to 0.1 deg."
+  },
+  "btoModel": {
+    "equation": "Range(satellite to aircraft) = c * (BTO - bias) / 2 - Range(satellite to Perth GES)",
+    "equationVerbatim": "The range from the satellite to the aircraft is c*(BTO - bias)/2 minus the range from the satellite to the Perth GES, where c is the speed of light and BTO is the measured burst timing offset in seconds.",
+    "biasUs": -495679,
+    "biasNote": "Verbatim: 'The mean bias of -495,679 us was then used to predict the path length.' Determined from 17 pre-flight calibration measurements (per-measurement biases ranged -495,658 to -495,738 us). With this sign convention, (BTO - bias) adds ~495,679 us to the measured BTO.",
+    "logonCorrectionUs": 4600,
+    "logonCorrectionNote": "Verbatim: 'Each power up sequence starts with a Logon Request message that has been found to have a fixed offset of 4600 us relative to the LOI message exchange.' Corrected BTO = measured BTO - 4600 for Log-on Request (0x10) messages. This yields the paper's stated corrected values of 12520 us (18:25:27) and 18400 us (00:19:29).",
+    "cLightMps": 299792458,
+    "cLightNote": "Standard speed of light; paper writes the equation with symbol c and does not print a numeric value.",
+    "specialCase_001937": "The 00:19:37 Log-on/Log-off Acknowledge (0x15) message that follows the 00:19:29 Log-on Request has an anomalously large BTO (49660 us) and is NOT corrected by the 4600 us offset. Ashton et al. treat the messages subsequent to a logon request as having unreliable delay (an artefact of the terminal switching channel/frequency during logon) and exclude them from the arc analysis. See the 'anomalous' handshake entry (excluded: true).",
+    "notes": "Only Log-on Request (0x10) messages get the -4600 us correction. The five interrogation-response handshakes (0x15 Log-on/Log-off Acknowledge at 19:41-00:11) use the measured BTO directly with no correction."
+  },
+  "satelliteEphemeris": {
+    "frame": "ECEF (Earth-Centred Earth-Fixed)",
+    "positionUnit": "km",
+    "velocityUnit": "km/s",
+    "source": "Ashton et al. (2015) Table 4, 'Satellite Location and Velocity (ECEF)' - verbatim; tabulated at rounded clock times, interpolate to exact handshake epochs",
+    "satellite": "Inmarsat-3F1 (IOR, 64.5 E nominal)",
+    "rows": [
+      { "timeUtc": "2014-03-07T16:30:00Z", "x": 18122.9, "y": 38080.0, "z": 828.5,  "vx": 0.00216, "vy": -0.00107, "vz": 0.06390 },
+      { "timeUtc": "2014-03-07T16:45:00Z", "x": 18124.8, "y": 38079.0, "z": 884.2,  "vx": 0.00212, "vy": -0.00114, "vz": 0.05980 },
+      { "timeUtc": "2014-03-07T16:55:00Z", "x": 18126.1, "y": 38078.3, "z": 919.2,  "vx": 0.00209, "vy": -0.00118, "vz": 0.05693 },
+      { "timeUtc": "2014-03-07T17:05:00Z", "x": 18127.3, "y": 38077.6, "z": 952.5,  "vx": 0.00206, "vy": -0.00120, "vz": 0.05395 },
+      { "timeUtc": "2014-03-07T18:25:00Z", "x": 18136.7, "y": 38071.8, "z": 1148.5, "vx": 0.00188, "vy": -0.00117, "vz": 0.02690 },
+      { "timeUtc": "2014-03-07T19:40:00Z", "x": 18145.1, "y": 38067.0, "z": 1206.3, "vx": 0.00189, "vy": -0.00092, "vz": -0.00148 },
+      { "timeUtc": "2014-03-07T20:40:00Z", "x": 18152.1, "y": 38064.0, "z": 1159.7, "vx": 0.00200, "vy": -0.00077, "vz": -0.02422 },
+      { "timeUtc": "2014-03-07T21:40:00Z", "x": 18159.5, "y": 38061.3, "z": 1033.8, "vx": 0.00212, "vy": -0.00076, "vz": -0.04531 },
+      { "timeUtc": "2014-03-07T22:40:00Z", "x": 18167.2, "y": 38058.3, "z": 837.2,  "vx": 0.00211, "vy": -0.00096, "vz": -0.06331 },
+      { "timeUtc": "2014-03-08T00:10:00Z", "x": 18177.5, "y": 38051.7, "z": 440.0,  "vx": 0.00160, "vy": -0.00151, "vz": -0.08188 },
+      { "timeUtc": "2014-03-08T00:20:00Z", "x": 18178.4, "y": 38050.8, "z": 390.5,  "vx": 0.00150, "vy": -0.00158, "vz": -0.08321 }
+    ]
+  },
+  "handshakes": [
+    {
+      "id": "hs1",
+      "timeUtc": "2014-03-07T18:25:27Z",
+      "timeUtcExact": "2014-03-07T18:25:27.421Z",
+      "messageType": "0x10 - Log-on Request (ISU)/Log-on Flight Information (SSU)",
+      "btoRawUs": 17120,
+      "btoCorrectedUs": 12520,
+      "isLogon": true,
+      "bfoHz": 142,
+      "satellite": { "frame": "ECEF-km", "x": 18136.7, "y": 38071.8, "z": 1148.5, "vx": 0.00188, "vy": -0.00117, "vz": 0.02690, "satEpochUtc": "2014-03-07T18:25:00Z", "satNote": "nearest tabulated row (27s before handshake); interpolate for precision" }
+    },
+    {
+      "id": "hs2",
+      "timeUtc": "2014-03-07T19:41:03Z",
+      "timeUtcExact": "2014-03-07T19:41:02.906Z",
+      "messageType": "0x15 - Log-on/Log-off Acknowledge (response to Log-on Interrogation)",
+      "btoRawUs": 11500,
+      "btoCorrectedUs": 11500,
+      "isLogon": false,
+      "bfoHz": 111,
+      "satellite": { "frame": "ECEF-km", "x": 18145.1, "y": 38067.0, "z": 1206.3, "vx": 0.00189, "vy": -0.00092, "vz": -0.00148, "satEpochUtc": "2014-03-07T19:40:00Z", "satNote": "nearest tabulated row (~63s before handshake); interpolate for precision" }
+    },
+    {
+      "id": "hs3",
+      "timeUtc": "2014-03-07T20:41:05Z",
+      "timeUtcExact": "2014-03-07T20:41:04.904Z",
+      "messageType": "0x15 - Log-on/Log-off Acknowledge (response to Log-on Interrogation)",
+      "btoRawUs": 11740,
+      "btoCorrectedUs": 11740,
+      "isLogon": false,
+      "bfoHz": 141,
+      "satellite": { "frame": "ECEF-km", "x": 18152.1, "y": 38064.0, "z": 1159.7, "vx": 0.00200, "vy": -0.00077, "vz": -0.02422, "satEpochUtc": "2014-03-07T20:40:00Z", "satNote": "nearest tabulated row (~65s before handshake); interpolate for precision" }
+    },
+    {
+      "id": "hs4",
+      "timeUtc": "2014-03-07T21:41:27Z",
+      "timeUtcExact": "2014-03-07T21:41:26.905Z",
+      "messageType": "0x15 - Log-on/Log-off Acknowledge (response to Log-on Interrogation)",
+      "btoRawUs": 12780,
+      "btoCorrectedUs": 12780,
+      "isLogon": false,
+      "bfoHz": 168,
+      "satellite": { "frame": "ECEF-km", "x": 18159.5, "y": 38061.3, "z": 1033.8, "vx": 0.00212, "vy": -0.00076, "vz": -0.04531, "satEpochUtc": "2014-03-07T21:40:00Z", "satNote": "nearest tabulated row (~87s before handshake); interpolate for precision" }
+    },
+    {
+      "id": "hs5",
+      "timeUtc": "2014-03-07T22:41:22Z",
+      "timeUtcExact": "2014-03-07T22:41:21.906Z",
+      "messageType": "0x15 - Log-on/Log-off Acknowledge (response to Log-on Interrogation)",
+      "btoRawUs": 14540,
+      "btoCorrectedUs": 14540,
+      "isLogon": false,
+      "bfoHz": 204,
+      "satellite": { "frame": "ECEF-km", "x": 18167.2, "y": 38058.3, "z": 837.2, "vx": 0.00211, "vy": -0.00096, "vz": -0.06331, "satEpochUtc": "2014-03-07T22:40:00Z", "satNote": "nearest tabulated row (~82s before handshake); interpolate for precision" }
+    },
+    {
+      "id": "hs6",
+      "timeUtc": "2014-03-08T00:11:00Z",
+      "timeUtcExact": "2014-03-08T00:10:59.928Z",
+      "messageType": "0x15 - Log-on/Log-off Acknowledge (response to Log-on Interrogation)",
+      "btoRawUs": 18040,
+      "btoCorrectedUs": 18040,
+      "isLogon": false,
+      "bfoHz": 252,
+      "satellite": { "frame": "ECEF-km", "x": 18177.5, "y": 38051.7, "z": 440.0, "vx": 0.00160, "vy": -0.00151, "vz": -0.08188, "satEpochUtc": "2014-03-08T00:10:00Z", "satNote": "nearest tabulated row (~60s before handshake); interpolate for precision" }
+    },
+    {
+      "id": "hs7",
+      "timeUtc": "2014-03-08T00:19:29Z",
+      "timeUtcExact": "2014-03-08T00:19:29.416Z",
+      "messageType": "0x10 - Log-on Request (ISU)/Log-on Flight Information (SSU)",
+      "btoRawUs": 23000,
+      "btoCorrectedUs": 18400,
+      "isLogon": true,
+      "bfoHz": 182,
+      "satellite": { "frame": "ECEF-km", "x": 18178.4, "y": 38050.8, "z": 390.5, "vx": 0.00150, "vy": -0.00158, "vz": -0.08321, "satEpochUtc": "2014-03-08T00:20:00Z", "satNote": "nearest tabulated row (~31s after handshake); interpolate between 00:10:00 and 00:20:00 for precision" }
+    },
+    {
+      "id": "anomalous",
+      "timeUtc": "2014-03-08T00:19:37Z",
+      "timeUtcExact": "2014-03-08T00:19:37.443Z",
+      "messageType": "0x15 - Log-on/Log-off Acknowledge (subsequent to 00:19:29 Log-on Request)",
+      "btoRawUs": 49660,
+      "btoCorrectedUs": null,
+      "isLogon": false,
+      "bfoHz": -2,
+      "excluded": true,
+      "excludedReason": "Anomalously large BTO. Ashton et al. treat messages immediately following a Log-on Request as having unreliable delay (an artefact of the terminal switching channel/frequency during logon); this value is not used to define an arc. Not corrected by the 4600 us logon offset.",
+      "satellite": { "frame": "ECEF-km", "x": 18178.4, "y": 38050.8, "z": 390.5, "vx": 0.00150, "vy": -0.00158, "vz": -0.08321, "satEpochUtc": "2014-03-08T00:20:00Z", "satNote": "nearest tabulated row (~23s after handshake)" }
+    }
+  ],
+  "crossChecks": [
+    { "value": "18:25:27 raw BTO", "csv": 17120, "literatureAnchor": 17120, "secondSource": "Ashton et al. (2015) reproduces the log-on request measured BTO", "match": true },
+    { "value": "00:19:29 BTO", "csv": 23000, "literatureAnchor": 23000, "secondSource": "Ashton et al. (2015)", "match": true },
+    { "value": "00:19:37 BTO (anomalous)", "csv": 49660, "literatureAnchor": 49660, "secondSource": "Ashton et al. (2015)", "match": true },
+    { "value": "18:25:27 corrected BTO", "computed": "17120 - 4600 = 12520", "paperStated": 12520, "match": true },
+    { "value": "00:19:29 corrected BTO", "computed": "23000 - 4600 = 18400", "paperStated": 18400, "match": true },
+    { "value": "19:41:03 BTO", "csv": 11500, "secondSource": "Ashton et al. (2015) measured BTO list", "paperStated": 11500, "match": true },
+    { "value": "20:41:05 BTO", "csv": 11740, "secondSource": "Ashton et al. (2015)", "paperStated": 11740, "match": true },
+    { "value": "21:41:27 BTO", "csv": 12780, "secondSource": "Ashton et al. (2015)", "paperStated": 12780, "match": true },
+    { "value": "22:41:22 BTO", "csv": 14540, "secondSource": "Ashton et al. (2015)", "paperStated": 14540, "match": true },
+    { "value": "00:11:00 BTO", "csv": 18040, "secondSource": "Ashton et al. (2015)", "paperStated": 18040, "match": true },
+    { "value": "BTO bias constant", "primary": "Ashton et al. (2015): -495,679 us", "secondSource": "DSTG Bayesian book uses equivalent T_nom=499,962 us / T_channel=-4,283 us parameterization (algebraically consistent, different bookkeeping)", "match": "consistent" },
+    { "value": "Log-on request correction offset", "primary": "Ashton et al. (2015): 4600 us", "secondSource": "DSTG book log-on anomaly correction N x 7,820 us (different formulation)", "match": "Ashton value used; DSTG differs in method" },
+    { "value": "Inmarsat-3F1 ECEF ephemeris table", "primary": "Ashton et al. (2015) Table 4 (verbatim)", "secondSource": "Not independently re-tabulated; DSTG book and duncansteel.com reference external ephemeris spreadsheets not extractable as inline numbers", "match": "single-source (primary paper)" },
+    { "value": "Perth GES coordinates", "primary": "Ashton et al. (2015) Table 2: ECEF (-2368.8, 4881.1, -3342.0) km, lat -31.8, lon 115.9", "secondSource": "Not independently confirmed to same precision", "match": "single-source (primary paper)" }
+  ]
+}

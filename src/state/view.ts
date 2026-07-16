@@ -33,7 +33,10 @@ interface ViewState {
   projection: Projection
   camera: Camera
   layers: Record<string, boolean>
+  /** Per-campaign sub-toggles for the search layer; absent id = enabled. */
+  disabledCampaigns: string[]
   panelOpen: boolean
+  legendOpen: boolean
   /** Set when the primary basemap failed to load and a fallback is in use. */
   basemapDegraded: boolean
 
@@ -42,7 +45,10 @@ interface ViewState {
   setCamera: (c: Camera) => void
   setLayers: (l: Record<string, boolean>) => void
   toggleLayer: (id: string) => void
+  toggleCampaign: (id: string) => void
+  setDisabledCampaigns: (ids: string[]) => void
   setPanelOpen: (open: boolean) => void
+  setLegendOpen: (open: boolean) => void
   setBasemapDegraded: (v: boolean) => void
 }
 
@@ -51,7 +57,9 @@ export const useView = create<ViewState>((set) => ({
   projection: 'globe',
   camera: DEFAULT_CAMERA,
   layers: { ...DEFAULT_LAYER_VIS },
+  disabledCampaigns: [],
   panelOpen: true,
+  legendOpen: true,
   basemapDegraded: false,
 
   setMode: (mode) => {
@@ -66,6 +74,14 @@ export const useView = create<ViewState>((set) => ({
   setLayers: (layers) => set({ layers }),
   toggleLayer: (id) =>
     set((st) => ({ layers: { ...st.layers, [id]: !st.layers[id] } })),
+  toggleCampaign: (id) =>
+    set((st) => ({
+      disabledCampaigns: st.disabledCampaigns.includes(id)
+        ? st.disabledCampaigns.filter((c) => c !== id)
+        : [...st.disabledCampaigns, id],
+    })),
+  setDisabledCampaigns: (disabledCampaigns) => set({ disabledCampaigns }),
   setPanelOpen: (panelOpen) => set({ panelOpen }),
+  setLegendOpen: (legendOpen) => set({ legendOpen }),
   setBasemapDegraded: (basemapDegraded) => set({ basemapDegraded }),
 }))

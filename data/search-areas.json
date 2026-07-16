@@ -1,0 +1,231 @@
+{
+  "meta": {
+    "retrieved": "2026-07-16",
+    "sources": [
+      "ATSB - 'The Operational Search for MH370', final report AE-2014-054 (3 October 2017), archived: https://web.archive.org/web/20200310104643/https://www.atsb.gov.au/media/5773565/operational-search-for-mh370_final_3oct2017.pdf (Tables 6-16: dates, areas in km2, latitude extents; figures are images, so polygon shapes are digitized approximations)",
+      "Wikipedia - 'Search for Malaysia Airlines Flight 370' and 'Malaysia Airlines Flight 370' (retrieved 2026-07-16; surface search progression narrative: 315,000 km2 ~2,600 km SW of Perth 18-27 Mar; moved 1,100 km NE on 28 Mar to 319,000 km2 ~1,850 km W of Perth; 217,000 km2 areas 1,060-2,100 km W of Learmonth from 4 Apr; ended 28 Apr 2014)",
+      "Ocean Infinity weekly operational search updates 2018 (as tabulated in Wikipedia revision 852853710)",
+      "Changing Times - 'Ocean Infinity resumes its search for MH370' (31 Dec 2025), https://changingtimes.media/2025/12/31/ocean-infinity-resumes-its-search-for-mh370/ and Victor Iannello, 'The Search for MH370 Continues into 2026', https://mh370.radiantphysics.com/2026/01/01/the-search-for-mh370-continues-into-2026/ (2025-26 zone: 15,000 km2 between latitudes 33 S and 36 S, wider off the 7th arc than previously searched)",
+      "Richard Godfrey / UGIB last estimated position 34.2342 S 93.7875 E, https://www.mh370search.com/2021/01/21/mh370-debris-drift-analysis/ (used to calibrate the 7th-arc model)"
+    ],
+    "notes": [
+      "All polygons are digitized approximations, confidence: derived. No official shapefiles exist for any MH370 search area.",
+      "Underwater-campaign polygons are corridor bands generated along a computed 7th arc: a small circle of angular radius 45.164 deg about the approximate Inmarsat-3F1 sub-satellite point (1.6 N, 64.5 E), calibrated so the arc passes exactly through the UGIB LEP (-34.2342, 93.7875). Validation: at 25.975 S the model gives 101.54 E vs the published Haixun-01 green-zone point 101.461 E (~7 km error); expect up to ~0.5-0.9 deg longitude error at the southern extreme.",
+      "Latitude extents of the underwater bands are fetched values from the ATSB report text (32.8 S to 39.5 S searched, wide area ~50 NM total width) and OI/MOT statements; band half-widths were chosen so the enclosed area matches the officially reported km2 (checked by shoelace computation).",
+      "Surface-search polygons are boxes/bands reconstructed from published distances, latitudes and area sizes; per-campaign details in each 'source' field.",
+      "Campaign areaKm2 values are the officially reported figures, not the area of the approximate polygon (they agree to within ~10%).",
+      "AUDIT: (2026-07-16, against ATSB final report AE-2014-054 3 Oct 2017 PDF, 440 pp, downloaded via web.archive.org and text-extracted, plus ATSB First Principles Review PDF 20 Dec 2016.) south-china-sea-2014 VERIFIED: Table 6 (PDF p.24) gives 8-15 Mar 2014, KL ARCC, 573,000 km2, 28 aircraft / 34 vessels - matches this file. malacca-andaman-2014 VERIFIED: Table 7 (PDF p.25) gives 8-15 Mar 2014, Royal Malaysia Air Force, Strait of Malacca / Andaman Sea / Bay of Bengal / west of Sumatra, 4,560,000 km2, 36 aircraft / 35 vessels - matches.",
+      "AUDIT: atsb-underwater-2014-2017 VERIFIED with nuance: final report pp.80-82 (report pp.71-73): deep-tow lines extended to 39.5S on 17 Jul 2015, indicative area 32.8S-39.5S, coverage initially -20 NM/+30 NM across the arc, refined 3 Dec 2015 to 36.1S-39.5S at +/-40 NM; 120,000 km2 confirmed. FPR (p.14) reports actual searched widths were NOT uniform: 36S-39.3S searched ~41 NM east / ~38 NM west of the arc, while 32.8S-36S was searched only ~12-17 NM east / ~10-21 NM west. The file's uniform 46.5 km (~25 NM) half-width band therefore overstates width north of 36S and understates it south of 36S; polygon left unchanged (no corner coordinates are published to digitize, and the shape is already flagged as approximate).",
+      "AUDIT: atsb-underwater-2014-2017 outcome-text correction: the First Principles Review does not give a centre '34 S 93 E' for the remaining 25,000 km2 area; it publishes bounds 32.5S-36S along the arc within ~25 NM (FPR pp.3, 23). Haixun-01 detection point 25.975S 101.461E used for arc calibration VERIFIED verbatim (final report PDF p.47).",
+      "AUDIT: ocean-infinity-2018 VERIFIED: >112,000 km2 searched by Seabed Constructor (Ocean Infinity statement; Wikipedia), starting in the FPR 25,000 km2 area, search ended 9 Jun 2018 - matches. The ~25 S northern limit of the file's band remains a published-description approximation (no official corner coordinates fetched).",
+      "AUDIT: sio-surface-final-2014 corroborated: the red/yellow/green ULB zones are defined by corners U1-U8 in the final report PDF p.194 (appendix 'Identification of the most probable final location of flight MH370', JIT): full zone 375 NM x 40 NM from U1 20°16'02.71\"S 104°17'04.86\"E to U8 26°09'59.47\"S 101°46'22.04\"E - consistent with this file's 20.2S-26S arc band.",
+      "AUDIT: missing phases found: (1) the Ocean Shield / HMS Echo / Haixun 01 ULB acoustic search (2-17 Apr 2014) with AUV follow-up to 28 May 2014 was missing - now ADDED as campaign ocean-shield-acoustic-2014 using the exact red-zone corners U1-U4 fetched from final report PDF p.194. (2) The bathymetric survey phase (Fugro Equator and Chinese navy vessel Zhu Kezhen from Jun 2014, later Fugro Supporter; >710,000 km2 of multibeam data incl. transits per Geoscience Australia 'MH370 Phase 1' release) is NOT added as a campaign: it was seafloor mapping, not wreckage search, and no official polygon corners were fetched. (3) P-3C sonobuoy ULB drops 6-17 Apr 2014 (~3,000 km2 per sortie, final report p.50) not added - no bounds published.",
+      "AUDIT: surface-search progression cross-check: final report p.43 (CSIRO reassessment) notes the 28 Mar 2014 northward move gave high detection probability for impacts between ~26S and 32.5S - consistent with this file's sio-surface-refined-2014 box (28.5S-34S) being the zone actually flown, though the polygon remains a reconstruction (no numeric corners published)."
+    ]
+  },
+  "campaigns": [
+    {
+      "id": "south-china-sea-2014",
+      "name": "Initial surface search, South China Sea (east of Malay Peninsula)",
+      "kind": "surface",
+      "startDate": "2014-03-08",
+      "endDate": "2014-03-15",
+      "areaKm2": 573000,
+      "operator": "Malaysia (KL ARCC), with aircraft/vessels from China, Japan, Singapore, Thailand, US, Vietnam",
+      "outcome": "No MH370 debris found; suspended 15 March 2014 when SATCOM analysis showed the flight continued for hours after last radar contact",
+      "source": "Dates, operator and 573,000 km2 fetched from ATSB final report Table 6; polygon approximated from figure description (waters between Malaysia and Vietnam around the last secondary-radar position near waypoint IGARI, 6.94 N 103.59 E)",
+      "polygon": [
+        [102.5, 4.8],
+        [106.5, 4.8],
+        [108.0, 6.5],
+        [108.0, 9.5],
+        [104.0, 9.5],
+        [102.5, 7.5],
+        [102.5, 4.8]
+      ]
+    },
+    {
+      "id": "malacca-andaman-2014",
+      "name": "Initial surface search, Strait of Malacca / Andaman Sea (west of Malay Peninsula)",
+      "kind": "surface",
+      "startDate": "2014-03-08",
+      "endDate": "2014-03-15",
+      "areaKm2": 4560000,
+      "operator": "Malaysia (Royal Malaysian Air Force), with assets from 12 nations",
+      "outcome": "No debris found; based on primary radar track of an unidentified aircraft (thought to be MH370) flying up the Strait of Malacca",
+      "source": "Dates, operator and 4,560,000 km2 fetched from ATSB final report Table 7 (Strait of Malacca, Andaman Sea, Bay of Bengal and west of Sumatra); polygon is a coarse approximation covering the strait and Andaman Sea core of that region and is much smaller than the full reported 4.56M km2 envelope",
+      "polygon": [
+        [95.5, 0.5],
+        [100.8, 1.2],
+        [100.0, 4.0],
+        [98.3, 7.5],
+        [98.5, 11.0],
+        [97.0, 14.5],
+        [90.5, 14.5],
+        [90.5, 6.5],
+        [93.0, 2.0],
+        [95.5, 0.5]
+      ]
+    },
+    {
+      "id": "sio-surface-initial-2014",
+      "name": "Southern Indian Ocean surface search, initial area SW of Perth (S1/S2 and satellite-imagery zone)",
+      "kind": "surface",
+      "startDate": "2014-03-18",
+      "endDate": "2014-03-27",
+      "areaKm2": 600000,
+      "operator": "AMSA (Australia), aircraft/vessels from Australia, NZ, US, Japan, China, South Korea",
+      "outcome": "Multiple satellite and aerial object sightings investigated (incl. objects 43-45 S, 90-97 E); none confirmed as MH370 debris",
+      "source": "Backed by fetched coordinates: ATSB final report gives the satellite-imagery search region as approximately 42 S - 46 S with sightings at 43-45 S / 90-97 E, initial 600,000 km2 zone ~2,500 km SW of Perth (Tables 9-12); polygon is that latitude/longitude box",
+      "polygon": [
+        [89.0, -46.0],
+        [93.5, -46.0],
+        [98.0, -46.0],
+        [98.0, -42.0],
+        [93.5, -42.0],
+        [89.0, -42.0],
+        [89.0, -46.0]
+      ]
+    },
+    {
+      "id": "sio-surface-refined-2014",
+      "name": "Southern Indian Ocean surface search, refined area (moved 1,100 km NE; drifted areas A/B)",
+      "kind": "surface",
+      "startDate": "2014-03-28",
+      "endDate": "2014-04-03",
+      "areaKm2": 319000,
+      "operator": "AMSA / ATSB (Australia), multinational aircraft and vessels",
+      "outcome": "Over 50 objects sighted on 28 March alone; recovered items were fishing equipment and other flotsam, none from MH370",
+      "source": "Approximated from figure description: search moved 1,100 km NE of the previous area to a 319,000 km2 zone roughly 1,850 km west of Perth (Wikipedia narrative + ATSB final report Tables 13-14); polygon is a reconstructed box at that distance/size, no numeric corners published",
+      "polygon": [
+        [95.0, -34.0],
+        [98.0, -34.0],
+        [101.0, -34.0],
+        [101.0, -28.5],
+        [98.0, -28.5],
+        [95.0, -28.5],
+        [95.0, -34.0]
+      ]
+    },
+    {
+      "id": "sio-surface-final-2014",
+      "name": "Southern Indian Ocean surface search, final northern areas (red/yellow/green zones along 7th arc, drifted areas C-F)",
+      "kind": "surface",
+      "startDate": "2014-04-04",
+      "endDate": "2014-04-28",
+      "areaKm2": 217000,
+      "operator": "AMSA / ATSB / JACC (Australia), multinational; incl. ULB search by ADV Ocean Shield and Haixun 01",
+      "outcome": "Surface search ended 28 April 2014 with no debris found; acoustic detections (Haixun 01 at 25.975 S 101.461 E; Ocean Shield) later discounted",
+      "source": "Latitude extent backed by fetched values: ATSB report places the red/yellow/green priority areas at latitudes 20.2 S - 26 S along the 7th arc, 1,060-2,100 km west of Learmonth, spanning 217,000 km2; polygon is a computed-arc band 20.2-26 S with ~150 km half-width (encloses ~219,000 km2), shape approximated",
+      "polygon": [
+        [102.808, -26.693],
+        [103.579, -25.519],
+        [104.306, -24.326],
+        [104.979, -23.133],
+        [105.604, -21.941],
+        [106.174, -20.767],
+        [103.569, -19.633],
+        [102.993, -20.779],
+        [102.382, -21.907],
+        [101.723, -23.034],
+        [101.014, -24.161],
+        [100.237, -25.307],
+        [102.808, -26.693]
+      ]
+    },
+    {
+      "id": "ocean-shield-acoustic-2014",
+      "name": "ULB acoustic search and Ocean Shield AUV follow-up (red zone, Zenith Plateau area)",
+      "kind": "underwater",
+      "startDate": "2014-04-02",
+      "endDate": "2014-05-28",
+      "areaKm2": 860,
+      "operator": "ADV Ocean Shield (US Navy TPL-25 towed pinger locator + Phoenix International Artemis/Bluefin-21 AUV), HMS Echo, MV Haixun 01; RAAF AP-3C sonobuoys 6-17 Apr",
+      "outcome": "Four TPL detections 5-8 Apr 2014 (~33 kHz, near latitude 21 S) initially thought to be from the flight recorders' ULBs; AUV side-scan survey of 860 km2 (10 km radius around detection 2, 3 km around detections 1, 3, 4) completed 28 May 2014 found nothing, and the detections were later attributed to a faulty TPL test-ULB cable (Phoenix International lab tests). Haixun 01 detections (25.975 S 101.461 E, green zone) also discounted. Area eliminated",
+      "source": "Polygon corners are FETCHED values: red-zone corners U1-U4 from ATSB final report AE-2014-054 (3 Oct 2017) PDF p.194, appendix 'Identification of the most probable final location of flight MH370' (U1 20°16'02.71\"S 104°17'04.86\"E, U2 20°29'10.22\"S 105°01'14.01\"E, U4 22°14'21.49\"S 104°08'34.81\"E, U3 21°55'50.84\"S 103°29'13.66\"E); the full red/yellow/green ULB zone was 375 NM x 40 NM. Ocean Shield operated in this red zone (final report p.48); AUV ops 'up near latitude 21°S' (p.130). areaKm2 is the officially reported 860 km2 AUV sonar coverage; the red-zone polygon itself encloses ~16,200 km2. Narrative and dates from final report pp.45-51 and ATSB 'Definition of Underwater Search Areas' (18 Aug 2014) pp.11-15",
+      "polygon": [
+        [104.284683, -20.267419],
+        [105.020558, -20.486172],
+        [104.143003, -22.239303],
+        [103.487128, -21.930789],
+        [104.284683, -20.267419]
+      ]
+    },
+    {
+      "id": "atsb-underwater-2014-2017",
+      "name": "ATSB-led underwater search, 120,000 km2 wide area along the 7th arc",
+      "kind": "underwater",
+      "startDate": "2014-10-06",
+      "endDate": "2017-01-17",
+      "areaKm2": 120000,
+      "operator": "ATSB / JACC for Malaysia-Australia-China tripartite; contractors Fugro (Discovery, Equator, Supporter) and Phoenix International (GO Phoenix)",
+      "outcome": "Completed to high confidence without locating the aircraft; search suspended 17 January 2017. First Principles Review then identified a remaining 25,000 km2 area centred near 34 S 93 E, NE of this zone",
+      "source": "Latitude extent fetched from ATSB final report text (search area extended from 32.8 S, ultimately to 39.5 S along the 7th arc; wide area ~50 NM total width; ~120,000 km2 announced April 2015); polygon is a computed-7th-arc band 39.5 S to 32.5 S with 46.5 km half-width (encloses ~117,000 km2), shape approximated from report figures",
+      "polygon": [
+        [85.21, -39.854],
+        [88.125, -38.448],
+        [90.586, -37.031],
+        [92.703, -35.615],
+        [94.557, -34.2],
+        [96.19, -32.793],
+        [95.484, -32.207],
+        [93.855, -33.6],
+        [92.031, -34.985],
+        [89.951, -36.369],
+        [87.537, -37.752],
+        [84.637, -39.146],
+        [85.21, -39.854]
+      ]
+    },
+    {
+      "id": "ocean-infinity-2018",
+      "name": "Ocean Infinity underwater search 2018 (Seabed Constructor), 7th-arc corridor extended north",
+      "kind": "underwater",
+      "startDate": "2018-01-22",
+      "endDate": "2018-06-09",
+      "areaKm2": 112000,
+      "operator": "Ocean Infinity (Seabed Constructor, 8 AUVs), 'no find, no fee' contract with Malaysia",
+      "outcome": "More than 112,000 km2 searched, starting in the CSIRO/First-Principles 25,000 km2 area (~35.6 S) and extending north along the arc to ~25 S; aircraft not found, points of interest classified geological; search ended June 2018",
+      "source": "Extent approximated from published descriptions (start in the 33-36 S remaining-priority area, progression north along the 7th arc to ~25 S; Ocean Infinity weekly updates give cumulative km2 only, no corners); polygon is a computed-7th-arc band 36.5 S to 25 S with 33 km half-width (encloses ~112,000 km2)",
+      "polygon": [
+        [90.831, -36.722],
+        [94.077, -34.416],
+        [96.741, -32.098],
+        [98.969, -29.782],
+        [100.858, -27.466],
+        [102.469, -25.159],
+        [101.917, -24.841],
+        [100.305, -27.134],
+        [98.43, -29.418],
+        [96.222, -31.702],
+        [93.585, -33.984],
+        [90.343, -36.278],
+        [90.831, -36.722]
+      ]
+    },
+    {
+      "id": "ocean-infinity-2025-26",
+      "name": "Ocean Infinity underwater search 2025-26 (Armada fleet), 15,000 km2 refined zone",
+      "kind": "underwater",
+      "startDate": "2025-02-23",
+      "endDate": null,
+      "areaKm2": 15000,
+      "operator": "Ocean Infinity (Armada 78 06 in Feb-Apr 2025; Armada 86 05 from 30 Dec 2025), 'no find, no fee' agreement with Malaysian Ministry of Transport (~USD 70M on success)",
+      "outcome": "First phase Feb-Apr 2025 paused for southern winter; search resumed 30 December 2025 for a window of up to 55 days into 2026; aircraft not located as of retrieval date (2026-07-16)",
+      "source": "Position backed by fetched statements: OI/MOT describe a 15,000 km2 zone between latitudes 33 S and 36 S, wider off the 7th arc than previously searched, in the region of the UGIB LEP (-34.2342, 93.7875); polygon is a computed-7th-arc band 36 S to 33 S with half-width scaled to enclose ~15,000 km2 - the real zone is irregular (hotspot boxes extending beyond the previously searched corridor), so this is a strong approximation",
+      "polygon": [
+        [91.466, -36.106],
+        [92.549, -35.355],
+        [93.561, -34.602],
+        [94.507, -33.849],
+        [95.394, -33.098],
+        [95.158, -32.902],
+        [94.272, -33.651],
+        [93.331, -34.398],
+        [92.324, -35.145],
+        [91.242, -35.894],
+        [91.466, -36.106]
+      ]
+    }
+  ]
+}

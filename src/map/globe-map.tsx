@@ -7,6 +7,7 @@ import { useEffect, useRef } from 'react'
 import maplibregl from 'maplibre-gl'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { darkStyle, fallbackStyle } from './basemap'
+import { registerDataLayers, syncLayerVisibility, syncCampaignFilter } from './data-layers'
 import { useView } from '../state/view'
 import { useCursor } from '../state/cursor'
 
@@ -31,6 +32,10 @@ const SKY: maplibregl.SkySpecification = {
 export const GlobeMap = () => {
   const containerRef = useRef<HTMLDivElement>(null)
   const mapRef = useRef<maplibregl.Map | null>(null)
+  // Pending moveends that are padding-only re-centers: their camera must NOT
+  // be written back to the store (the padding-shifted center would compound
+  // into shared URLs on every reload).
+  const suppressSyncRef = useRef(0)
 
   // Create the map once, immediately. (StrictMode is disabled app-wide, see
   // main.tsx, so this effect runs a single time and the WebGL context is stable.)
@@ -70,8 +75,49 @@ export const GlobeMap = () => {
     const applyGlobe = () => {
       map.setProjection({ type: useView.getState().projection })
       map.setSky(SKY)
+      // Data layers live on top of whichever basemap style is active, so they
+      // are (re-)registered on every style load.
+      registerDataLayers(map)
+      syncLayerVisibility(map, useView.getState().layers)
+      syncCampaignFilter(map, useView.getState().disabledCampaigns)
     }
     map.on('style.load', applyGlobe)
+
+    // Keep maplibre in sync with the store: layer visibility, and camera
+    // changes that did NOT originate from the map itself (hashchange /
+    // deep-link application). Self-originated changes match the map's pose
+    // exactly, so the drift guard breaks the feedback loop.
+    const unsubLayers = useView.subscribe((s, prev) => {
+      if (s.layers !== prev.layers && map.getLayer('mh-epoch1')) {
+        syncLayerVisibility(map, s.layers)
+      }
+      if (s.disabledCampaigns !== prev.disabledCampaigns && map.getLayer('mh-search-fill')) {
+        syncCampaignFilter(map, s.disabledCampaigns)
+      }
+      if (s.camera !== prev.camera) {
+        const mc = map.getCenter()
+        // Bearings compare on the wrapped angular difference: a stored -179.9
+        // vs map's +180 is 0.1 deg apart, not 359.9.
+        const bearingDiff = Math.abs(
+          ((s.camera.bearing - map.getBearing() + 540) % 360) - 180,
+        )
+        const drift =
+          Math.abs(mc.lng - s.camera.center[0]) +
+          Math.abs(mc.lat - s.camera.center[1]) +
+          Math.abs(map.getZoom() - s.camera.zoom) +
+          bearingDiff +
+          Math.abs(map.getPitch() - s.camera.pitch)
+        if (drift > 0.01) {
+          map.easeTo({
+            center: s.camera.center,
+            zoom: s.camera.zoom,
+            bearing: s.camera.bearing,
+            pitch: s.camera.pitch,
+            duration: 600,
+          })
+        }
+      }
+    })
     // Defensive: ensure the canvas matches the container once loaded.
     map.on('load', () => map.resize())
 
@@ -93,7 +139,7 @@ export const GlobeMap = () => {
       if (usingFallback || primaryRendered || !fromTiles) return
       usingFallback = true
       useView.getState().setBasemapDegraded(true)
-      map.once('style.load', applyGlobe)
+      // The persistent 'style.load' handler re-applies globe/sky/data layers.
       map.setStyle(fallbackStyle())
     })
     // When connectivity returns, retry the primary basemap once per event.
@@ -102,13 +148,16 @@ export const GlobeMap = () => {
       usingFallback = false
       primaryRendered = false
       useView.getState().setBasemapDegraded(false)
-      map.once('style.load', applyGlobe)
       map.setStyle(darkStyle())
     }
     window.addEventListener('online', onOnline)
 
     // Write camera back to the store after user movement (drives URL state).
     const syncCamera = () => {
+      if (suppressSyncRef.current > 0) {
+        suppressSyncRef.current--
+        return
+      }
       const c = map.getCenter()
       useView.getState().setCamera({
         center: [c.lng, c.lat],
@@ -125,6 +174,7 @@ export const GlobeMap = () => {
     map.on('mouseout', () => useCursor.getState().clear())
 
     return () => {
+      unsubLayers()
       window.removeEventListener('online', onOnline)
       map.remove()
       mapRef.current = null
@@ -158,6 +208,7 @@ export const GlobeMap = () => {
     const map = mapRef.current
     if (!map || mode === 'database') return
     map.resize() // in case the container was display:none (database mode)
+    suppressSyncRef.current++ // padding-only ease; see syncCamera
     map.easeTo({
       padding: {
         top: 66,

@@ -1,0 +1,57 @@
+{
+  "meta": {
+    "retrieved": "2026-07-16",
+    "sources": [
+      { "label": "OurAirports data (airports.csv, runways.csv)", "url": "https://raw.githubusercontent.com/davidmegginson/ourairports-data/main/airports.csv" },
+      { "label": "OpenNav waypoint database (VAMPI, MEKAR, NILAM, GOLUD, PUKAR, IDKUT)", "url": "https://opennav.com/waypoint/MY/VAMPI" },
+      { "label": "Wikipedia: Malaysia Airlines Flight 370", "url": "https://en.wikipedia.org/wiki/Malaysia_Airlines_Flight_370" },
+      { "label": "mh370wiki.net: History of the flight (quotes Factual Information 2015)", "url": "https://www.mh370wiki.net/The_Operational_Search_for_MH370/History_of_the_flight" },
+      { "label": "mh370wiki.net: Waypoints and MH370 (filed flight plan table from FI 2015)", "url": "https://www.mh370wiki.net/Waypoints_and_MH370" },
+      { "label": "Gilbert, 'An Analysis of MH370's Flight Path Between Waypoint IGARI...' (PDF; quotes FI 2015 pages 1-2, 7, 46, 54 event times)", "url": "https://vridar.org/wp-content/uploads/2021/03/MH370-Research-v3-14.pdf" },
+      { "label": "Iannello (radiantphysics) / mh370search: 18:22 last primary radar position interpretations", "url": "https://www.mh370search.com/2022/09/08/mh370-detection-and-tracking/" }
+    ],
+    "method": "waypoint/report-quoted positions; NOT a figure digitization; positions between anchors are along airway/great-circle interpolation between published anchors",
+    "notes": [
+      "Times are UTC on 7 March 2014 (MYT = UTC+8, i.e. local 8 March). Event times are quoted from the Malaysian Factual Information report (2015) as cited by mh370wiki.net and the Gilbert PDF timeline (which cites FI page numbers).",
+      "Epoch 1 lateral path is modeled as departure runway 32R -> filed waypoints PIBOS, IKUKO -> IGARI (filed-route coordinates from the FI flight plan table on mh370wiki.net). Aircraft was cleared 'direct IGARI' at 16:43; filed waypoints lie within a few NM of the direct track, so the polyline is representative, not radar-derived.",
+      "The exact FI-quoted coordinates of the 17:21:13 last secondary-radar return could not be verified from any reliable fetched source (a widely circulated value ~6°55'N 103°34.7'E appears only on unreliable aggregators). The 17:21:13 point here is dead-reckoned 42 s past IGARI on the 059° track toward BITOD (FI: FMS right turn to 059° toward BITOD had begun) and is marked interpolated.",
+      "The 18:22:12 last primary radar fix has two published interpretations ~117 km apart: (a) Safety Investigation Report figure: 10 NM beyond MEKAR on N571 toward NILAM = 6.577655N 96.340864E (used here); (b) Beijing Lido military slide: 200 NM from Butterworth bearing 295T = 6.871123N 97.354047E (not used).",
+      "OpenNav MEKAR (6.5039N 96.4911E) and NILAM (6.7564N 95.9764E) were cross-validated: the independently published '10 NM past MEKAR toward NILAM' position 6.577655N 96.340864E lies exactly 10 NM along the MEKAR->NILAM leg built from the OpenNav coordinates.",
+      "Epoch 2 positions between the FI-timed anchors (turnback, Kota Bharu coast 17:37:22, 6 NM south of Penang 17:52:35, Pulau Perak 18:02, VAMPI 18:13:00, north of MEKAR 18:21:50, last fix 18:22:12) are straight-line interpolations; the military radar track between anchors was published only as report figures, which were not digitized.",
+      "Implied ground speeds between some Epoch 2 anchors are schematic; FI notes radar-derived ground speeds varied. The turnback 'hook' shape (right turn toward BITOD reversing into a left turn to ~231-240°) follows the FI description as quoted by mh370wiki.net and the Gilbert PDF.",
+      "Altitudes: 35,000 ft from FI ACARS 17:07:48 report; 35,700 ft at 17:30:35-17:35 and 29,500 ft at 18:22 are military-radar-derived values quoted by Wikipedia from official reports. Interpolated points carry altFt null."
+    ]
+  },
+  "epoch1": [
+    { "timeUtc": "2014-03-07T16:27:00Z", "lat": 2.74558, "lon": 101.709999, "altFt": null, "label": "Cleared to push back, gate C1 WMKK (airport reference point)", "source": "time: FI p1 via Gilbert PDF; position: OurAirports WMKK" },
+    { "timeUtc": "2014-03-07T16:42:00Z", "lat": 2.74739, "lon": 101.722, "altFt": 70, "label": "Takeoff from runway 32R (threshold coordinates, field elev ~70 ft)", "source": "time: FI p1 via Gilbert PDF; position: OurAirports runways.csv WMKK 32R threshold" },
+    { "timeUtc": "2014-03-07T16:45:00Z", "lat": 2.95, "lon": 101.83, "altFt": null, "label": "Climbing right turn to the northeast (cleared FL180 direct IGARI at 16:43)", "source": "interpolated" },
+    { "timeUtc": "2014-03-07T16:48:00Z", "lat": 3.15, "lon": 101.95, "altFt": null, "label": "Climb, cleared FL250 at 16:47", "source": "interpolated" },
+    { "timeUtc": "2014-03-07T16:51:00Z", "lat": 3.3417, "lon": 102.0517, "altFt": null, "label": "Near filed waypoint PIBOS, climbing (cleared FL350 at 16:50)", "source": "position: FI filed flight plan (PIBOS N0320.5 E10203.1) via mh370wiki.net; time interpolated" },
+    { "timeUtc": "2014-03-07T16:56:00Z", "lat": 3.95, "lon": 102.35, "altFt": null, "label": "En route PIBOS-IKUKO segment", "source": "interpolated" },
+    { "timeUtc": "2014-03-07T17:01:00Z", "lat": 4.55, "lon": 102.64, "altFt": 35000, "label": "Crew reports maintaining FL350", "source": "time/alt: FI App 1.18E via Gilbert PDF; position interpolated" },
+    { "timeUtc": "2014-03-07T17:07:48Z", "lat": 5.37, "lon": 103.04, "altFt": 35000, "label": "Last ACARS transmission (HDG 027, FL350, Mach 0.821)", "source": "time/alt/hdg: FI p46 via Gilbert PDF; position interpolated" },
+    { "timeUtc": "2014-03-07T17:11:00Z", "lat": 5.7533, "lon": 103.2233, "altFt": 35000, "label": "Near filed waypoint IKUKO", "source": "position: FI filed flight plan (IKUKO N0545.2 E10313.4) via mh370wiki.net; time interpolated" },
+    { "timeUtc": "2014-03-07T17:15:00Z", "lat": 6.26, "lon": 103.38, "altFt": 35000, "label": "En route IKUKO-IGARI segment", "source": "interpolated" },
+    { "timeUtc": "2014-03-07T17:19:30Z", "lat": 6.81, "lon": 103.55, "altFt": 35000, "label": "Final voice transmission: 'Good night, Malaysian three seven zero'", "source": "time: FI App 1.18E via Gilbert PDF; position interpolated" },
+    { "timeUtc": "2014-03-07T17:20:31Z", "lat": 6.936667, "lon": 103.585, "altFt": 35000, "label": "Passing waypoint IGARI (6°56'12\"N 103°35'06\"E)", "source": "time: FI p2 via Gilbert PDF; position: Wikipedia MH370 article, cross-checked with FI flight plan table (N0656.2 E10335.1) via mh370wiki.net" },
+    { "timeUtc": "2014-03-07T17:21:13Z", "lat": 6.984, "lon": 103.664, "altFt": 35000, "label": "Last secondary radar return; Mode S symbol dropped 17:20:36, position symbol disappeared 17:21:13", "source": "time: FI p2 via Gilbert PDF; position interpolated (dead-reckoned ~42 s past IGARI on 059° track toward BITOD; exact FI coordinates not verifiable from fetched sources)" }
+  ],
+  "epoch2": [
+    { "timeUtc": "2014-03-07T17:21:13Z", "lat": 6.984, "lon": 103.664, "altFt": 35000, "label": "Start of primary-radar-only epoch (same point as last secondary return)", "source": "interpolated (see epoch1 final point)" },
+    { "timeUtc": "2014-03-07T17:22:30Z", "lat": 7.02, "lon": 103.73, "altFt": null, "label": "Brief continuation toward BITOD; apex of right turn before turnback (FI: turn back began between IGARI and BITOD)", "source": "interpolated" },
+    { "timeUtc": "2014-03-07T17:23:30Z", "lat": 7.06, "lon": 103.62, "altFt": null, "label": "Left turn through north - turnback hook", "source": "interpolated" },
+    { "timeUtc": "2014-03-07T17:26:00Z", "lat": 6.85, "lon": 103.35, "altFt": null, "label": "Established southwest-bound (~231-240°) back toward the Malay peninsula", "source": "interpolated" },
+    { "timeUtc": "2014-03-07T17:30:35Z", "lat": 6.63, "lon": 102.91, "altFt": 35700, "label": "Military radar: 35,700 ft on 231° magnetic heading (17:30:35-17:35)", "source": "time/alt/hdg: Wikipedia MH370 article (from official reports); position interpolated" },
+    { "timeUtc": "2014-03-07T17:37:22Z", "lat": 6.3, "lon": 102.25, "altFt": null, "label": "Crossing coast north of Kota Bharu (near waypoint GOLUD 6.285N 102.2775E / WMKC)", "source": "time: FI p7 via Gilbert PDF (mh370search gives 17:36:43); position interpolated on coast north of Kota Bharu, anchored by OpenNav GOLUD and OurAirports WMKC" },
+    { "timeUtc": "2014-03-07T17:45:00Z", "lat": 5.75, "lon": 101.26, "altFt": null, "label": "Crossing the Malay peninsula toward Penang", "source": "interpolated" },
+    { "timeUtc": "2014-03-07T17:52:35Z", "lat": 5.18, "lon": 100.25, "altFt": null, "label": "6 NM south of Penang Island (track aligned toward KENDI, SW of Penang)", "source": "time/description: FI p7 via Gilbert PDF; position interpolated 6 NM south of Penang Island south coast (island position from OurAirports WMKP)" },
+    { "timeUtc": "2014-03-07T17:56:00Z", "lat": 5.32, "lon": 99.9, "altFt": null, "label": "Right turn onto ~290° up the Strait of Malacca", "source": "interpolated" },
+    { "timeUtc": "2014-03-07T18:02:00Z", "lat": 5.68056, "lon": 98.94083, "altFt": null, "label": "Passing Pulau Perak (island at 5°40'50\"N 98°56'27\"E)", "source": "time: Wikipedia MH370 article (from FI); position: Wikipedia Pulau Perak island coordinates (aircraft passed near the island)" },
+    { "timeUtc": "2014-03-07T18:08:00Z", "lat": 5.95, "lon": 98.2, "altFt": null, "label": "Strait of Malacca, toward airway N571 at VAMPI", "source": "interpolated" },
+    { "timeUtc": "2014-03-07T18:13:00Z", "lat": 6.182222, "lon": 97.585556, "altFt": null, "label": "Passing waypoint VAMPI on N571", "source": "time: FI p7 via Gilbert PDF; position: OpenNav VAMPI (6°10'56\"N 97°35'08\"E)" },
+    { "timeUtc": "2014-03-07T18:18:00Z", "lat": 6.36, "lon": 96.97, "altFt": null, "label": "Along N571 VAMPI-MEKAR (FI: track ran slightly north of the airway)", "source": "interpolated" },
+    { "timeUtc": "2014-03-07T18:21:50Z", "lat": 6.556, "lon": 96.386, "altFt": null, "label": "Passing north of waypoint MEKAR (MEKAR at 6.5039N 96.4911E)", "source": "time: FI p7 via Gilbert PDF; position interpolated ~7 NM past MEKAR along N571 toward NILAM (MEKAR/NILAM from OpenNav)" },
+    { "timeUtc": "2014-03-07T18:22:12Z", "lat": 6.577655, "lon": 96.340864, "altFt": 29500, "label": "Last primary radar fix, 10 NM past MEKAR on N571 toward NILAM (SIR interpretation; Lido-slide alternative: 6.871123N 97.354047E)", "source": "time: FI p7 via Gilbert PDF; position: Safety Investigation Report interpretation as computed by mh370search/radiantphysics (Iannello); alt: Wikipedia MH370 article" }
+  ]
+}

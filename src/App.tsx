@@ -4,6 +4,7 @@ import { TopBar } from './ui/top-bar'
 import { LayerPanel } from './ui/layer-panel'
 import { Timeline } from './ui/timeline'
 import { CursorReadout } from './ui/cursor-readout'
+import { Legend } from './ui/legend'
 import { Database } from './ui/database'
 import { ClockDriver } from './state/clock-driver'
 import { ErrorBoundary } from './ui/error-boundary'
@@ -55,6 +56,7 @@ const App = () => {
       {onMap && <BasemapBanner />}
       {onMap && <LayerPanel />}
       {onMap && <CursorReadout />}
+      {onMap && <Legend />}
       {hasTimeline && <Timeline />}
       {mode === 'database' && <Database />}
 

@@ -10,6 +10,11 @@
 import { useClock, type TimeScale } from './clock'
 import { useView, type Mode, type Camera } from './view'
 import { LAYERS } from '../config/layers'
+import searchAreas from '../data/search-areas.geojson.json'
+
+const CAMPAIGN_IDS = new Set(searchAreas.features.map((f) => String(f.properties?.id)))
+/** Upper bound for the playback-speed URL value (above any UI preset). */
+const MAX_SPEED = 5_000_000
 
 const MODE_CODE: Record<Mode, string> = { explore: 'e', flight: 'f', database: 'd' }
 const CODE_MODE: Record<string, Mode> = { e: 'explore', f: 'flight', d: 'database' }
@@ -74,6 +79,8 @@ export const encodeState = (): string => {
     `c=${encodeCamera(view.camera)}`,
     `l=${visible.join(',')}`,
     `p=${view.panelOpen ? 1 : 0}`,
+    // Disabled search campaigns (FR-11.3); omitted when all enabled.
+    ...(view.disabledCampaigns.length ? [`dc=${view.disabledCampaigns.join(',')}`] : []),
   ].join('&')
 }
 
@@ -111,7 +118,7 @@ export const applyStateFromHash = (): void => {
 
   const v = params.get('v')
   if (v !== null && Number.isFinite(Number(v)) && Number(v) > 0) {
-    useClock.getState().setSpeed(Number(v))
+    useClock.getState().setSpeed(Math.min(Number(v), MAX_SPEED))
   }
 
   const c = params.get('c')
@@ -130,6 +137,13 @@ export const applyStateFromHash = (): void => {
   const p = params.get('p')
   if (p === '0' || p === '1') {
     useView.getState().setPanelOpen(p === '1')
+  }
+
+  const dc = params.get('dc')
+  if (dc !== null) {
+    useView
+      .getState()
+      .setDisabledCampaigns(dc.split(',').filter((id) => CAMPAIGN_IDS.has(id)))
   }
 }
 
