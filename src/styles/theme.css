@@ -965,6 +965,74 @@ a:hover {
   text-align: center;
 }
 
+/* ------------------------------------------------------------ mobile gate */
+
+.mobile-gate {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  background: var(--bg-0);
+  display: flex;
+  flex-direction: column;
+}
+.mg-strip {
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  color: var(--text-2);
+  text-align: center;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--line);
+  background: var(--bg-1);
+}
+.mg-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 28px 26px;
+  max-width: 440px;
+  margin: 0 auto;
+}
+.mg-brand {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--text-0);
+}
+.mg-brand .brand-mark { color: var(--accent); font-size: 18px; }
+.mg-tag {
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  color: var(--text-2);
+  margin: 6px 0 26px;
+}
+.mg-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  align-self: flex-start;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  padding: 6px 11px;
+  margin-bottom: 20px;
+}
+.mg-planned {
+  color: var(--text-2);
+  border-left: 1px solid var(--line-hi);
+  padding-left: 8px;
+  letter-spacing: 0.12em;
+}
+.mg-text {
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--text-1);
+  margin: 0 0 12px;
+}
+.mg-dim { color: var(--text-2); font-size: 12.5px; }
+
 /* ------------------------------------------------------------ error state */
 
 .err-boundary {

@@ -8,6 +8,7 @@ import { Legend } from './ui/legend'
 import { MapTooltip } from './ui/tooltip'
 import { DetailPanel } from './ui/detail-panel'
 import { Database } from './ui/database'
+import { MobileGate } from './ui/mobile-gate'
 import { ClockDriver } from './state/clock-driver'
 import { ErrorBoundary } from './ui/error-boundary'
 import { startUrlSync } from './state/url'
@@ -65,6 +66,7 @@ const App = () => {
       {mode === 'database' && <Database />}
 
       <ClockDriver />
+      <MobileGate />
     </div>
   )
 }
