@@ -93,6 +93,16 @@ describe('simple setters', () => {
     expect(useView.getState().camera).toEqual(cam)
   })
 
+  it('resetCamera restores the opening pose as a fresh object', () => {
+    const cam: Camera = { center: [100, 5], zoom: 4, bearing: 90, pitch: 30 }
+    useView.getState().setCamera(cam)
+    useView.getState().resetCamera()
+    const { camera } = useView.getState()
+    expect(camera).toEqual(DEFAULT_CAMERA)
+    // A new reference each call so the map's drift guard always re-eases.
+    expect(camera).not.toBe(DEFAULT_CAMERA)
+  })
+
   it('setLayers replaces the whole visibility map', () => {
     const off = Object.fromEntries(LAYERS.map((l) => [l.id, false]))
     useView.getState().setLayers(off)

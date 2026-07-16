@@ -60,7 +60,7 @@ export const LAYERS: LayerDef[] = [
       label: 'ATSB reports; UGIB 2020; independent groups',
       url: 'https://mh370.radiantphysics.com/papers/',
     },
-    defaultVisible: false,
+    defaultVisible: true,
   },
   {
     id: 'arcs',

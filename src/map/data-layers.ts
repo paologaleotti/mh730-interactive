@@ -130,7 +130,7 @@ const ICONS: [name: string, shape: Shape, color: string][] = [
   ['mh-di-waypoint', 'diamond', '#8fa8b8'],
   ['mh-ci-event', 'circle', '#dfe6ec'],
   ['mh-hx-station', 'hexagon', '#c9a35b'],
-  ['mh-st-site', 'star', '#b79ddb'],
+  ['mh-st-site', 'star', '#c65d5d'],
   ['mh-cr-satellite', 'cross', '#6fb7cc'],
 ]
 

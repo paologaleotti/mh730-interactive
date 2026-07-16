@@ -1,8 +1,10 @@
 import { useView, type Mode } from '../state/view'
 
-const MODES: { id: Mode; label: string }[] = [
+// `planned` marks a mode whose full experience (flight-clock audio +
+// choreography) is not finished yet; it renders a PLANNED badge and a tooltip.
+const MODES: { id: Mode; label: string; planned?: boolean }[] = [
   { id: 'explore', label: 'EXPLORE' },
-  { id: 'flight', label: 'FLIGHT' },
+  { id: 'flight', label: 'FLIGHT', planned: true },
   { id: 'database', label: 'DATABASE' },
 ]
 
@@ -33,9 +35,11 @@ export const TopBar = () => {
                 type="button"
                 className="seg-btn"
                 aria-pressed={mode === m.id}
+                title={m.planned ? 'Work in progress: flight-clock audio and choreography are still being built' : undefined}
                 onClick={() => setMode(m.id)}
               >
                 {m.label}
+                {m.planned && <span className="conf conf-planned" aria-hidden="true">PLANNED</span>}
               </button>
             ))}
           </div>

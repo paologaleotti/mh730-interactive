@@ -143,6 +143,25 @@ const clipToBbox = (points: [number, number][]): [number, number][][] => {
   return segments.filter((s) => s.length >= 2)
 }
 
+const ARC_NAMES: Record<string, { name: string; desc: string }> = {
+  hs1: {
+    name: 'Handshake 1 · 18:25 log-on ring',
+    desc: 'The SATCOM terminal logged back on at 18:25:27 UTC, three minutes after the last radar fix. First of the seven timing rings.',
+  },
+  hs2: {
+    name: 'Handshake 2 · 19:41 ring',
+    desc: 'Hourly ground-station interrogation. The smallest of the seven rings: the aircraft was closest to the satellite around this time.',
+  },
+  hs3: { name: 'Handshake 3 · 20:41 ring', desc: 'Hourly ground-station interrogation.' },
+  hs4: { name: 'Handshake 4 · 21:41 ring', desc: 'Hourly ground-station interrogation.' },
+  hs5: { name: 'Handshake 5 · 22:41 ring', desc: 'Hourly ground-station interrogation.' },
+  hs6: { name: 'Handshake 6 · 00:11 ring', desc: 'The last routine hourly interrogation.' },
+  hs7: {
+    name: '7th arc · 00:19 final log-on',
+    desc: 'The final, incomplete log-on at 00:19:29 UTC, consistent with restart after fuel exhaustion. Every underwater search has followed this ring.',
+  },
+}
+
 const buildArcs = (satcom: SatcomJson) => {
   const { biasUs } = satcom.btoModel
   if (!Number.isFinite(biasUs)) fail('satcom: biasUs missing')
@@ -178,6 +197,8 @@ const buildArcs = (satcom: SatcomJson) => {
         properties: {
           id: h.id,
           label: `${h.id.toUpperCase()} ${hourLabel}Z`,
+          name: ARC_NAMES[h.id]?.name ?? `Handshake ${h.id}`,
+          desc: ARC_NAMES[h.id]?.desc ?? '',
           timeUtc: h.timeUtc,
           btoUs: bto,
           bfoHz: h.bfoHz,
@@ -197,9 +218,45 @@ const buildArcs = (satcom: SatcomJson) => {
 // ---------------------------------------------------------------- track
 
 const buildTrack = (track: { epoch1: TrackPoint[]; epoch2: TrackPoint[] }) => {
-  const toFc = (points: TrackPoint[], epoch: number) => {
+  // Display-grade epoch metadata: the tooltip and Detail Panel render these
+  // properties directly, so they must read like evidence, not like ids.
+  interface EpochMeta {
+    name: string
+    desc: string
+    citation: { label: string; url: string }
+  }
+  const EPOCH_META: Record<1 | 2, EpochMeta> = {
+    1: {
+      name: 'Epoch 1 · Recorded flight path (ADS-B)',
+      desc:
+        'Civil secondary-radar/ADS-B positions from takeoff at Kuala Lumpur (16:42 UTC) ' +
+        'to the final transponder return near waypoint IGARI (17:21:13 UTC). ' +
+        'Compiled from report-quoted positions and the filed route; the authoritative ' +
+        'track is in the SIR 2018 / Factual Information 2015 appendix figures.',
+      citation: {
+        label: 'Malaysian Safety Investigation Report (2018); Factual Information (2015)',
+        url: 'https://www.mot.gov.my/en/MH370%20Investigation%20Report/01-Report/MH370SafetyInvestigationReport.pdf',
+      },
+    },
+    2: {
+      name: 'Epoch 2 · Military radar path',
+      desc:
+        'Primary (military) radar track: the turnback at IGARI, recrossing the Malay ' +
+        'peninsula near Kota Bharu, passing south of Penang, then northwest up the ' +
+        'Strait of Malacca to the last fix 10 NM past waypoint MEKAR at 18:22:12 UTC. ' +
+        'Recorded but lower precision; no transponder was operating.',
+      citation: {
+        label: 'Malaysian SIR (2018); ATSB Definition of Underwater Search Areas',
+        url: 'https://www.atsb.gov.au/mh370-pages/updates/reports',
+      },
+    },
+  }
+
+  const toFc = (points: TrackPoint[], epoch: 1 | 2) => {
     for (const p of points) assertLatLon(p.lat, p.lon, `epoch${epoch} ${p.timeUtc}`)
     const sorted = [...points].sort((a, b) => a.timeUtc.localeCompare(b.timeUtc))
+    const interpolated = sorted.filter((p) => p.source === 'interpolated').length
+    const meta = EPOCH_META[epoch]
     return {
       type: 'FeatureCollection',
       features: [
@@ -210,8 +267,16 @@ const buildTrack = (track: { epoch1: TrackPoint[]; epoch2: TrackPoint[] }) => {
             coordinates: sorted.map((p) => [p.lon, p.lat]),
           },
           properties: {
+            id: `epoch${epoch}`,
             epoch,
+            name: meta.name,
+            desc: meta.desc,
+            citation: meta.citation,
             confidence: 'recorded',
+            timeStart: sorted[0].timeUtc,
+            timeEnd: sorted[sorted.length - 1].timeUtc,
+            pointCount: sorted.length,
+            interpolatedCount: interpolated,
             points: sorted.map((p) => ({
               t: p.timeUtc,
               alt: p.altFt,
@@ -269,6 +334,10 @@ const buildReconstructions = (raw: { reconstructions: Reconstruction[] }) => {
         id: r.id,
         name: r.name,
         label: `${r.name} · RECONSTRUCTION`,
+        desc:
+          `Published candidate route for the SATCOM-only final hours (18:22-00:19 UTC), ` +
+          `${r.points.length} path points ending on the 7th arc. A model consistent with ` +
+          `the satellite data, not a recorded track.`,
         citation: r.citation,
         synthesized: r.synthesizedFromParameters,
         confidence: 'modelled',
@@ -301,10 +370,18 @@ const buildDebris = (raw: { items: DebrisItem[] }) => {
     assertLatLon(d.lat, d.lon, `debris ${d.id}`)
     if (!DEBRIS_STATUSES.has(d.status)) fail(`debris ${d.id}: bad status "${d.status}"`)
     if (!/^\d{4}-\d{2}-\d{2}$/.test(d.findDate)) fail(`debris ${d.id}: bad date`)
+    const statusText = d.status.replace('-', ' ')
     return {
       type: 'Feature',
       geometry: { type: 'Point', coordinates: [d.lon, d.lat] },
-      properties: { ...d, confidence: 'recorded' },
+      properties: {
+        ...d,
+        desc:
+          `${d.partId}, found ${d.findDate} at ${d.locationName}` +
+          `${d.discoverer ? ` by ${d.discoverer}` : ''}. ` +
+          `Official identification status: ${statusText}.`,
+        confidence: 'recorded',
+      },
     }
   })
   writeOut('debris.geojson.json', { type: 'FeatureCollection', features }, features.length)
@@ -420,6 +497,56 @@ const buildPois = (raw: Poi[]) => {
   writeOut('pois.geojson.json', { type: 'FeatureCollection', features }, features.length)
 }
 
+// ------------------------------------------------------------------ media
+
+interface MediaItem {
+  id: string
+  kind: string
+  title: string
+  featureIds: string[]
+  directUrl: string | null
+  embedUrl: string | null
+  pageUrl: string | null
+  mimeType: string | null
+  durationS: number | null
+  publisher: string
+  license: string
+  verified: string
+  notes: string
+}
+
+const MEDIA_KINDS = new Set(['audio', 'video', 'image'])
+
+/**
+ * Validate the media manifest against the known feature ids and pass it
+ * through (FR-8.4.1: manifest ships with the app; payloads load on demand).
+ */
+const buildMedia = (
+  raw: { meta: unknown; items: MediaItem[] },
+  knownFeatureIds: Set<string>,
+) => {
+  // Locally-mirrored payloads live under public/media/ and are served at
+  // /media/... so assert every such file actually exists: a renamed or
+  // missing asset fails the build instead of shipping a dead local link.
+  const publicDir = join(root, 'public')
+  for (const m of raw.items) {
+    if (!MEDIA_KINDS.has(m.kind)) fail(`media ${m.id}: bad kind "${m.kind}"`)
+    if (!m.directUrl && !m.embedUrl && !m.pageUrl) fail(`media ${m.id}: no URL at all`)
+    if (!m.license) fail(`media ${m.id}: license missing`)
+    if (!m.featureIds.length) fail(`media ${m.id}: no featureIds`)
+    if (m.directUrl?.startsWith('/') && !existsSync(join(publicDir, m.directUrl))) {
+      fail(`media ${m.id}: local file ${m.directUrl} missing from public/`)
+    }
+    for (const fid of m.featureIds) {
+      if (!knownFeatureIds.has(fid)) fail(`media ${m.id}: unknown featureId "${fid}"`)
+    }
+  }
+  const ids = raw.items.map((m) => m.id)
+  if (new Set(ids).size !== ids.length) fail('media: duplicate item ids')
+  writeFileSync(join(outDir, 'media.manifest.json'), JSON.stringify(raw))
+  console.log(`✓ src/data/media.manifest.json (${raw.items.length} items)`)
+}
+
 // ---------------------------------------------------------------- main
 
 const satcom = readRaw<SatcomJson>('satcom.json')
@@ -442,6 +569,20 @@ if (pois) buildPois(pois)
 
 const sites = readRaw<{ sites: CandidateSite[] }>('candidate-sites.json')
 if (sites) buildCandidateSites(sites)
+
+const media = readRaw<{ meta: unknown; items: MediaItem[] }>('media.json')
+if (media) {
+  const knownFeatureIds = new Set([
+    ...(pois ?? []).map((p) => p.id),
+    ...(debris?.items ?? []).map((d) => d.id),
+    ...(search?.campaigns ?? []).map((c) => c.id),
+    ...(sites?.sites ?? []).map((s) => s.id),
+    ...(satcom?.handshakes ?? []).map((h) => h.id),
+    'epoch1',
+    'epoch2',
+  ])
+  buildMedia(media, knownFeatureIds)
+}
 
 writeFileSync(
   join(outDir, 'manifest.json'),

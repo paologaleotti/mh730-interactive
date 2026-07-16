@@ -8,6 +8,7 @@ import maplibregl from 'maplibre-gl'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { darkStyle, fallbackStyle } from './basemap'
 import { registerDataLayers, syncLayerVisibility, syncCampaignFilter } from './data-layers'
+import { wireInteractions } from './interactions'
 import { useView } from '../state/view'
 import { useCursor } from '../state/cursor'
 
@@ -27,6 +28,31 @@ const SKY: maplibregl.SkySpecification = {
     5, 0.35,
     8, 0,
   ],
+}
+
+// A maplibre control button (grouped with the zoom/compass stack) that resets
+// pan, zoom, bearing (north up) and pitch to the opening pose via the store,
+// which the camera drift-guard subscription eases the map back to.
+const makeResetControl = (): maplibregl.IControl => {
+  const container = document.createElement('div')
+  container.className = 'maplibregl-ctrl maplibregl-ctrl-group'
+  const button = document.createElement('button')
+  button.type = 'button'
+  button.className = 'mh-reset-ctrl'
+  button.title = 'Reset view'
+  button.setAttribute('aria-label', 'Reset view')
+  button.innerHTML =
+    '<svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true">' +
+    '<path fill="none" stroke="currentColor" stroke-width="1.6" ' +
+    'd="M10 3v3M10 14v3M3 10h3M14 10h3"/>' +
+    '<circle cx="10" cy="10" r="4.2" fill="none" stroke="currentColor" stroke-width="1.6"/>' +
+    '</svg>'
+  button.addEventListener('click', () => useView.getState().resetCamera())
+  container.appendChild(button)
+  return {
+    onAdd: () => container,
+    onRemove: () => container.remove(),
+  }
 }
 
 export const GlobeMap = () => {
@@ -67,6 +93,7 @@ export const GlobeMap = () => {
       new maplibregl.NavigationControl({ visualizePitch: true, showZoom: true }),
       'bottom-right',
     )
+    map.addControl(makeResetControl(), 'bottom-right')
     map.addControl(new maplibregl.ScaleControl({ unit: 'metric' }), 'bottom-left')
     // Source attributions (OpenFreeMap / OpenMapTiles / OSM) come from the
     // TileJSON itself; a custom string would duplicate them.
@@ -172,6 +199,14 @@ export const GlobeMap = () => {
 
     map.on('mousemove', (e) => useCursor.getState().set({ lng: e.lngLat.lng, lat: e.lngLat.lat }))
     map.on('mouseout', () => useCursor.getState().clear())
+
+    // Cursor conventions, hover tooltip, click-to-select (Detail Panel).
+    wireInteractions(map)
+
+    // Dev-only handle for the headless verification harness (CLAUDE.md gate 4).
+    if (import.meta.env.DEV) {
+      Object.assign(window, { __mhmap: map })
+    }
 
     return () => {
       unsubLayers()

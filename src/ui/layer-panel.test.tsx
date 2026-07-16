@@ -70,11 +70,11 @@ describe('LayerPanel', () => {
   it('toggling on a hidden layer raises the count without touching others', async () => {
     const user = userEvent.setup()
     render(<LayerPanel />)
-    // 'flight-epoch3' (candidate reconstructions) is hidden by default.
-    expect(useView.getState().layers['flight-epoch3']).toBe(false)
-    await user.click(screen.getByRole('checkbox', { name: /candidate reconstructions/ }))
+    // 'bathymetry' (Bathymetry seabed) is hidden by default.
+    expect(useView.getState().layers.bathymetry).toBe(false)
+    await user.click(screen.getByRole('checkbox', { name: /Bathymetry/ }))
     const layers = useView.getState().layers
-    expect(layers['flight-epoch3']).toBe(true)
+    expect(layers.bathymetry).toBe(true)
     expect(layers.debris).toBe(true)
     expect(screen.getByText(`${defaultOnCount + 1}/${countable.length}`)).toBeDefined()
   })

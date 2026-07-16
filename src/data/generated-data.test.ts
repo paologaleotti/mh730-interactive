@@ -12,14 +12,49 @@ import pois from './pois.geojson.json'
 import debris from './debris.geojson.json'
 import searchAreas from './search-areas.geojson.json'
 
-interface LineFeature {
-  geometry: { type: string; coordinates: number[][] }
-}
+import type { Feature } from 'geojson'
 
-const lineCoords = (f: LineFeature): [number, number][] =>
+const lineCoords = (f: Feature): [number, number][] =>
   f.geometry.type === 'LineString'
     ? f.geometry.coordinates.map(([lon, lat]): [number, number] => [lon, lat])
     : []
+
+describe('display-grade properties (every clickable feature)', () => {
+  it('every feature carries a human-readable name/partId and a description', () => {
+    const collections = [
+      { label: 'arcs', fc: arcs },
+      { label: 'epoch1', fc: epoch1 },
+      { label: 'epoch2', fc: epoch2 },
+      { label: 'epoch3', fc: epoch3 },
+      { label: 'debris', fc: debris },
+      { label: 'search', fc: searchAreas },
+      { label: 'pois', fc: pois },
+      { label: 'sites', fc: candidateSites },
+    ]
+    for (const { label, fc } of collections) {
+      for (const f of fc.features) {
+        const p = f.properties ?? {}
+        const display = String(p.name ?? p.partId ?? '')
+        expect(display.length, `${label}: feature ${p.id} has no display name`).toBeGreaterThan(3)
+        // A name that is just the raw id means the data was not shaped.
+        expect(display, `${label}: display name equals raw id`).not.toBe(String(p.id))
+        const about = String(p.desc ?? p.oneLiner ?? p.outcome ?? p.methodology ?? '')
+        expect(about.length, `${label}: feature ${p.id} has no description`).toBeGreaterThan(10)
+      }
+    }
+  })
+
+  it('epoch lines carry time range and point provenance counts', () => {
+    for (const fc of [epoch1, epoch2]) {
+      const p = fc.features[0].properties ?? {}
+      expect(String(p.timeStart)).toMatch(/^2014-03-07T/)
+      expect(String(p.timeEnd)).toMatch(/^2014-03-07T/)
+      expect(Number(p.pointCount)).toBeGreaterThanOrEqual(10)
+      expect(Number(p.interpolatedCount)).toBeGreaterThanOrEqual(0)
+      expect(p.citation).toBeDefined()
+    }
+  })
+})
 
 describe('arcs.geojson', () => {
   it('contains all seven handshake arcs', () => {

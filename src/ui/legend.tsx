@@ -44,7 +44,7 @@ const MARKER_ITEMS: { label: string; shape: string; color: string; title?: strin
   },
   { label: 'Waypoint', shape: 'diamond', color: '#8fa8b8' },
   { label: 'Recovered debris', shape: 'triangle', color: '#6faf7d' },
-  { label: 'Candidate crash site', shape: 'star', color: '#b79ddb' },
+  { label: 'Candidate crash site', shape: 'star', color: '#c65d5d' },
   { label: 'Hydrophone station', shape: 'hexagon', color: '#c9a35b' },
   { label: 'Satellite position', shape: 'cross', color: '#6fb7cc' },
   { label: 'Key event', shape: 'circle', color: '#dfe6ec' },

@@ -206,6 +206,10 @@ a:hover {
 }
 .seg-sm .seg-btn { padding: 4px 8px; font-size: 10px; }
 
+/* PLANNED tag on a mode button (reuses the .conf-planned badge from layers). */
+.seg-btn .conf { margin-left: 6px; vertical-align: middle; }
+.seg-btn[aria-pressed="true"] .conf-planned { color: var(--bg-0); }
+
 .icon-btn {
   background: var(--bg-2);
   border: 1px solid var(--line);
@@ -368,6 +372,164 @@ a:hover {
 .campaign-swatch { width: 9px; height: 9px; flex: 0 0 auto; opacity: 0.85; }
 .campaign-name { color: var(--text-1); flex: 1; line-height: 1.3; }
 .campaign-kind { color: var(--text-2); font-size: 8.5px; letter-spacing: 0.1em; }
+
+/* ------------------------------------------------------------ tooltip */
+
+.map-tooltip {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 46;
+  pointer-events: none;
+  background: rgba(7, 9, 11, 0.92);
+  border: 1px solid var(--line-hi);
+  padding: 5px 9px;
+  max-width: 240px;
+  will-change: transform;
+}
+.tt-name { color: var(--text-0); font-size: 11.5px; font-weight: 700; letter-spacing: 0.04em; }
+.tt-sub {
+  font-family: var(--sans);
+  color: var(--text-1);
+  font-size: 10.5px;
+  margin-top: 1px;
+}
+.tt-hint { color: var(--text-2); font-size: 8.5px; letter-spacing: 0.14em; margin-top: 3px; }
+
+/* -------------------------------------------------------- detail panel */
+
+.detail-panel {
+  position: absolute;
+  top: calc(var(--topbar-h) + 8px);
+  left: 8px;
+  bottom: var(--bottom-inset);
+  width: 364px;
+  z-index: 47;
+  display: flex;
+  flex-direction: column;
+  background: rgba(11, 14, 18, 0.94);
+  border: 1px solid var(--line);
+  backdrop-filter: blur(8px);
+}
+.dp-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--line);
+}
+.dp-kind {
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  color: var(--text-2);
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 5px;
+}
+.dp-title {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-0);
+  letter-spacing: 0.04em;
+  line-height: 1.3;
+}
+.dp-close {
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--text-2);
+  padding: 3px 8px;
+  font-size: 11px;
+}
+.dp-close:hover { color: var(--text-0); border-color: var(--line-hi); }
+
+.dp-body { flex: 1; overflow-y: auto; padding: 4px 0 8px; }
+.dp-section { padding: 8px 12px; }
+.dp-section + .dp-section { border-top: 1px solid var(--line); }
+.dp-section-title {
+  font-size: 8.5px;
+  letter-spacing: 0.22em;
+  color: var(--text-2);
+  margin-bottom: 6px;
+}
+.dp-row {
+  display: flex;
+  gap: 10px;
+  padding: 2px 0;
+  align-items: baseline;
+}
+.dp-key {
+  flex: 0 0 118px;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  color: var(--text-2);
+}
+.dp-val {
+  font-family: var(--sans);
+  font-size: 12px;
+  color: var(--text-0);
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+.dp-text {
+  margin: 0;
+  font-family: var(--sans);
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--text-1);
+}
+.dp-cite {
+  display: block;
+  margin-top: 6px;
+  font-size: 10.5px;
+  color: var(--accent);
+  overflow-wrap: anywhere;
+}
+.dp-source-text {
+  margin: 0;
+  font-family: var(--sans);
+  font-size: 11px;
+  color: var(--text-1);
+  line-height: 1.45;
+}
+/* evidence media */
+.media-item { padding: 6px 0; }
+.media-item + .media-item { border-top: 1px dashed var(--line); }
+.media-title {
+  font-family: var(--sans);
+  font-size: 11.5px;
+  color: var(--text-0);
+  margin-bottom: 5px;
+}
+.media-audio { width: 100%; height: 32px; filter: invert(0.9) hue-rotate(180deg); }
+.media-image {
+  width: 100%;
+  max-height: 180px;
+  object-fit: cover;
+  border: 1px solid var(--line);
+  display: block;
+}
+.media-embed {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: 1px solid var(--line);
+  background: var(--bg-0);
+}
+.media-attr {
+  margin-top: 4px;
+  font-size: 9px;
+  color: var(--text-2);
+  letter-spacing: 0.04em;
+}
+.media-attr a { color: var(--text-1); }
+.dp-actions {
+  display: flex;
+  gap: 8px;
+  padding: 10px 12px;
+  border-top: 1px solid var(--line);
+}
 
 /* ------------------------------------------------------------- legend */
 
@@ -623,6 +785,13 @@ a:hover {
 .maplibregl-ctrl button .maplibregl-ctrl-icon {
   filter: invert(0.85) hue-rotate(160deg);
 }
+.mh-reset-ctrl {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-1);
+}
+.mh-reset-ctrl:hover { color: var(--accent); }
 .maplibregl-ctrl-scale {
   background: rgba(7, 9, 11, 0.8) !important;
   border-color: var(--line) !important;

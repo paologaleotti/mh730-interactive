@@ -79,6 +79,30 @@ describe('encodeState / applyStateFromHash roundtrip', () => {
     expect(useClock.getState().speed).toBe(initialClock.speed)
   })
 
+  it('roundtrips the open Detail Panel target (ft)', async () => {
+    const { useSelection } = await import('./selection')
+    useSelection.getState().selectById('arc', 'hs7')
+    const encoded = encodeState()
+    expect(encoded).toContain('ft=arc:hs7')
+
+    useSelection.setState({ selected: null, hover: null })
+    setHash(encoded)
+    applyStateFromHash()
+    expect(useSelection.getState().selected?.kind).toBe('arc')
+    expect(useSelection.getState().selected?.id).toBe('hs7')
+  })
+
+  it('ignores a hostile ft target', async () => {
+    const { useSelection } = await import('./selection')
+    useSelection.setState({ selected: null, hover: null })
+    setHash('ft=zz:qq')
+    applyStateFromHash()
+    expect(useSelection.getState().selected).toBeNull()
+    setHash('ft=debris:doesnotexist')
+    applyStateFromHash()
+    expect(useSelection.getState().selected).toBeNull()
+  })
+
   it('roundtrips explore mode and globe projection', () => {
     useView.getState().setMode('explore')
     useView.getState().setProjection('globe')

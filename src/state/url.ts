@@ -9,8 +9,13 @@
 
 import { useClock, type TimeScale } from './clock'
 import { useView, type Mode, type Camera } from './view'
+import { useSelection, resolveFeature, type FeatureKind } from './selection'
 import { LAYERS } from '../config/layers'
 import searchAreas from '../data/search-areas.geojson.json'
+
+const FEATURE_KINDS: FeatureKind[] = [
+  'poi', 'debris', 'arc', 'search', 'site', 'epoch1', 'epoch2', 'epoch3',
+]
 
 const CAMPAIGN_IDS = new Set(searchAreas.features.map((f) => String(f.properties?.id)))
 /** Upper bound for the playback-speed URL value (above any UI preset). */
@@ -66,6 +71,7 @@ const decodeCamera = (s: string): Camera | null => {
 export const encodeState = (): string => {
   const clock = useClock.getState()
   const view = useView.getState()
+  const { selected } = useSelection.getState()
   const visible = LAYERS.filter((l) => view.layers[l.id]).map((l) => l.id)
 
   // Built by hand instead of URLSearchParams: every value here is URL-safe by
@@ -81,6 +87,8 @@ export const encodeState = (): string => {
     `p=${view.panelOpen ? 1 : 0}`,
     // Disabled search campaigns (FR-11.3); omitted when all enabled.
     ...(view.disabledCampaigns.length ? [`dc=${view.disabledCampaigns.join(',')}`] : []),
+    // Open Detail Panel target (FR-13.1); omitted when nothing is selected.
+    ...(selected ? [`ft=${selected.kind}:${selected.id}`] : []),
   ].join('&')
 }
 
@@ -145,6 +153,16 @@ export const applyStateFromHash = (): void => {
       .getState()
       .setDisabledCampaigns(dc.split(',').filter((id) => CAMPAIGN_IDS.has(id)))
   }
+
+  const ft = params.get('ft')
+  if (ft !== null) {
+    const sep = ft.indexOf(':')
+    const kind = FEATURE_KINDS.find((k) => k === ft.slice(0, sep === -1 ? 0 : sep))
+    if (kind) {
+      // resolveFeature returns null for unknown ids: hostile ft closes the panel.
+      useSelection.getState().select(resolveFeature(kind, ft.slice(sep + 1)))
+    }
+  }
 }
 
 /**
@@ -180,11 +198,13 @@ export const startUrlSync = (): (() => void) => {
 
   const unsubClock = useClock.subscribe(schedule)
   const unsubView = useView.subscribe(schedule)
+  const unsubSelection = useSelection.subscribe(schedule)
   window.addEventListener('hashchange', onHashChange)
   return () => {
     if (timer) clearTimeout(timer)
     unsubClock()
     unsubView()
+    unsubSelection()
     window.removeEventListener('hashchange', onHashChange)
   }
 }

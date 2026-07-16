@@ -43,6 +43,8 @@ interface ViewState {
   setMode: (m: Mode) => void
   setProjection: (p: Projection) => void
   setCamera: (c: Camera) => void
+  /** Reset pan, zoom, bearing (north) and pitch to the opening pose. */
+  resetCamera: () => void
   setLayers: (l: Record<string, boolean>) => void
   toggleLayer: (id: string) => void
   toggleCampaign: (id: string) => void
@@ -71,6 +73,9 @@ export const useView = create<ViewState>((set) => ({
   },
   setProjection: (projection) => set({ projection }),
   setCamera: (camera) => set({ camera }),
+  // A fresh object each call so the map's drift guard always sees a new
+  // reference and eases back even when already near the default pose.
+  resetCamera: () => set({ camera: { ...DEFAULT_CAMERA } }),
   setLayers: (layers) => set({ layers }),
   toggleLayer: (id) =>
     set((st) => ({ layers: { ...st.layers, [id]: !st.layers[id] } })),

@@ -5,6 +5,8 @@ import { LayerPanel } from './ui/layer-panel'
 import { Timeline } from './ui/timeline'
 import { CursorReadout } from './ui/cursor-readout'
 import { Legend } from './ui/legend'
+import { MapTooltip } from './ui/tooltip'
+import { DetailPanel } from './ui/detail-panel'
 import { Database } from './ui/database'
 import { ClockDriver } from './state/clock-driver'
 import { ErrorBoundary } from './ui/error-boundary'
@@ -57,6 +59,8 @@ const App = () => {
       {onMap && <LayerPanel />}
       {onMap && <CursorReadout />}
       {onMap && <Legend />}
+      {onMap && <MapTooltip />}
+      {onMap && <DetailPanel />}
       {hasTimeline && <Timeline />}
       {mode === 'database' && <Database />}
 
