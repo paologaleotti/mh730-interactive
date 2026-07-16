@@ -4,7 +4,7 @@
 // config/layers.ts; confidence styling follows P2 (recorded solid, derived
 // dashed, modelled distinct + labeled).
 
-import type maplibregl from 'maplibre-gl'
+import maplibregl from 'maplibre-gl'
 import arcs from '../data/arcs.geojson.json'
 import epoch1 from '../data/flight-epoch1.geojson.json'
 import epoch2 from '../data/flight-epoch2.geojson.json'
@@ -194,7 +194,10 @@ export const registerDataLayers = (map: maplibregl.Map): void => {
   addSourceOnce(map, 'mh-sites', { type: 'geojson', data: candidateSites })
   registerIcons(map)
 
-  if (map.getLayer('mh-epoch1')) return // layers already registered
+  if (map.getLayer('mh-epoch1')) {
+    registerHighlight(map) // ensure present after a style swap
+    return
+  }
 
   // Insert seabed under everything drawn above water; 'waterway' is the first
   // layer above 'water' in the dark style. Fallback style lacks it -> append.
@@ -542,6 +545,68 @@ export const registerDataLayers = (map: maplibregl.Map): void => {
       'text-halo-width': 1.3,
     },
   })
+
+  // Highlight layers last, so the emphasis draws on top of every data layer.
+  registerHighlight(map)
+}
+
+const EMPTY_FC: GeoJSON.FeatureCollection = { type: 'FeatureCollection', features: [] }
+
+/** Register the highlight source + layers (drawn on top of everything). One
+    feature at a time; works for any geometry (line/polygon outline + point). */
+const registerHighlight = (map: maplibregl.Map) => {
+  if (map.getSource('mh-highlight')) return
+  map.addSource('mh-highlight', { type: 'geojson', data: EMPTY_FC })
+  // Restrained emphasis: a subtle wider halo behind the feature plus a modest
+  // brightness lift, not a neon glow. Reads as "this one is active".
+  map.addLayer({
+    id: 'mh-hl-glow',
+    type: 'line',
+    source: 'mh-highlight',
+    filter: ['!=', ['geometry-type'], 'Point'],
+    layout: { 'line-cap': 'round', 'line-join': 'round' },
+    paint: {
+      'line-color': '#6f97a8',
+      'line-width': ['interpolate', ['linear'], ['zoom'], 1, 5, 8, 10],
+      'line-opacity': 0.28,
+      'line-blur': 3,
+    },
+  })
+  map.addLayer({
+    id: 'mh-hl-line',
+    type: 'line',
+    source: 'mh-highlight',
+    filter: ['!=', ['geometry-type'], 'Point'],
+    layout: { 'line-cap': 'round', 'line-join': 'round' },
+    paint: {
+      'line-color': '#aecbd6',
+      'line-width': ['interpolate', ['linear'], ['zoom'], 1, 1.6, 8, 3],
+      'line-opacity': 0.85,
+    },
+  })
+  // Ring for point features.
+  map.addLayer({
+    id: 'mh-hl-point',
+    type: 'circle',
+    source: 'mh-highlight',
+    filter: ['==', ['geometry-type'], 'Point'],
+    paint: {
+      'circle-radius': ['interpolate', ['linear'], ['zoom'], 2, 10, 8, 15],
+      'circle-color': 'rgba(111, 151, 168, 0.08)',
+      'circle-stroke-color': '#8faab8',
+      'circle-stroke-width': 1.5,
+    },
+  })
+}
+
+/** Set (or clear) the currently highlighted feature geometry. */
+export const setHighlightFeature = (
+  map: maplibregl.Map,
+  feature: GeoJSON.Feature | null,
+): void => {
+  const src = map.getSource('mh-highlight')
+  if (!(src instanceof maplibregl.GeoJSONSource)) return
+  src.setData(feature ? { type: 'FeatureCollection', features: [feature] } : EMPTY_FC)
 }
 
 /** Show/hide individual search campaigns (sub-layer toggles). */

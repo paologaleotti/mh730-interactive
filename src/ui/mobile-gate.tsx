@@ -18,17 +18,22 @@ export const MobileGate = () => {
   if (!mobile) return null
 
   return (
-    <div className="mobile-gate" role="alertdialog" aria-label="Desktop only">
+    <div
+      className="mobile-gate"
+      role="region"
+      aria-labelledby="mg-heading"
+      aria-describedby="mg-desc"
+    >
       <div className="mg-strip">UNCLASSIFIED · OPEN-SOURCE EVIDENCE COMPILATION</div>
       <div className="mg-body">
-        <div className="mg-brand">
+        <h1 id="mg-heading" className="mg-brand">
           <span className="brand-mark" aria-hidden="true">◆</span> MH370
-        </div>
+        </h1>
         <div className="mg-tag">INTERACTIVE EVIDENCE GLOBE</div>
 
         <div className="mg-badge">DESKTOP ONLY <span className="mg-planned">MOBILE PLANNED</span></div>
 
-        <p className="mg-text">
+        <p id="mg-desc" className="mg-text">
           This interactive globe is built for a large screen and a mouse or
           trackpad. Open it on a desktop or laptop for the full evidence map,
           timeline, and detail panels.

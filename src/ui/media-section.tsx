@@ -19,7 +19,7 @@ const Attribution = ({ publisher, license, pageUrl }: {
     {pageUrl && (
       <>
         {' · '}
-        <a href={pageUrl} target="_blank" rel="noopener">source ↗</a>
+        <a href={pageUrl} target="_blank" rel="noopener noreferrer">source ↗</a>
       </>
     )}
   </div>
@@ -55,14 +55,14 @@ export const MediaSection = ({ featureId }: { featureId: string }) => {
               {/* Local file: preload metadata so the scrubber shows duration
                   up front; audio bytes still wait for the play button. */}
               <audio className="media-audio" controls preload="metadata" src={item.directUrl} />
-              {/^.*time-compress/i.test(item.notes) && (
+              {/time-compress/i.test(item.notes) && (
                 <div className="media-note">Time-compressed audio, illustrative playback rate</div>
               )}
             </>
           )}
 
           {item.kind === 'image' && item.directUrl && (
-            <a href={item.pageUrl ?? item.directUrl} target="_blank" rel="noopener">
+            <a href={item.pageUrl ?? item.directUrl} target="_blank" rel="noopener noreferrer">
               <img className="media-image" src={item.directUrl} alt={item.title} loading="lazy" />
             </a>
           )}
@@ -70,7 +70,7 @@ export const MediaSection = ({ featureId }: { featureId: string }) => {
           {!item.directUrl && item.embedUrl && <Embed item={item} />}
 
           {!item.directUrl && !item.embedUrl && item.pageUrl && (
-            <a className="dp-cite" href={item.pageUrl} target="_blank" rel="noopener">
+            <a className="dp-cite" href={item.pageUrl} target="_blank" rel="noopener noreferrer">
               ↗ {item.title}
             </a>
           )}

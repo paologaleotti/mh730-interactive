@@ -4,6 +4,7 @@
 
 import { create } from 'zustand'
 import type { Feature } from 'geojson'
+import { useHighlight } from './highlight'
 import arcs from '../data/arcs.geojson.json'
 import epoch1 from '../data/flight-epoch1.geojson.json'
 import epoch2 from '../data/flight-epoch2.geojson.json'
@@ -75,11 +76,13 @@ const representativePoint = (f: Feature): [number, number] => {
   return [0, 0]
 }
 
+/** The full GeoJSON feature for a (kind, id) pair; null if unknown. */
+export const featureByKind = (kind: FeatureKind, id: string): Feature | null =>
+  COLLECTIONS[kind]?.features.find((x) => featureId(kind, x) === id) ?? null
+
 /** Resolve a (kind, id) pair against the static data; null if unknown. */
 export const resolveFeature = (kind: FeatureKind, id: string): Selected | null => {
-  const coll = COLLECTIONS[kind]
-  if (!coll) return null
-  const f = coll.features.find((x) => featureId(kind, x) === id)
+  const f = featureByKind(kind, id)
   if (!f) return null
   return {
     kind,
@@ -97,10 +100,23 @@ interface SelectionState {
   setHover: (h: Hover | null) => void
 }
 
+// Selecting a feature also highlights it on the map; the highlight store is
+// separate so other drivers (flight-clock replay) can highlight without a
+// selection. Clearing the selection clears the click-driven highlight.
+const syncHighlight = (selected: Selected | null) =>
+  useHighlight.getState().set(selected ? { kind: selected.kind, id: selected.id } : null)
+
 export const useSelection = create<SelectionState>((set) => ({
   selected: null,
   hover: null,
-  select: (selected) => set({ selected }),
-  selectById: (kind, id) => set({ selected: resolveFeature(kind, id) }),
+  select: (selected) => {
+    syncHighlight(selected)
+    set({ selected })
+  },
+  selectById: (kind, id) => {
+    const selected = resolveFeature(kind, id)
+    syncHighlight(selected)
+    set({ selected })
+  },
   setHover: (hover) => set({ hover }),
 }))

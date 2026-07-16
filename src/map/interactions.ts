@@ -116,11 +116,8 @@ export const wireInteractions = (map: maplibregl.Map): void => {
       props: { ...(hit.feature.properties ?? {}) },
       lngLat: [e.lngLat.lng, e.lngLat.lat],
     })
-    // FR-9.2: the Detail Panel occupies the left edge; nudge the camera so
-    // the clicked feature is never hidden under it.
-    const PANEL_W = 372
-    if (e.point.x < PANEL_W + 24) {
-      map.panBy([-(PANEL_W + 24 - e.point.x + 40), 0], { duration: 350 })
-    }
+    // FR-9.2: the map's left padding shifts to clear the Detail Panel (see
+    // the padding effect in globe-map.tsx), keeping the feature visible for
+    // both click and deep-link, and honoring reduced-motion there.
   })
 }

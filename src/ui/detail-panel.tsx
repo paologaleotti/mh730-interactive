@@ -34,19 +34,21 @@ const Row = ({ k, v }: { k: string; v: unknown }) => {
   )
 }
 
+/** Read a key off an unknown value without casting (rule: never `as`). */
+const at = (o: unknown, k: string): unknown =>
+  o !== null && typeof o === 'object' && k in o ? Reflect.get(o, k) : undefined
+
 const Citation = ({ props }: { props: Record<string, unknown> }) => {
   const c = props.citation
-  const url =
-    c && typeof c === 'object' && 'url' in c ? str((c as Record<string, unknown>).url) : null
-  const label =
-    c && typeof c === 'object' && 'label' in c ? str((c as Record<string, unknown>).label) : null
+  const url = str(at(c, 'url'))
+  const label = str(at(c, 'label'))
   const source = str(props.source)
   if (!url && !source && !label) return null
   return (
     <div className="dp-section">
       <div className="dp-section-title">SOURCE</div>
       {url ? (
-        <a className="dp-cite" href={url} target="_blank" rel="noopener">
+        <a className="dp-cite" href={url} target="_blank" rel="noopener noreferrer">
           ↗ {label ?? url}
         </a>
       ) : (
@@ -72,7 +74,7 @@ const ArcExplainer = ({ props }: { props: Record<string, unknown> }) => (
       className="dp-cite"
       href="https://www.cambridge.org/core/journals/journal-of-navigation/article/search-for-mh370/D2D1C4C99E7BFDE35841CFD70081114A"
       target="_blank"
-      rel="noopener"
+      rel="noopener noreferrer"
     >
       ↗ Methodology: Ashton et al. 2015 (open access)
     </a>
@@ -80,7 +82,7 @@ const ArcExplainer = ({ props }: { props: Record<string, unknown> }) => (
       className="dp-cite"
       href="https://github.com/davetaz/mh370-data"
       target="_blank"
-      rel="noopener"
+      rel="noopener noreferrer"
     >
       ↗ Released SATCOM log (validated CSV)
     </a>

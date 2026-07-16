@@ -19,6 +19,37 @@ const lineCoords = (f: Feature): [number, number][] =>
     ? f.geometry.coordinates.map(([lon, lat]): [number, number] => [lon, lat])
     : []
 
+describe('feature ids (highlight + deep-link reliability)', () => {
+  const collections = [
+    { label: 'arcs', fc: arcs },
+    { label: 'epoch1', fc: epoch1 },
+    { label: 'epoch2', fc: epoch2 },
+    { label: 'epoch3', fc: epoch3 },
+    { label: 'debris', fc: debris },
+    { label: 'search', fc: searchAreas },
+    { label: 'pois', fc: pois },
+    { label: 'sites', fc: candidateSites },
+  ]
+
+  it('every feature has a non-empty id, unique within its collection', () => {
+    for (const { label, fc } of collections) {
+      const ids = fc.features.map((f) => String(f.properties?.id ?? ''))
+      for (const id of ids) {
+        expect(id.length, `${label}: empty feature id`).toBeGreaterThan(0)
+      }
+      expect(new Set(ids).size, `${label}: duplicate ids ${ids}`).toBe(ids.length)
+    }
+  })
+
+  it('ids are globally unique across collections (kind:id keys never collide)', () => {
+    const all = collections.flatMap(({ fc }) =>
+      fc.features.map((f) => String(f.properties?.id ?? '')),
+    )
+    const dupes = all.filter((id, i) => all.indexOf(id) !== i)
+    expect([...new Set(dupes)], 'cross-collection id collisions').toEqual([])
+  })
+})
+
 describe('display-grade properties (every clickable feature)', () => {
   it('every feature carries a human-readable name/partId and a description', () => {
     const collections = [

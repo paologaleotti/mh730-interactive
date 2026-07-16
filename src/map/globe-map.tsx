@@ -7,10 +7,18 @@ import { useEffect, useRef } from 'react'
 import maplibregl from 'maplibre-gl'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { darkStyle, fallbackStyle } from './basemap'
-import { registerDataLayers, syncLayerVisibility, syncCampaignFilter } from './data-layers'
+import {
+  registerDataLayers,
+  syncLayerVisibility,
+  syncCampaignFilter,
+  setHighlightFeature,
+} from './data-layers'
 import { wireInteractions } from './interactions'
 import { useView } from '../state/view'
 import { useCursor } from '../state/cursor'
+import { useHighlight } from '../state/highlight'
+import { featureByKind, useSelection } from '../state/selection'
+import { motionDuration } from '../lib/motion'
 
 // Dark atmosphere / halo around the globe.
 const SKY: maplibregl.SkySpecification = {
@@ -99,6 +107,10 @@ export const GlobeMap = () => {
     // TileJSON itself; a custom string would duplicate them.
     map.addControl(new maplibregl.AttributionControl({ compact: true }), 'bottom-right')
 
+    // Reflect the highlight store onto the dedicated highlight source.
+    const applyHighlight = (key: ReturnType<typeof useHighlight.getState>['key']) => {
+      setHighlightFeature(map, key ? featureByKind(key.kind, key.id) : null)
+    }
     const applyGlobe = () => {
       map.setProjection({ type: useView.getState().projection })
       map.setSky(SKY)
@@ -107,8 +119,13 @@ export const GlobeMap = () => {
       registerDataLayers(map)
       syncLayerVisibility(map, useView.getState().layers)
       syncCampaignFilter(map, useView.getState().disabledCampaigns)
+      applyHighlight(useHighlight.getState().key)
     }
     map.on('style.load', applyGlobe)
+
+    const unsubHighlight = useHighlight.subscribe((s, prev) => {
+      if (s.key !== prev.key) applyHighlight(s.key)
+    })
 
     // Keep maplibre in sync with the store: layer visibility, and camera
     // changes that did NOT originate from the map itself (hashchange /
@@ -140,7 +157,7 @@ export const GlobeMap = () => {
             zoom: s.camera.zoom,
             bearing: s.camera.bearing,
             pitch: s.camera.pitch,
-            duration: 600,
+            duration: motionDuration(600),
           })
         }
       }
@@ -210,6 +227,7 @@ export const GlobeMap = () => {
 
     return () => {
       unsubLayers()
+      unsubHighlight()
       window.removeEventListener('online', onOnline)
       map.remove()
       mapRef.current = null
@@ -236,9 +254,11 @@ export const GlobeMap = () => {
   }, [projection])
 
   // Keep the visual center of the globe centered in the unobscured viewport:
-  // pad for the top bar, timeline, and the layer panel when it is open.
+  // pad for the top bar, timeline, the layer panel (right), and the Detail
+  // Panel (left) so a selected/deep-linked feature is never hidden (FR-9.2).
   const mode = useView((s) => s.mode)
   const panelOpen = useView((s) => s.panelOpen)
+  const detailOpen = useSelection((s) => s.selected !== null)
   useEffect(() => {
     const map = mapRef.current
     if (!map || mode === 'database') return
@@ -248,12 +268,12 @@ export const GlobeMap = () => {
       padding: {
         top: 66,
         bottom: mode === 'flight' ? 78 : 12, // timeline bar only in flight
-        left: 0,
+        left: detailOpen ? 380 : 0,
         right: panelOpen ? 344 : 0,
       },
-      duration: 500,
+      duration: motionDuration(500),
     })
-  }, [panelOpen, mode])
+  }, [panelOpen, mode, detailOpen])
 
   return <div ref={containerRef} className="map-canvas" />
 }
