@@ -14,7 +14,7 @@ import { LAYERS } from '../config/layers'
 import searchAreas from '../data/search-areas.geojson.json'
 
 const FEATURE_KINDS: FeatureKind[] = [
-  'poi', 'debris', 'arc', 'search', 'site', 'epoch1', 'epoch2', 'epoch3',
+  'poi', 'debris', 'arc', 'aux', 'search', 'site', 'epoch1', 'epoch2', 'epoch3',
 ]
 
 const CAMPAIGN_IDS = new Set(searchAreas.features.map((f) => String(f.properties?.id)))

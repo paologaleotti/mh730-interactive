@@ -6,6 +6,7 @@ import { create } from 'zustand'
 import type { Feature } from 'geojson'
 import { useHighlight } from './highlight'
 import arcs from '../data/arcs.geojson.json'
+import auxArcs from '../data/aux-arcs.geojson.json'
 import epoch1 from '../data/flight-epoch1.geojson.json'
 import epoch2 from '../data/flight-epoch2.geojson.json'
 import epoch3 from '../data/flight-epoch3.geojson.json'
@@ -18,6 +19,7 @@ export type FeatureKind =
   | 'poi'
   | 'debris'
   | 'arc'
+  | 'aux'
   | 'search'
   | 'site'
   | 'epoch1'
@@ -44,6 +46,7 @@ const COLLECTIONS: Record<FeatureKind, { features: Feature[] }> = {
   poi: pois,
   debris,
   arc: arcs,
+  aux: auxArcs,
   search: searchAreas,
   site: candidateSites,
   epoch1,

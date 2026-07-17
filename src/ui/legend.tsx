@@ -3,7 +3,7 @@
 // encode feature category, colors encode status/campaign.
 
 import { useView } from '../state/view'
-import { SEARCH_CAMPAIGNS } from '../map/data-layers'
+import { SEARCH_CAMPAIGNS, RECONSTRUCTIONS } from '../map/data-layers'
 
 // Labels written for a first-time visitor: plain words first, technical term
 // in parentheses where it matters.
@@ -19,11 +19,6 @@ const LINE_ITEMS: { label: string; className: string; title?: string }[] = [
     title: 'Primary radar, 17:21-18:22 UTC (recorded, lower precision)',
   },
   {
-    label: 'Reconstructed paths',
-    className: 'lg-line lg-epoch3',
-    title: 'Published candidate routes for the unrecorded final hours',
-  },
-  {
     label: 'Satellite rings 1-6',
     className: 'lg-line lg-arc',
     title: 'Hourly Inmarsat handshakes: the plane was somewhere on each ring',
@@ -32,6 +27,11 @@ const LINE_ITEMS: { label: string; className: string; title?: string }[] = [
     label: '7th ring · last signal',
     className: 'lg-line lg-arc7',
     title: 'The final, incomplete satellite log-on at 00:19 UTC; all searches follow this line',
+  },
+  {
+    label: 'CAPTIO extra arc (02:28)',
+    className: 'lg-line lg-aux',
+    title: 'An 8th distance ring the CAPTIO study derives from the 02:28 (UTC+8) satellite message, beyond the 7 official arcs. Its two phone-call points show as Key event markers. Off by default.',
   },
 ]
 
@@ -58,6 +58,14 @@ const DEBRIS_SCALE: { label: string; color: string }[] = [
   { label: 'unidentified', color: '#7b8794' },
 ]
 
+/** Compact display names for the reconstruction swatches (full name on hover). */
+const RECON_SHORT: Record<string, string> = {
+  'ashton-2015': 'Ashton 2015 (Inmarsat)',
+  'ugib-2020': 'UGIB 2020',
+  'captio-2022': 'CAPTIO 2022 (ditching)',
+  'wspr-gdtaaa-2023': 'WSPR 2023 (contested)',
+}
+
 /** Compact display names for the campaign swatch grid (full name on hover). */
 const CAMPAIGN_SHORT: Record<string, string> = {
   'south-china-sea-2014': 'South China Sea 2014',
@@ -69,6 +77,7 @@ const CAMPAIGN_SHORT: Record<string, string> = {
   'atsb-underwater-2014-2017': 'ATSB seabed 2014-17',
   'ocean-infinity-2018': 'Ocean Infinity 2018',
   'ocean-infinity-2025-26': 'Ocean Inf. 2025-26',
+  'captio-blelly-marchand-proposed': 'CAPTIO proposed zone',
 }
 
 // CSSProperties has no custom-property keys; extending it types `--mk`
@@ -105,6 +114,19 @@ export const Legend = () => {
               <div key={it.label} className="lg-row" title={it.title}>
                 <span className={it.className} />
                 <span className="lg-label">{it.label}</span>
+              </div>
+            ))}
+          </div>
+
+          <div className="lg-section lg-grid-2">
+            <div className="lg-section-title">RECONSTRUCTED PATHS (final hours)</div>
+            {RECONSTRUCTIONS.map((r) => (
+              <div key={r.id} className="lg-row" title={r.name}>
+                <span
+                  className="lg-line lg-recon"
+                  style={{ borderColor: r.color, opacity: r.contested ? 0.6 : 1 }}
+                />
+                <span className="lg-label">{RECON_SHORT[r.id] ?? r.name}</span>
               </div>
             ))}
           </div>

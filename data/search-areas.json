@@ -227,6 +227,24 @@
         [91.242, -35.894],
         [91.466, -36.106]
       ]
+    },
+    {
+      "id": "captio-blelly-marchand-proposed",
+      "name": "CAPTIO proposed new search zone (Blelly & Marchand, unsearched)",
+      "kind": "proposed",
+      "startDate": "2022-06-24",
+      "endDate": "2022-06-24",
+      "areaKm2": 2058,
+      "operator": "Patrick Blelly & Jean-Luc Marchand / CAPTIO (proposed, never executed)",
+      "outcome": "A proposal, not a conducted search. CAPTIO recommend a ~14 NM-wide trapezoid extending the 2018-searched corridor ~37 NM further south along their reconstructed 177 deg true track, anchored on their northernmost point of impact 35 deg 39' S 93 deg 01' E (a piloted controlled-ditching end-of-flight). Much of this 33-36 S band was subsequently covered by the failed 2025-26 Ocean Infinity search without a find; CAPTIO argue the specific southern extension was not fully scanned.",
+      "source": "Blelly & Marchand (CAPTIO v4a, May/June 2022), 'Analysis of Flight MH370', Executive Summary p.1 and section 5 'The proposed new search zone' p.17 (fetched 2026-07-17): '~14 Nm wide trapeze prolongating the already scanned zone to the south by ~37 Nm ... margin of ~7 Nm on each side of the true track of 177 deg ... this area of ~600 Nm2'; crash-zone endpoints from sections 2.8-2.9 (min -35.6650 S 93.0130 E, max -36.0269 S 93.0364 E). Polygon here is DIGITIZED from those two published crash-zone endpoints extended +/-7 NM half-width about the 177 deg track and +7 NM north/south contingency (encloses ~502 NM2 / ~1721 km2); areaKm2 carries CAPTIO's stated ~600 NM2 figure. https://www.mh370-caption.net/wp-content/uploads/Blelly-Analysis-of-Flight-MH370.pdf",
+      "polygon": [
+        [93.1486, -35.5424],
+        [93.1881, -36.1372],
+        [92.8998, -36.1493],
+        [92.8624, -35.5546],
+        [93.1486, -35.5424]
+      ]
     }
   ]
 }

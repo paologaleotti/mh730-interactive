@@ -4,6 +4,7 @@
 
 import { describe, it, expect } from 'vitest'
 import arcs from './arcs.geojson.json'
+import auxArcs from './aux-arcs.geojson.json'
 import epoch1 from './flight-epoch1.geojson.json'
 import epoch2 from './flight-epoch2.geojson.json'
 import epoch3 from './flight-epoch3.geojson.json'
@@ -131,6 +132,42 @@ describe('arcs.geojson', () => {
   })
 })
 
+describe('aux-arcs.geojson (CAPTIO extra Inmarsat constraints)', () => {
+  it('carries exactly the three extra constraints, all modelled + cited', () => {
+    const ids = new Set(auxArcs.features.map((f) => String(f.properties?.id)))
+    expect(ids).toEqual(new Set(['aux-18-28', 'aux-call1-1840', 'aux-call2-2314']))
+    for (const f of auxArcs.features) {
+      expect(f.properties?.confidence).toBe('modelled')
+      expect(f.properties?.citation).toBeDefined()
+      expect(String(f.properties?.desc).length).toBeGreaterThan(10)
+    }
+  })
+
+  it('only 18:28 defines a BTO ring (LineString); the two phone calls are BFO-only points', () => {
+    const ring = auxArcs.features.filter((f) => f.properties?.id === 'aux-18-28')
+    expect(ring.length).toBeGreaterThanOrEqual(1)
+    for (const f of ring) {
+      expect(f.geometry.type).toBe('LineString')
+      expect(f.properties?.definesRing).toBe(true)
+    }
+    for (const id of ['aux-call1-1840', 'aux-call2-2314']) {
+      const pt = auxArcs.features.find((f) => f.properties?.id === id)
+      expect(pt).toBeDefined()
+      expect(pt!.geometry.type).toBe('Point')
+      expect(pt!.properties?.definesRing).toBe(false)
+    }
+  })
+
+  it('the 18:28 ring sits near the 18:25 first arc (same log-on session)', () => {
+    // Ring passes close to the CAPTIO 18:28 crossing (~6.76N 95.69E): its
+    // northern arm must reach the Malacca-approach latitudes, not the SIO.
+    const ring = auxArcs.features.find((f) => f.properties?.id === 'aux-18-28')
+    const coords = lineCoords(ring!)
+    const maxLat = Math.max(...coords.map((p) => p[1]))
+    expect(maxLat).toBeGreaterThan(5)
+  })
+})
+
 describe('flight track geojson', () => {
   it('epoch 1 starts at WMKK and ends near IGARI', () => {
     const coords = lineCoords(epoch1.features[0])
@@ -252,8 +289,8 @@ describe('debris.geojson', () => {
 })
 
 describe('search-areas.geojson', () => {
-  it('has all nine campaigns with closed polygons', () => {
-    expect(searchAreas.features.length).toBe(9)
+  it('has all ten campaigns with closed polygons', () => {
+    expect(searchAreas.features.length).toBe(10)
     for (const f of searchAreas.features) {
       expect(f.geometry.type).toBe('Polygon')
       const ring = f.geometry.type === 'Polygon' ? f.geometry.coordinates[0] : []

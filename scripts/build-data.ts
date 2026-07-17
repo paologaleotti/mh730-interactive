@@ -37,12 +37,29 @@ interface EphemerisRow {
   vz: number
 }
 
+interface AuxConstraint {
+  id: string
+  label: string
+  name: string
+  plain?: string
+  timeUtc: string
+  timeUtcExact?: string
+  messageType: string
+  btoRawUs: number | null
+  btoCorrectedUs: number | null
+  bfoHz: number | null
+  definesRing: boolean
+  captioCrossing?: { lat: number; lon: number }
+  reasonNotUsedOfficially: string
+}
+
 interface SatcomJson {
   meta: { sources: { label: string; url: string }[] }
   gesPerth: { lat: number; lon: number; ecefKm: { x: number; y: number; z: number } }
   btoModel: { biasUs: number; logonCorrectionUs: number }
   satelliteEphemeris: { rows: EphemerisRow[] }
   handshakes: RawHandshake[]
+  auxiliaryConstraints?: { description: string; sources: string[]; items: AuxConstraint[] }
 }
 
 interface TrackPoint {
@@ -70,6 +87,14 @@ const readRaw = <T>(name: string): T | null => {
 const writeOut = (name: string, fc: unknown, count: number) => {
   writeFileSync(join(outDir, name), JSON.stringify(fc))
   console.log(`✓ src/data/${name} (${count} features)`)
+}
+
+// UTC ISO -> Kuala Lumpur local "HH:MM" (MYT = UTC+8). Times shown to users are
+// local; only the raw source keeps UTC.
+const localHM = (iso: string): string => {
+  const d = new Date(Date.parse(iso) + 8 * 3600_000)
+  const p = (n: number) => String(n).padStart(2, '0')
+  return `${p(d.getUTCHours())}:${p(d.getUTCMinutes())}`
 }
 
 const assertLatLon = (lat: number, lon: number, ctx: string) => {
@@ -143,22 +168,24 @@ const clipToBbox = (points: [number, number][]): [number, number][][] => {
   return segments.filter((s) => s.length >= 2)
 }
 
+// All times shown to users are Kuala Lumpur local (MYT = UTC+8); the flight ran
+// the morning of 8 March 2014 local. Raw UTC is kept only in the source data.
 const ARC_NAMES: Record<string, { name: string; desc: string }> = {
   hs1: {
-    name: 'Handshake 1 · 18:25 log-on ring',
-    desc: 'The SATCOM terminal logged back on at 18:25:27 UTC, three minutes after the last radar fix. First of the seven timing rings.',
+    name: 'Handshake 1 · 02:25 (UTC+8) log-on ring',
+    desc: 'The SATCOM terminal logged back on at 02:25:27 (UTC+8), three minutes after the last radar fix. First of the seven timing rings.',
   },
   hs2: {
-    name: 'Handshake 2 · 19:41 ring',
+    name: 'Handshake 2 · 03:41 (UTC+8) ring',
     desc: 'Hourly ground-station interrogation. The smallest of the seven rings: the aircraft was closest to the satellite around this time.',
   },
-  hs3: { name: 'Handshake 3 · 20:41 ring', desc: 'Hourly ground-station interrogation.' },
-  hs4: { name: 'Handshake 4 · 21:41 ring', desc: 'Hourly ground-station interrogation.' },
-  hs5: { name: 'Handshake 5 · 22:41 ring', desc: 'Hourly ground-station interrogation.' },
-  hs6: { name: 'Handshake 6 · 00:11 ring', desc: 'The last routine hourly interrogation.' },
+  hs3: { name: 'Handshake 3 · 04:41 (UTC+8) ring', desc: 'Hourly ground-station interrogation.' },
+  hs4: { name: 'Handshake 4 · 05:41 (UTC+8) ring', desc: 'Hourly ground-station interrogation.' },
+  hs5: { name: 'Handshake 5 · 06:41 (UTC+8) ring', desc: 'Hourly ground-station interrogation.' },
+  hs6: { name: 'Handshake 6 · 08:11 (UTC+8) ring', desc: 'The last routine hourly interrogation.' },
   hs7: {
-    name: '7th arc · 00:19 final log-on',
-    desc: 'The final, incomplete log-on at 00:19:29 UTC, consistent with restart after fuel exhaustion. Every underwater search has followed this ring.',
+    name: '7th arc · 08:19 (UTC+8) final log-on',
+    desc: 'The final, incomplete log-on at 08:19:29 (UTC+8), consistent with restart after fuel exhaustion. Every underwater search has followed this ring.',
   },
 }
 
@@ -190,13 +217,13 @@ const buildArcs = (satcom: SatcomJson) => {
           Math.round(lat * 10_000) / 10_000,
         ],
       )
-      const hourLabel = h.timeUtc.slice(11, 16)
+      const hourLabel = localHM(h.timeUtc)
       return clipToBbox(ring).map((coords) => ({
         type: 'Feature',
         geometry: { type: 'LineString', coordinates: coords },
         properties: {
           id: h.id,
-          label: `${h.id.toUpperCase()} ${hourLabel}Z`,
+          label: `${h.id.toUpperCase()} ${hourLabel} (UTC+8)`,
           name: ARC_NAMES[h.id]?.name ?? `Handshake ${h.id}`,
           desc: ARC_NAMES[h.id]?.desc ?? '',
           timeUtc: h.timeUtc,
@@ -213,6 +240,78 @@ const buildArcs = (satcom: SatcomJson) => {
     { type: 'FeatureCollection', features },
     features.length,
   )
+}
+
+// ---------------------------------------------------- auxiliary arcs (CAPTIO)
+
+// The three extra Inmarsat constraints CAPTIO uses beyond the official 7 arcs.
+// Only items with a usable BTO become a ring (LineString); the BFO-only phone
+// calls become a Point at CAPTIO's modelled crossing (clearly flagged). Drawn
+// in a distinct colour so they never read as an official arc.
+const buildAuxArcs = (satcom: SatcomJson) => {
+  const aux = satcom.auxiliaryConstraints
+  if (!aux?.items?.length) {
+    console.warn('! satcom.auxiliaryConstraints missing, skipping aux-arcs')
+    return
+  }
+  const { biasUs } = satcom.btoModel
+  const gesKm = satcom.gesPerth.ecefKm
+  const ges: Ecef = { x: gesKm.x * 1000, y: gesKm.y * 1000, z: gesKm.z * 1000 }
+  const ephemeris = [...satcom.satelliteEphemeris.rows].sort((a, b) =>
+    a.timeUtc.localeCompare(b.timeUtc),
+  )
+
+  const features = aux.items.flatMap((c) => {
+    const base = {
+      id: c.id,
+      label: c.label,
+      name: c.name,
+      plain: c.plain,
+      timeUtc: c.timeUtc,
+      messageType: c.messageType,
+      btoUs: c.btoCorrectedUs,
+      bfoHz: c.bfoHz,
+      definesRing: c.definesRing,
+      reason: c.reasonNotUsedOfficially,
+      messageTypeRaw: c.messageType,
+      citation: {
+        label: 'Blelly & Marchand (CAPTIO), Table 10; released Inmarsat log (davetaz CSV)',
+        url: 'https://www.mh370-caption.net/index.php/caption-technical-documentation/',
+      },
+      confidence: 'modelled',
+      desc: c.reasonNotUsedOfficially,
+    }
+    if (c.definesRing) {
+      const bto = c.btoCorrectedUs ?? fail(`aux ${c.id}: btoCorrectedUs missing for a ring`)
+      const sat = satelliteAt(ephemeris, c.timeUtcExact ?? c.timeUtc)
+      const range = rangeFromBto(bto, biasUs, distEcef(sat, ges))
+      if (range < 36_000_000 || range > 40_000_000) {
+        fail(`aux ${c.id}: implausible range ${Math.round(range / 1000)} km`)
+      }
+      const ring = btoRing(sat, range, RING_ALT_M, 0.1).map(
+        ([lon, lat]): [number, number] => [
+          Math.round(lon * 10_000) / 10_000,
+          Math.round(lat * 10_000) / 10_000,
+        ],
+      )
+      return clipToBbox(ring).map((coords) => ({
+        type: 'Feature',
+        geometry: { type: 'LineString', coordinates: coords },
+        properties: base,
+      }))
+    }
+    const pt = c.captioCrossing ?? fail(`aux ${c.id}: BFO-only item needs captioCrossing`)
+    assertLatLon(pt.lat, pt.lon, `aux ${c.id}`)
+    return [
+      {
+        type: 'Feature',
+        geometry: { type: 'Point', coordinates: [pt.lon, pt.lat] },
+        properties: base,
+      },
+    ]
+  })
+
+  writeOut('aux-arcs.geojson.json', { type: 'FeatureCollection', features }, features.length)
 }
 
 // ---------------------------------------------------------------- track
@@ -304,6 +403,21 @@ interface Reconstruction {
   points: { timeUtc: string | null; lat: number; lon: number }[]
 }
 
+// Per-reconstruction colour + contested flag: the four candidate routes were
+// previously indistinguishable (one violet for all), which read as
+// "unaligned". Each hypothesis now gets a distinct hue; the contested WSPR
+// track is flagged so the UI can render it more faintly.
+const RECON_STYLE: Record<string, { color: string; contested: boolean }> = {
+  'ashton-2015': { color: '#9d86c9', contested: false }, // violet - Inmarsat example
+  'ugib-2020': { color: '#5fb0d0', contested: false }, // cyan - independent group best-fit
+  'captio-2022': { color: '#e0996b', contested: false }, // sand - piloted-ditching
+  'wspr-gdtaaa-2023': { color: '#c77dae', contested: true }, // magenta - contested WSPR
+}
+
+// Last primary-radar fix (18:22:12, end of Epoch 2) as [lon, lat] - the shared
+// origin all Epoch-3 reconstructions continue from.
+const LAST_RADAR_FIX: [number, number] = [96.340864, 6.577655]
+
 const buildReconstructions = (raw: { reconstructions: Reconstruction[] }) => {
   if (raw.reconstructions.length < 2) {
     fail('reconstructions: spec FR-5.1.3 requires >= 2 named reconstructions')
@@ -324,11 +438,20 @@ const buildReconstructions = (raw: { reconstructions: Reconstruction[] }) => {
     }
     if (r.points.length < 2) fail(`reconstruction ${r.id}: needs >= 2 points`)
     for (const p of r.points) assertLatLon(p.lat, p.lon, `reconstruction ${r.id}`)
+    // Anchor every reconstruction to the shared last primary-radar fix
+    // (18:22:12, end of Epoch 2) so all four visibly continue from the one
+    // known last position instead of fanning out from scattered first points.
+    // Skip when the first vertex is already essentially at the fix (UGIB).
+    const coords = r.points.map((p): [number, number] => [p.lon, p.lat])
+    const [flon, flat] = coords[0]
+    const atFix =
+      Math.abs(flon - LAST_RADAR_FIX[0]) < 0.05 && Math.abs(flat - LAST_RADAR_FIX[1]) < 0.05
+    const anchored = atFix ? coords : [LAST_RADAR_FIX, ...coords]
     return {
       type: 'Feature',
       geometry: {
         type: 'LineString',
-        coordinates: r.points.map((p) => [p.lon, p.lat]),
+        coordinates: anchored,
       },
       properties: {
         id: r.id,
@@ -340,6 +463,8 @@ const buildReconstructions = (raw: { reconstructions: Reconstruction[] }) => {
           `consistent with the satellite data by its authors, not a recorded track.`,
         citation: r.citation,
         synthesized: r.synthesizedFromParameters,
+        color: RECON_STYLE[r.id]?.color ?? '#9d86c9',
+        contested: RECON_STYLE[r.id]?.contested ?? false,
         confidence: 'modelled',
       },
     }
@@ -415,6 +540,9 @@ const CAMPAIGN_COLORS: Record<string, string> = {
   'atsb-underwater-2014-2017': '#6fb7cc',
   'ocean-infinity-2018': '#c9a35b',
   'ocean-infinity-2025-26': '#c65d5d',
+  // Same sand hue as the CAPTIO reconstruction line, visually linking the
+  // hypothesis to the search zone its authors propose.
+  'captio-blelly-marchand-proposed': '#e0996b',
 }
 
 const buildSearch = (raw: { campaigns: Campaign[] }) => {
@@ -553,7 +681,10 @@ const buildMedia = (
 // ---------------------------------------------------------------- main
 
 const satcom = readRaw<SatcomJson>('satcom.json')
-if (satcom) buildArcs(satcom)
+if (satcom) {
+  buildArcs(satcom)
+  buildAuxArcs(satcom)
+}
 
 const track = readRaw<{ epoch1: TrackPoint[]; epoch2: TrackPoint[] }>('flight-track.json')
 if (track) buildTrack(track)

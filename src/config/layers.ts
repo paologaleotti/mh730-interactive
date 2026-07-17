@@ -75,6 +75,18 @@ export const LAYERS: LayerDef[] = [
     defaultVisible: true,
   },
   {
+    id: 'aux-arcs',
+    label: 'CAPTIO extra signals',
+    group: 'Satellite',
+    desc: 'Three extra satellite signals the CAPTIO study uses that the official reports leave out: an automatic status message at 02:28 (UTC+8) that measured the aircraft\'s distance, and the two unanswered sat-phone calls at 02:40 and 07:14 (UTC+8) that captured only its direction of travel.',
+    confidence: 'modelled',
+    citation: {
+      label: 'Blelly & Marchand (CAPTIO), Table 10; released Inmarsat log',
+      url: 'https://www.mh370-caption.net/index.php/caption-technical-documentation/',
+    },
+    defaultVisible: false,
+  },
+  {
     id: 'satellite',
     label: 'Satellite sub-point (3F1)',
     group: 'Satellite',

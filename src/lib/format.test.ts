@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { fmtUTC, fmtLocalMYT, fmtDate, fmtDeg } from './format'
+import { fmtUTC, fmtLocalMYT, fmtLocalMYTFull, fmtDate, fmtDeg } from './format'
 
 describe('fmtUTC', () => {
   it('formats a known timestamp with Z suffix', () => {
@@ -20,26 +20,30 @@ describe('fmtUTC', () => {
 })
 
 describe('fmtLocalMYT (UTC+8)', () => {
-  it('shifts a UTC time by +8 hours', () => {
-    expect(fmtLocalMYT(Date.UTC(2014, 2, 7, 8, 30, 15))).toBe('16:30:15 MYT')
+  it('shifts a UTC time by +8 hours and cites the zone', () => {
+    expect(fmtLocalMYT(Date.UTC(2014, 2, 7, 8, 30, 15))).toBe('16:30:15 (UTC+8)')
   })
 
   it('rolls over past midnight into the next local day', () => {
-    // 17:19:30 UTC on 7 Mar is 01:19:30 MYT on 8 Mar.
-    expect(fmtLocalMYT(Date.UTC(2014, 2, 7, 17, 19, 30))).toBe('01:19:30 MYT')
+    // 17:19:30 UTC on 7 Mar is 01:19:30 (UTC+8) on 8 Mar.
+    expect(fmtLocalMYT(Date.UTC(2014, 2, 7, 17, 19, 30))).toBe('01:19:30 (UTC+8)')
   })
 
   it('16:00 UTC is exactly local midnight', () => {
-    expect(fmtLocalMYT(Date.UTC(2014, 2, 7, 16, 0, 0))).toBe('00:00:00 MYT')
+    expect(fmtLocalMYT(Date.UTC(2014, 2, 7, 16, 0, 0))).toBe('00:00:00 (UTC+8)')
   })
 
   it('one second before local midnight stays on the same local day', () => {
-    expect(fmtLocalMYT(Date.UTC(2014, 2, 7, 15, 59, 59))).toBe('23:59:59 MYT')
+    expect(fmtLocalMYT(Date.UTC(2014, 2, 7, 15, 59, 59))).toBe('23:59:59 (UTC+8)')
   })
 
   it('handles a rollover across a month boundary', () => {
-    // 31 Jan 20:00 UTC -> 1 Feb 04:00 MYT; only the clock is shown.
-    expect(fmtLocalMYT(Date.UTC(2014, 0, 31, 20, 0, 0))).toBe('04:00:00 MYT')
+    // 31 Jan 20:00 UTC -> 1 Feb 04:00 (UTC+8); only the clock is shown.
+    expect(fmtLocalMYT(Date.UTC(2014, 0, 31, 20, 0, 0))).toBe('04:00:00 (UTC+8)')
+  })
+
+  it('fmtLocalMYTFull adds the local date', () => {
+    expect(fmtLocalMYTFull(Date.UTC(2014, 2, 7, 17, 19, 30))).toBe('8 Mar 01:19:30 (UTC+8)')
   })
 })
 

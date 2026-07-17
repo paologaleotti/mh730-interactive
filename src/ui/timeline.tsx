@@ -69,13 +69,13 @@ export const Timeline = () => {
     if (target !== undefined) setTime(target)
   }
 
-  const fmtTick = (t: number) => (scale === 'flight' ? fmtUTC(t) : fmtDate(t))
+  const fmtTick = (t: number) => (scale === 'flight' ? fmtLocalMYT(t) : fmtDate(t))
 
   return (
     <div className="timeline" role="group" aria-label="Timeline">
       <div className="tl-left">
         <span className="tl-scale-label">
-          {scale === 'flight' ? 'FLIGHT CLOCK · 7-8 MAR 2014' : 'CALENDAR · 2014-2027'}
+          {scale === 'flight' ? 'FLIGHT CLOCK · 7-8 MAR 2014 · KL LOCAL (UTC+8)' : 'CALENDAR · 2014-2027'}
         </span>
 
         <button type="button" className="icon-btn" aria-label="Step to previous event" onClick={() => stepEvent(-1)}>
@@ -150,8 +150,8 @@ export const Timeline = () => {
       <div className="tl-readout">
         {scale === 'flight' ? (
           <>
-            <span className="tl-time">{fmtUTC(time)}</span>
-            <span className="tl-time-sub">{fmtLocalMYT(time)}</span>
+            <span className="tl-time">{fmtLocalMYT(time)}</span>
+            <span className="tl-time-sub">{fmtUTC(time)}</span>
           </>
         ) : (
           <span className="tl-time">{fmtDate(time)}</span>

@@ -17,6 +17,8 @@ const LAYER_KINDS: [string, FeatureKind][] = [
   ['mh-epoch3', 'epoch3'],
   ['mh-arc7', 'arc'],
   ['mh-arcs', 'arc'],
+  ['mh-aux-points', 'aux'],
+  ['mh-aux-arcs', 'aux'],
   ['mh-search-fill', 'search'],
 ]
 const LAYER_IDS = LAYER_KINDS.map(([id]) => id)
@@ -29,21 +31,32 @@ interface Picked {
   feature: maplibregl.MapGeoJSONFeature
 }
 
+// Geometry precedence: a click always resolves to the topmost thing under the
+// cursor - a point/marker beats a line, a line beats a fill - regardless of
+// layer draw order. Within the same geometry class, the LAYER_KINDS order
+// breaks ties. This guarantees "click a dot sitting on a line -> open the dot".
+const geomRank = (f: maplibregl.MapGeoJSONFeature): number => {
+  const t = f.geometry.type
+  if (t === 'Point' || t === 'MultiPoint') return 0
+  if (t === 'LineString' || t === 'MultiLineString') return 1
+  return 2
+}
+
 const pick = (map: maplibregl.Map, point: { x: number; y: number }): Picked | null => {
   const existing = LAYER_IDS.filter((id) => map.getLayer(id))
   if (!existing.length) return null
   const hits = map.queryRenderedFeatures(
-    // Small pixel box makes thin lines clickable.
+    // Small pixel box makes thin lines and small markers clickable.
     [
-      [point.x - 4, point.y - 4],
-      [point.x + 4, point.y + 4],
+      [point.x - 5, point.y - 5],
+      [point.x + 5, point.y + 5],
     ],
     { layers: existing },
   )
   if (!hits.length) return null
-  const best = hits.reduce((a, b) =>
-    (KIND_PRIORITY.get(a.layer.id) ?? 99) <= (KIND_PRIORITY.get(b.layer.id) ?? 99) ? a : b,
-  )
+  const score = (f: maplibregl.MapGeoJSONFeature) =>
+    geomRank(f) * 100 + (KIND_PRIORITY.get(f.layer.id) ?? 99)
+  const best = hits.reduce((a, b) => (score(a) <= score(b) ? a : b))
   const kind = KIND_BY_LAYER.get(best.layer.id)
   return kind ? { kind, feature: best } : null
 }
@@ -56,7 +69,9 @@ const hoverText = (p: Picked): Hover => {
       ? `${props.status} · found ${props.findDate}`
       : p.kind === 'arc'
         ? 'Satellite timing ring'
-        : p.kind === 'search'
+        : p.kind === 'aux'
+          ? 'Extra Inmarsat constraint (CAPTIO)'
+          : p.kind === 'search'
           ? `Search area · ${fmtDate(Date.parse(String(props.startDate)))}`
           : p.kind === 'site'
             ? `Candidate crash site · ${props.publishedBy ?? ''}`
@@ -66,7 +81,7 @@ const hoverText = (p: Picked): Hover => {
                 ? 'Military radar path'
                 : p.kind === 'epoch3'
                   ? 'Reconstructed path'
-                  : String(props.oneLiner ?? '')
+                  : String(props.short ?? props.oneLiner ?? '')
   return { name, sub, x: 0, y: 0 }
 }
 

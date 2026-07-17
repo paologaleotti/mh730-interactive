@@ -184,6 +184,58 @@
       "source": "Ashton et al. (2015); Wikipedia MH370 satellite communications (both fetched 2026-07-16)"
     }
   ],
+  "auxiliaryConstraints": {
+    "description": "Three extra satellite signals the CAPTIO study (Blelly & Marchand) uses that the official 7-arc analyses (Ashton et al. 2015 / ATSB / DSTG) leave out: an automatic status message at 18:28 UTC (02:28 UTC+8) that measured the aircraft's distance from the satellite, and the two unanswered ground-to-air phone calls at 18:40 UTC (02:40 UTC+8) and 23:14 UTC (07:14 UTC+8) that captured only the aircraft's direction and speed. Distance readings yield a position ring; the phone-call signals do not. All values were read directly from the released Inmarsat log (davetaz CSV) and cross-checked against CAPTIO's Table 10.",
+    "sources": [
+      "Inmarsat SATCOM log (davetaz CSV): 18:28:14.904 R-channel 0x62 Acknowledge User Data, BTO 12480 us, BFO 143 Hz; 18:39:55+ and 23:13:58+ C-channel 0x30 Call Progress rows carry BFO but blank BTO, https://raw.githubusercontent.com/davetaz/mh370-data/master/mh370-post_take_off.csv",
+      "Blelly & Marchand (CAPTIO), 'Analysis of Flight MH370', Table 10 (p.12): rows 'Arc1.2' 18:28:15 (Meas BTO 12480), 'Phone Call 1' 18:40:33 (BTO N/A), 'Call 23h14' 23:14:30 (BTO N/A); Figure 11 text: 'extra BFOs (like the one we name Arc-1.2) which are not usually considered by the other studies', https://www.mh370-caption.net/wp-content/uploads/Blelly-Analysis-of-Flight-MH370.pdf",
+      "Ashton et al. (2015): the two ground-to-air telephone calls 'did give BFO measurements of 88 and 217 Hz respectively' (BFO only, no BTO arc)"
+    ],
+    "items": [
+      {
+        "id": "aux-18-28",
+        "label": "02:28 extra arc (CAPTIO)",
+        "name": "02:28 (UTC+8) extra satellite arc (CAPTIO 'Arc-1.2')",
+        "plain": "Just after 02:28 (UTC+8) - about three minutes after the aircraft's satellite phone reconnected at 02:25 - it sent another automatic status message. The message measured the plane at almost exactly the same distance from the satellite as the 02:25 reading, showing it had barely moved in those three minutes. The official investigation set this reading aside; the CAPTIO researchers used it as an extra check on their route.",
+        "timeUtc": "2014-03-07T18:28:15Z",
+        "timeUtcExact": "2014-03-07T18:28:14.904Z",
+        "messageType": "0x62 - Acknowledge User Data (R-channel), within the 18:25:27 log-on / data-exchange session",
+        "btoRawUs": 12480,
+        "btoCorrectedUs": 12480,
+        "bfoHz": 143,
+        "definesRing": true,
+        "reasonNotUsedOfficially": "The BTO here (12480 us) is normal and usable, essentially the same ring as the 18:25:27 log-on (12520 us corrected) ~2m48s earlier. The main reason it is not a separate arc is redundancy: it lies inside the SAME 18:25 log-on handshake, so Ashton et al./ATSB/DSTG treat 18:25/18:28 as one 'first arc' rather than two. Separately, Ashton et al. 2015 judged it 'prudent to discount the [BFO] measurements between 18:25:34 and 18:28:15 inclusive' from their refined dataset (they describe the 18:28 spike as not fully understood, possibly related to frequency changes during the log-on sequence); the value CAPTIO reintroduce as 'Arc-1.2' comes from that discounted window. This is a BFO discount: Ashton's explicit anomalous-BTO exclusions name only 18:25:34 and 00:19:37, NOT 18:28:15, and the 18:28 BTO itself is not anomalous. Not a log-on request (0x62, not 0x10), so no 4600 us log-on correction applies: corrected BTO = raw."
+      },
+      {
+        "id": "aux-call1-1840",
+        "label": "02:40 sat-phone call",
+        "name": "First sat-phone call · 02:40 (UTC+8) (CAPTIO extra signal)",
+        "plain": "At 02:40 (UTC+8) Malaysia Airlines' operations centre tried to phone the cockpit. The call connected to the aircraft's satellite phone and rang, but no one answered. The brief signal it left behind showed the plane was already flying south, though it was not precise enough to pin down exactly where.",
+        "timeUtc": "2014-03-07T18:39:52Z",
+        "messageType": "0x30 - Call Progress (C-channel), first unanswered ground-to-air telephone call",
+        "btoRawUs": null,
+        "btoCorrectedUs": null,
+        "bfoHz": 88,
+        "definesRing": false,
+        "captioCrossing": { "lat": 5.71, "lon": 94.58 },
+        "reasonNotUsedOfficially": "The C-channel call-progress messages carry a BFO measurement (88 Hz) but blank BTO in the released log, so the call defines no distance ring. Official analyses use its BFO only as a direction check: the 88 Hz value fits the southern track, showing the turn south had already happened by 18:40. CAPTIO use it as an extra BFO constraint; the marker is placed at CAPTIO's modelled crossing position, not a measured location."
+      },
+      {
+        "id": "aux-call2-2314",
+        "label": "07:14 sat-phone call",
+        "name": "Second sat-phone call · 07:14 (UTC+8) (CAPTIO extra signal)",
+        "plain": "A second phone call, at 07:14 (UTC+8), more than four hours into the aircraft's silent flight south, also went unanswered. Like the first call, its signal was consistent with the plane still heading steadily south, but could not fix exactly where it was.",
+        "timeUtc": "2014-03-07T23:13:58Z",
+        "messageType": "0x30 - Call Progress (C-channel), second unanswered ground-to-air telephone call",
+        "btoRawUs": null,
+        "btoCorrectedUs": null,
+        "bfoHz": 217,
+        "definesRing": false,
+        "captioCrossing": { "lat": -27.22, "lon": 92.55 },
+        "reasonNotUsedOfficially": "As with the 18:40 call, the released log carries a BFO measurement (217 Hz) but no usable BTO, so it defines no ring. Used by the official analyses only as a BFO consistency check between the 22:41 and 00:11 arcs. CAPTIO use it as an extra BFO constraint; the marker is placed at CAPTIO's modelled crossing position, not a measured location."
+      }
+    ]
+  },
   "crossChecks": [
     { "value": "18:25:27 raw BTO", "csv": 17120, "literatureAnchor": 17120, "secondSource": "Ashton et al. (2015) reproduces the log-on request measured BTO", "match": true },
     { "value": "00:19:29 BTO", "csv": 23000, "literatureAnchor": 23000, "secondSource": "Ashton et al. (2015)", "match": true },

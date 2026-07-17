@@ -25,7 +25,7 @@ afterEach(cleanup)
 describe('Timeline', () => {
   it('renders the flight clock label', () => {
     render(<Timeline />)
-    expect(screen.getByText('FLIGHT CLOCK · 7-8 MAR 2014')).toBeDefined()
+    expect(screen.getByText('FLIGHT CLOCK · 7-8 MAR 2014 · KL LOCAL (UTC+8)')).toBeDefined()
   })
 
   it('renders one tick per flight event', () => {

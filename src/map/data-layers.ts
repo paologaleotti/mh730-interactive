@@ -6,6 +6,7 @@
 
 import maplibregl from 'maplibre-gl'
 import arcs from '../data/arcs.geojson.json'
+import auxArcs from '../data/aux-arcs.geojson.json'
 import epoch1 from '../data/flight-epoch1.geojson.json'
 import epoch2 from '../data/flight-epoch2.geojson.json'
 import epoch3 from '../data/flight-epoch3.geojson.json'
@@ -24,6 +25,15 @@ export const SEARCH_CAMPAIGNS = searchAreas.features
   }))
   .sort((a, b) => a.id.localeCompare(b.id))
 
+/** Reconstruction metadata (id, name, colour, contested) for the legend, so
+    the four candidate routes are distinguishable by colour, not just label. */
+export const RECONSTRUCTIONS = epoch3.features.map((f) => ({
+  id: String(f.properties?.id),
+  name: String(f.properties?.name),
+  color: String(f.properties?.color ?? '#9d86c9'),
+  contested: Boolean(f.properties?.contested),
+}))
+
 // AWS Open Data terrain tiles (Mapzen terrarium encoding): global elevation
 // incl. ocean bathymetry (ETOPO1-derived at sea). Keyless, spec B.13-style.
 // High-res GA survey patches layer on top later (B.7 pipeline).
@@ -34,6 +44,7 @@ const C = {
   recordedDim: '#b7c2cc',
   derived: '#c9a35b',
   arcHi: '#e8c987',
+  auxArc: '#5fb89a',
   green: '#6faf7d',
   amber: '#c9a35b',
   gray: '#5f6b77',
@@ -47,6 +58,7 @@ export const REGISTRY_TO_MAP_LAYERS: Record<string, string[]> = {
   'flight-epoch2': ['mh-epoch2'],
   'flight-epoch3': ['mh-epoch3', 'mh-epoch3-labels'],
   arcs: ['mh-arcs', 'mh-arc7', 'mh-arc-labels', 'mh-arc7-label'],
+  'aux-arcs': ['mh-aux-arcs', 'mh-aux-points', 'mh-aux-labels'],
   search: ['mh-search-fill', 'mh-search-line', 'mh-search-labels'],
   debris: ['mh-debris', 'mh-debris-labels'],
   poi: ['mh-poi', 'mh-poi-labels', 'mh-departure', 'mh-departure-label'],
@@ -185,6 +197,7 @@ export const registerDataLayers = (map: maplibregl.Map): void => {
       '<a href="https://registry.opendata.aws/terrain-tiles/" target="_blank" rel="noopener">Terrain Tiles (ETOPO1/SRTM)</a>',
   })
   addSourceOnce(map, 'mh-arcs', { type: 'geojson', data: arcs })
+  addSourceOnce(map, 'mh-aux-arcs', { type: 'geojson', data: auxArcs })
   addSourceOnce(map, 'mh-epoch1', { type: 'geojson', data: epoch1 })
   addSourceOnce(map, 'mh-epoch2', { type: 'geojson', data: epoch2 })
   addSourceOnce(map, 'mh-epoch3', { type: 'geojson', data: epoch3 })
@@ -324,7 +337,7 @@ export const registerDataLayers = (map: maplibregl.Map): void => {
     minzoom: 1.5,
     layout: {
       'symbol-placement': 'line',
-      'text-field': '7TH ARC · 00:19Z',
+      'text-field': '7TH ARC · 08:19 (UTC+8)',
       'text-font': FONT_BOLD,
       'text-size': 11,
       'text-letter-spacing': 0.18,
@@ -337,6 +350,24 @@ export const registerDataLayers = (map: maplibregl.Map): void => {
     },
   })
 
+  // --- CAPTIO auxiliary constraints (modelled): the extra 18:28 distance ring,
+  // in a distinct teal so it never reads as one of the seven official amber
+  // arcs. The two phone-call points render later, in the marker group, so they
+  // sit above every line. Off by default. ---
+  map.addLayer({
+    id: 'mh-aux-arcs',
+    type: 'line',
+    source: 'mh-aux-arcs',
+    filter: ['==', ['geometry-type'], 'LineString'],
+    layout: { visibility: 'none' },
+    paint: {
+      'line-color': C.auxArc,
+      'line-width': ['interpolate', ['linear'], ['zoom'], 1, 1, 6, 1.8],
+      'line-dasharray': [2, 3],
+      'line-opacity': 0.85,
+    },
+  })
+
   // --- Flight path ---
   // Epoch 3 candidate reconstructions (modelled, P2: distinct dotted
   // treatment + explicit RECONSTRUCTION label; off by default, FR-5.1.3).
@@ -346,10 +377,12 @@ export const registerDataLayers = (map: maplibregl.Map): void => {
     source: 'mh-epoch3',
     layout: { 'line-cap': 'round' },
     paint: {
-      'line-color': C.violet,
+      // Per-reconstruction colour (P2: modelled) so the four hypotheses read
+      // as distinct routes; contested WSPR track drawn fainter.
+      'line-color': ['coalesce', ['get', 'color'], C.violet],
       'line-width': ['interpolate', ['linear'], ['zoom'], 2, 1.2, 8, 2.2],
       'line-dasharray': [0.5, 2],
-      'line-opacity': 0.9,
+      'line-opacity': ['case', ['get', 'contested'], 0.55, 0.9],
     },
   })
   map.addLayer({
@@ -367,7 +400,7 @@ export const registerDataLayers = (map: maplibregl.Map): void => {
       'text-keep-upright': true,
     },
     paint: {
-      'text-color': C.violet,
+      'text-color': ['coalesce', ['get', 'color'], C.violet],
       'text-halo-color': C.halo,
       'text-halo-width': 1.2,
     },
@@ -394,6 +427,44 @@ export const registerDataLayers = (map: maplibregl.Map): void => {
       'line-color': C.recorded,
       'line-width': ['interpolate', ['linear'], ['zoom'], 3, 1.8, 8, 3.5],
       'line-opacity': 0.95,
+    },
+  })
+
+  // CAPTIO phone-call points: rendered as ordinary white event markers (the
+  // "Key event" legend entry) here in the marker group so they sit above all
+  // lines/areas. Only the Point features of the aux source.
+  map.addLayer({
+    id: 'mh-aux-points',
+    type: 'symbol',
+    source: 'mh-aux-arcs',
+    filter: ['==', ['geometry-type'], 'Point'],
+    layout: {
+      visibility: 'none',
+      'icon-image': 'mh-ci-event',
+      'icon-size': ['interpolate', ['linear'], ['zoom'], 2, 0.72, 6, 1, 10, 1.25],
+      'icon-allow-overlap': true,
+    },
+  })
+  map.addLayer({
+    id: 'mh-aux-labels',
+    type: 'symbol',
+    source: 'mh-aux-arcs',
+    minzoom: 3,
+    layout: {
+      visibility: 'none',
+      'symbol-placement': ['case', ['==', ['geometry-type'], 'Point'], 'point', 'line'],
+      'text-field': ['get', 'label'],
+      'text-font': FONT,
+      'text-size': 9.5,
+      'text-letter-spacing': 0.1,
+      'symbol-spacing': 600,
+      'text-offset': [0, 1],
+      'text-anchor': 'top',
+    },
+    paint: {
+      'text-color': '#9fc6d4',
+      'text-halo-color': C.halo,
+      'text-halo-width': 1.3,
     },
   })
 

@@ -1,5 +1,8 @@
-// Time and coordinate formatting. Flight clock shows UTC with a Malaysia local
-// (UTC+8) secondary; calendar shows a date.
+// Time and coordinate formatting. Times are shown in the flight's local zone -
+// Kuala Lumpur, MYT = UTC+8 (Malaysia has no daylight saving) - always with
+// the "(UTC+8)" signature, and UTC is kept as a secondary reference.
+
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
 const pad = (n: number, w = 2) => String(Math.floor(n)).padStart(w, '0')
 
@@ -12,10 +15,19 @@ export const fmtUTC = (ms: number): string => {
   )
 }
 
-/** 01:19:30 MYT (UTC+8) */
+/** 01:19:30 (UTC+8) - Kuala Lumpur local time. */
 export const fmtLocalMYT = (ms: number): string => {
   const d = new Date(ms + 8 * 3600_000)
-  return `${pad(d.getUTCHours())}:${pad(d.getUTCMinutes())}:${pad(d.getUTCSeconds())} MYT`
+  return `${pad(d.getUTCHours())}:${pad(d.getUTCMinutes())}:${pad(d.getUTCSeconds())} (UTC+8)`
+}
+
+/** 8 Mar 01:19:30 (UTC+8) - local time with date (the flight crosses midnight MYT). */
+export const fmtLocalMYTFull = (ms: number): string => {
+  const d = new Date(ms + 8 * 3600_000)
+  return (
+    `${d.getUTCDate()} ${MONTHS[d.getUTCMonth()]} ` +
+    `${pad(d.getUTCHours())}:${pad(d.getUTCMinutes())}:${pad(d.getUTCSeconds())} (UTC+8)`
+  )
 }
 
 /** 2016-07-29 */
