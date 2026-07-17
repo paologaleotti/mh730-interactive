@@ -19,6 +19,15 @@ pnpm lint        # 3. oxlint (if it OOMs, use ./node_modules/.bin/oxlint)
 - Never render `GlobeMap` in jsdom (needs WebGL) — cover map logic via `basemap.ts` style assertions and headless-Chrome runtime checks instead.
 - Behavior changes: update the failing test to pin the NEW behavior in the same change; never delete a test to make the suite pass.
 
+## Dates & Times (timezone)
+
+- **All user-facing times are Kuala Lumpur local — MYT = UTC+8** (the flight's departure timezone; Malaysia has no DST). This applies to **every** displayed hour: labels, map text, tooltips, timeline, detail panels, and all human-readable data fields (`name`, `label`, `desc`, `oneLiner`, `short`, `plain`, `note`, `outcome`, `methodology`, `significance`).
+- **Always cite the zone** with the `(UTC+8)` signature in parentheses, e.g. `02:25 (UTC+8)`, `08:19:29 (UTC+8)`. Never show a bare local time with no zone marker.
+- The MH370 flight is **7 March 2014 in UTC** but the whole sequence (16:42 UTC → 00:19 UTC next day) is the **morning of 8 March 2014 local** (00:42 → 08:19 UTC+8). When a date sits next to a converted flight-clock time, the local date is **8 Mar 2014**.
+- **Internally, store raw UTC only** (ISO `...Z` in `timeUtc`/`timeUtcExact`, epoch ms, ephemeris rows, calendar `date`/`findDate`/`startDate`/`endDate`). Convert to local **at the display layer** via `src/lib/format.ts` (`fmtLocalMYT` = `HH:MM:SS (UTC+8)`, `fmtLocalMYTFull` = `8 Mar HH:MM:SS (UTC+8)`); never hand-shift epoch ms.
+- **Source/citation fields keep UTC** (they quote primary reports, which publish in UTC) — do not convert `source`, `citation`, `sources`, `meta.notes`. Calendar dates (`YYYY-MM-DD`, "17 January 2017") are not flight-clock times — leave them.
+- When adding any new hour to displayed content, write it in KL local with `(UTC+8)`.
+
 ## Core Rules
 
 Critical rules for **ALL** packages. **Non-compliance will not be tolerated.**

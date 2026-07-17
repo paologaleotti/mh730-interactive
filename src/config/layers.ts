@@ -28,7 +28,7 @@ export const LAYERS: LayerDef[] = [
     id: 'flight-epoch1',
     label: 'Epoch 1 · ADS-B track',
     group: 'Flight path',
-    desc: 'Recorded civil positions, WMKK departure → IGARI (16:42–17:21 UTC).',
+    desc: 'Recorded civil positions, WMKK departure → IGARI (00:42–01:21 UTC+8, 8 Mar).',
     confidence: 'recorded',
     citation: {
       label: 'SIR 2018 / Factual Information 2015',
@@ -42,7 +42,7 @@ export const LAYERS: LayerDef[] = [
     group: 'Flight path',
     // Spec §2: recorded, lower precision. Dashed styling conveys the lower
     // precision; the epistemic status stays "recorded".
-    desc: 'Primary radar track: military-derived turnback at IGARI + recorded Kota Bharu/Butterworth civil PSR returns → Strait of Malacca → last fix past MEKAR (17:21–18:22 UTC).',
+    desc: 'Primary radar track: military-derived turnback at IGARI + recorded Kota Bharu/Butterworth civil PSR returns → Strait of Malacca → last fix past MEKAR (01:21–02:22 UTC+8, 8 Mar).',
     confidence: 'recorded',
     citation: {
       label: 'Malaysian SIR 2018; ATSB search-area definition',
@@ -54,7 +54,7 @@ export const LAYERS: LayerDef[] = [
     id: 'flight-epoch3',
     label: 'Epoch 3 · candidate reconstructions',
     group: 'Flight path',
-    desc: 'SATCOM-only period (18:25–00:19 UTC). No recorded positions; 4 named, cited reconstructions (Ashton 2015, UGIB 2020, CAPTIO 2022, WSPR 2023 — contested).',
+    desc: 'SATCOM-only period (02:25–08:19 UTC+8, 8 Mar). No recorded positions; 4 named, cited reconstructions (Ashton 2015, UGIB 2020, CAPTIO 2022, WSPR 2023 — contested).',
     confidence: 'modelled',
     citation: {
       label: 'ATSB reports; UGIB 2020; independent groups',

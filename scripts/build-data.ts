@@ -328,8 +328,8 @@ const buildTrack = (track: { epoch1: TrackPoint[]; epoch2: TrackPoint[] }) => {
     1: {
       name: 'Epoch 1 · Recorded flight path (ADS-B)',
       desc:
-        'Civil secondary-radar/ADS-B positions from takeoff at Kuala Lumpur (16:42 UTC) ' +
-        'to the final transponder return near waypoint IGARI (17:21:13 UTC). ' +
+        'Civil secondary-radar/ADS-B positions from takeoff at Kuala Lumpur (00:42 UTC+8) ' +
+        'to the final transponder return near waypoint IGARI (01:21:13 UTC+8). ' +
         'Compiled from report-quoted positions and the filed route; the authoritative ' +
         'track is in the SIR 2018 / Factual Information 2015 appendix figures.',
       citation: {
@@ -342,7 +342,7 @@ const buildTrack = (track: { epoch1: TrackPoint[]; epoch2: TrackPoint[] }) => {
       desc:
         'Primary (military) radar track: the turnback at IGARI, recrossing the Malay ' +
         'peninsula near Kota Bharu, passing south of Penang, then northwest up the ' +
-        'Strait of Malacca to the last fix 10 NM past waypoint MEKAR at 18:22:12 UTC. ' +
+        'Strait of Malacca to the last fix 10 NM past waypoint MEKAR at 02:22:12 UTC+8. ' +
         'Recorded but lower precision; no transponder was operating.',
       citation: {
         label: 'Malaysian SIR (2018); ATSB Definition of Underwater Search Areas',
@@ -458,7 +458,7 @@ const buildReconstructions = (raw: { reconstructions: Reconstruction[] }) => {
         name: r.name,
         label: `${r.name} · RECONSTRUCTION`,
         desc:
-          `Published candidate route for the SATCOM-only final hours (18:22-00:19 UTC), ` +
+          `Published candidate route for the SATCOM-only final hours (02:22-08:19 UTC+8), ` +
           `${r.points.length} path points ending at or near the 7th arc. A model claimed ` +
           `consistent with the satellite data by its authors, not a recorded track.`,
         citation: r.citation,

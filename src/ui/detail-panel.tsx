@@ -129,7 +129,7 @@ const ArcExplainer = ({ props }: { props: Record<string, unknown> }) => (
       here {String(props.btoUs)} microseconds) fixes the aircraft's distance
       from the satellite at that instant. All positions at that distance form
       this ring: the aircraft was somewhere on it at{' '}
-      {String(props.timeUtc).replace('T', ' ').replace('Z', ' UTC')}, at the
+      {fmtLocalMYTFull(Date.parse(String(props.timeUtc)))}, at the
       assumed cruise altitude of {String(props.altAssumptionFt)} ft.
     </p>
     <a

@@ -88,7 +88,7 @@
         "label": "Ashton et al. (2015), 'The Search for MH370', Journal of Navigation 68(1), Table 9 final row 00:19:29 (p.20) and conclusions (p.22): 'a last contact location of 34.7°S and 93.0°E'",
         "url": "https://www.cambridge.org/core/journals/journal-of-navigation/article/search-for-mh370/D2D1C4C99E7BFDE35841CFD70081114A"
       },
-      "methodology": "BTO/BFO example reconstruction: constant 450 kt ground-speed route crossing the 19:41 arc at 0N, matching BFO within 2 Hz at the five post-19:41 signalling epochs; the paper stresses 'significant uncertainty in the final location'",
+      "methodology": "BTO/BFO example reconstruction: constant 450 kt ground-speed route crossing the 03:41 (UTC+8) arc at 0N, matching BFO within 2 Hz at the five post-03:41 (UTC+8) signalling epochs; the paper stresses 'significant uncertainty in the final location'",
       "status": "searched-2014-2017",
       "note": "~9 NM west of the 7th arc at 34.7S per the repo arc model, inside the ATSB 120,000 km2 corridor searched 2014-17. Widely reported in 2015 media (e.g. The Economist) as the Inmarsat 'hotspot'."
     },
@@ -103,7 +103,7 @@
         "label": "Blelly & Marchand (CAPTIO v4a, 2022), 'Analysis of Flight MH370', Executive Summary p.1: 'The northernmost probable point of impact (POI) ... is located at [35 deg 39' S; 93 deg 01' E]'; crash zone -35.6650 S 93.0130 E to -36.0269 S 93.0364 E (sections 2.8-2.9)",
         "url": "https://www.mh370-caption.net/wp-content/uploads/Blelly-Analysis-of-Flight-MH370.pdf"
       },
-      "methodology": "Piloted-flight reconstruction: constant FL300 / Mach 0.706 (ICAO holding speed) southern leg fitting all 7 arcs plus 3 extra Inmarsat constraints (18:28 BTO + 18:40/23:14 BFO), followed by a manual engine shutdown, APU-powered glide and controlled ditching south of the 7th arc. The POI is the northern end of a ~22 NM crash-zone segment; the reconstructed track is the captio-2022 Epoch 3 path.",
+      "methodology": "Piloted-flight reconstruction: constant FL300 / Mach 0.706 (ICAO holding speed) southern leg fitting all 7 arcs plus 3 extra Inmarsat constraints (02:28 (UTC+8) BTO + 02:40 (UTC+8)/07:14 (UTC+8) BFO), followed by a manual engine shutdown, APU-powered glide and controlled ditching south of the 7th arc. The POI is the northern end of a ~22 NM crash-zone segment; the reconstructed track is the captio-2022 Epoch 3 path.",
       "status": "partially-searched",
       "note": "The terminus of the CAPTIO reconstruction, ~55 NM SW of the UGIB LEP. Because CAPTIO model a powered glide PAST the 7th arc, the POI lies ~45 NM beyond (SW of) the arc - outside the classic 'within ~25 NM' constraint. Much of the surrounding 33-36 S band was covered by the failed 2025-26 Ocean Infinity search; CAPTIO propose a specific southern extension (see the captio-blelly-marchand-proposed search zone) they argue was not fully scanned."
     }
