@@ -78,7 +78,7 @@ export const LAYERS: LayerDef[] = [
     id: 'aux-arcs',
     label: 'CAPTIO extra signals',
     group: 'Satellite',
-    desc: 'Three extra satellite signals the CAPTIO study uses that the official reports leave out: an automatic status message at 02:28 (UTC+8) that measured the aircraft\'s distance, and the two unanswered sat-phone calls at 02:40 and 07:14 (UTC+8) that captured only its direction of travel.',
+    desc: 'An 8th distance ring the CAPTIO study uses that the official reports leave out: an automatic status message at 02:28 (UTC+8) whose timing measures the aircraft\'s distance from the satellite, ~3 min after the 02:25 (UTC+8) log-on. The two unanswered sat-phone calls carry only direction, not distance, so they define no ring and are shown on the timeline, not the map.',
     confidence: 'modelled',
     citation: {
       label: 'Blelly & Marchand (CAPTIO), Table 10; released Inmarsat log',

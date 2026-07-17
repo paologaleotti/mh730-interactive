@@ -13,9 +13,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "es-toolkit": "^1.49.0",
     "maplibre-gl": "^5.24.0",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
+    "ts-pattern": "^5.9.0",
+    "zod": "^4.4.3",
     "zustand": "^5.0.14"
   },
   "devDependencies": {
@@ -34,6 +37,7 @@
     "babel-plugin-react-compiler": "^1.0.0",
     "jsdom": "^29.1.1",
     "oxlint": "^1.71.0",
+    "playwright-core": "^1.61.1",
     "typescript": "~6.0.2",
     "vite": "^8.1.1",
     "vitest": "^4.1.10"

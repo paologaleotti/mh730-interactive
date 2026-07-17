@@ -14,25 +14,12 @@ import debris from '../data/debris.geojson.json'
 import searchAreas from '../data/search-areas.geojson.json'
 import pois from '../data/pois.geojson.json'
 import candidateSites from '../data/candidate-sites.geojson.json'
+import { DEBRIS_STATUS_COLORS } from '../config/palette'
 
-/** Campaign metadata for the sub-layer toggles and the legend. */
-export const SEARCH_CAMPAIGNS = searchAreas.features
-  .map((f) => ({
-    id: String(f.properties?.id),
-    name: String(f.properties?.name),
-    kind: String(f.properties?.kind),
-    color: String(f.properties?.color),
-  }))
-  .sort((a, b) => a.id.localeCompare(b.id))
-
-/** Reconstruction metadata (id, name, colour, contested) for the legend, so
-    the four candidate routes are distinguishable by colour, not just label. */
-export const RECONSTRUCTIONS = epoch3.features.map((f) => ({
-  id: String(f.properties?.id),
-  name: String(f.properties?.name),
-  color: String(f.properties?.color ?? '#9d86c9'),
-  contested: Boolean(f.properties?.contested),
-}))
+// Campaign + reconstruction metadata (typed, for the legend and sub-layer
+// toggles) now live in ../data/collections; re-exported here so existing
+// importers (legend.tsx) keep their import path.
+export { SEARCH_CAMPAIGNS, RECONSTRUCTIONS } from '../data/collections'
 
 // AWS Open Data terrain tiles (Mapzen terrarium encoding): global elevation
 // incl. ocean bathymetry (ETOPO1-derived at sea). Keyless, spec B.13-style.
@@ -58,7 +45,7 @@ export const REGISTRY_TO_MAP_LAYERS: Record<string, string[]> = {
   'flight-epoch2': ['mh-epoch2'],
   'flight-epoch3': ['mh-epoch3', 'mh-epoch3-labels'],
   arcs: ['mh-arcs', 'mh-arc7', 'mh-arc-labels', 'mh-arc7-label'],
-  'aux-arcs': ['mh-aux-arcs', 'mh-aux-points', 'mh-aux-labels'],
+  'aux-arcs': ['mh-aux-arcs', 'mh-aux-labels'],
   search: ['mh-search-fill', 'mh-search-line', 'mh-search-labels'],
   debris: ['mh-debris', 'mh-debris-labels'],
   poi: ['mh-poi', 'mh-poi-labels', 'mh-departure', 'mh-departure-label'],
@@ -124,14 +111,6 @@ const makeShapeImage = (shape: Shape, fill: string): ImageData => {
   ctx.strokeStyle = '#05070a'
   ctx.stroke()
   return ctx.getImageData(0, 0, size, size)
-}
-
-const DEBRIS_STATUS_COLORS: Record<string, string> = {
-  confirmed: '#6faf7d',
-  'almost-certain': '#8fae6f',
-  'highly-likely': '#c9a35b',
-  likely: '#c9865b',
-  unidentifiable: '#7b8794',
 }
 
 const ICONS: [name: string, shape: Shape, color: string][] = [
@@ -350,15 +329,13 @@ export const registerDataLayers = (map: maplibregl.Map): void => {
     },
   })
 
-  // --- CAPTIO auxiliary constraints (modelled): the extra 18:28 distance ring,
-  // in a distinct teal so it never reads as one of the seven official amber
-  // arcs. The two phone-call points render later, in the marker group, so they
-  // sit above every line. Off by default. ---
+  // --- CAPTIO auxiliary constraint (modelled): the one extra 02:28 (UTC+8)
+  // distance ring, in a distinct teal so it never reads as one of the seven
+  // official amber arcs. Off by default. ---
   map.addLayer({
     id: 'mh-aux-arcs',
     type: 'line',
     source: 'mh-aux-arcs',
-    filter: ['==', ['geometry-type'], 'LineString'],
     layout: { visibility: 'none' },
     paint: {
       'line-color': C.auxArc,
@@ -430,21 +407,6 @@ export const registerDataLayers = (map: maplibregl.Map): void => {
     },
   })
 
-  // CAPTIO phone-call points: rendered as ordinary white event markers (the
-  // "Key event" legend entry) here in the marker group so they sit above all
-  // lines/areas. Only the Point features of the aux source.
-  map.addLayer({
-    id: 'mh-aux-points',
-    type: 'symbol',
-    source: 'mh-aux-arcs',
-    filter: ['==', ['geometry-type'], 'Point'],
-    layout: {
-      visibility: 'none',
-      'icon-image': 'mh-ci-event',
-      'icon-size': ['interpolate', ['linear'], ['zoom'], 2, 0.72, 6, 1, 10, 1.25],
-      'icon-allow-overlap': true,
-    },
-  })
   map.addLayer({
     id: 'mh-aux-labels',
     type: 'symbol',
@@ -452,14 +414,12 @@ export const registerDataLayers = (map: maplibregl.Map): void => {
     minzoom: 3,
     layout: {
       visibility: 'none',
-      'symbol-placement': ['case', ['==', ['geometry-type'], 'Point'], 'point', 'line'],
+      'symbol-placement': 'line',
       'text-field': ['get', 'label'],
       'text-font': FONT,
       'text-size': 9.5,
       'text-letter-spacing': 0.1,
       'symbol-spacing': 600,
-      'text-offset': [0, 1],
-      'text-anchor': 'top',
     },
     paint: {
       'text-color': '#9fc6d4',

@@ -20,6 +20,59 @@ const lineCoords = (f: Feature): [number, number][] =>
     ? f.geometry.coordinates.map(([lon, lat]): [number, number] => [lon, lat])
     : []
 
+describe('discriminant + reshaped properties', () => {
+  const byKind = [
+    { kind: 'arc', fc: arcs },
+    { kind: 'aux', fc: auxArcs },
+    { kind: 'epoch1', fc: epoch1 },
+    { kind: 'epoch2', fc: epoch2 },
+    { kind: 'epoch3', fc: epoch3 },
+    { kind: 'debris', fc: debris },
+    { kind: 'search', fc: searchAreas },
+    { kind: 'poi', fc: pois },
+    { kind: 'site', fc: candidateSites },
+  ]
+
+  it('stamps the DataPoint discriminant matching each collection', () => {
+    for (const { kind, fc } of byKind) {
+      for (const f of fc.features) {
+        expect(f.properties?.kind, `${kind}: wrong discriminant`).toBe(kind)
+      }
+    }
+  })
+
+  it('search carries campaignKind (not a colliding `kind`) and drops nothing', () => {
+    for (const f of searchAreas.features) {
+      expect(['underwater', 'surface', 'proposed']).toContain(f.properties?.campaignKind)
+    }
+  })
+
+  it('point features no longer duplicate lat/lon into properties (geometry only)', () => {
+    for (const fc of [pois, debris, candidateSites]) {
+      for (const f of fc.features) {
+        expect(f.properties).not.toHaveProperty('lat')
+        expect(f.properties).not.toHaveProperty('lon')
+      }
+    }
+  })
+
+  it('aux no longer carries the messageTypeRaw duplicate', () => {
+    for (const f of auxArcs.features) {
+      expect(f.properties).not.toHaveProperty('messageTypeRaw')
+    }
+  })
+
+  it('epistemic caveats are explicit data fields, not scraped from prose', () => {
+    const caveatOf = (fc: typeof pois, id: string) =>
+      fc.features.find((f) => f.properties?.id === id)?.properties?.caveat
+    expect(caveatOf(pois, 'kate-tee-sighting')).toBe('uncorroborated')
+    expect(caveatOf(pois, 'mike-mckay-sighting')).toBe('uncorroborated')
+    expect(caveatOf(pois, 'penang-cell-registration')).toBe('uncorroborated')
+    expect(caveatOf(pois, 'emirates-etihad-near-miss')).toBe('model-dependent')
+    expect(caveatOf(candidateSites, 'godfrey-wspr-2023')).toBe('disputed')
+  })
+})
+
 describe('feature ids (highlight + deep-link reliability)', () => {
   const collections = [
     { label: 'arcs', fc: arcs },
@@ -132,10 +185,10 @@ describe('arcs.geojson', () => {
   })
 })
 
-describe('aux-arcs.geojson (CAPTIO extra Inmarsat constraints)', () => {
-  it('carries exactly the three extra constraints, all modelled + cited', () => {
+describe('aux-arcs.geojson (CAPTIO extra Inmarsat constraint)', () => {
+  it('carries only the 02:28 distance ring, modelled + cited (BFO-only calls dropped)', () => {
     const ids = new Set(auxArcs.features.map((f) => String(f.properties?.id)))
-    expect(ids).toEqual(new Set(['aux-18-28', 'aux-call1-1840', 'aux-call2-2314']))
+    expect(ids).toEqual(new Set(['aux-18-28']))
     for (const f of auxArcs.features) {
       expect(f.properties?.confidence).toBe('modelled')
       expect(f.properties?.citation).toBeDefined()
@@ -143,18 +196,14 @@ describe('aux-arcs.geojson (CAPTIO extra Inmarsat constraints)', () => {
     }
   })
 
-  it('only 18:28 defines a BTO ring (LineString); the two phone calls are BFO-only points', () => {
-    const ring = auxArcs.features.filter((f) => f.properties?.id === 'aux-18-28')
-    expect(ring.length).toBeGreaterThanOrEqual(1)
-    for (const f of ring) {
+  it('the sole aux constraint is a BTO ring (LineString), never a BFO-only point', () => {
+    for (const f of auxArcs.features) {
       expect(f.geometry.type).toBe('LineString')
       expect(f.properties?.definesRing).toBe(true)
     }
+    // The confusing phone-call point markers are gone entirely.
     for (const id of ['aux-call1-1840', 'aux-call2-2314']) {
-      const pt = auxArcs.features.find((f) => f.properties?.id === id)
-      expect(pt).toBeDefined()
-      expect(pt!.geometry.type).toBe('Point')
-      expect(pt!.properties?.definesRing).toBe(false)
+      expect(auxArcs.features.find((f) => f.properties?.id === id)).toBeUndefined()
     }
   })
 
@@ -300,7 +349,7 @@ describe('search-areas.geojson', () => {
   })
 
   it('underwater campaigns lie along the 7th arc corridor in the SIO', () => {
-    const underwater = searchAreas.features.filter((f) => f.properties?.kind === 'underwater')
+    const underwater = searchAreas.features.filter((f) => f.properties?.campaignKind === 'underwater')
     // ATSB 2014-17, OI 2018, OI 2025-26, Ocean Shield acoustic 2014
     expect(underwater.length).toBe(4)
     for (const f of underwater) {

@@ -4,6 +4,7 @@
 
 import { useView } from '../state/view'
 import { SEARCH_CAMPAIGNS, RECONSTRUCTIONS } from '../map/data-layers'
+import { DEBRIS_LEGEND } from '../config/palette'
 
 // Labels written for a first-time visitor: plain words first, technical term
 // in parentheses where it matters.
@@ -31,7 +32,7 @@ const LINE_ITEMS: { label: string; className: string; title?: string }[] = [
   {
     label: 'CAPTIO extra arc (02:28)',
     className: 'lg-line lg-aux',
-    title: 'An 8th distance ring the CAPTIO study derives from the 02:28 (UTC+8) satellite message, beyond the 7 official arcs. Its two phone-call points show as Key event markers. Off by default.',
+    title: 'An 8th distance ring the CAPTIO study derives from the 02:28 (UTC+8) satellite message, beyond the 7 official arcs. Off by default.',
   },
 ]
 
@@ -48,14 +49,6 @@ const MARKER_ITEMS: { label: string; shape: string; color: string; title?: strin
   { label: 'Hydrophone station', shape: 'hexagon', color: '#c9a35b' },
   { label: 'Satellite position', shape: 'cross', color: '#6fb7cc' },
   { label: 'Key event', shape: 'circle', color: '#dfe6ec' },
-]
-
-const DEBRIS_SCALE: { label: string; color: string }[] = [
-  { label: 'confirmed', color: '#6faf7d' },
-  { label: 'almost certain', color: '#8fae6f' },
-  { label: 'highly likely', color: '#c9a35b' },
-  { label: 'likely', color: '#c9865b' },
-  { label: 'unidentified', color: '#7b8794' },
 ]
 
 /** Compact display names for the reconstruction swatches (full name on hover). */
@@ -144,7 +137,7 @@ export const Legend = () => {
           <div className="lg-section">
             <div className="lg-section-title">DEBRIS IDENTIFICATION</div>
             <div className="lg-row lg-scale">
-              {DEBRIS_SCALE.map((d) => (
+              {DEBRIS_LEGEND.map((d) => (
                 <span key={d.label} className="lg-scale-item">
                   <i className="lg-dot" style={{ background: d.color }} />
                   {d.label}

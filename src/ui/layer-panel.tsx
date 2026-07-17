@@ -28,7 +28,7 @@ const CampaignSubMenu = () => {
                 <input type="checkbox" checked={on} onChange={() => toggleCampaign(c.id)} />
                 <i className="campaign-swatch" style={{ background: c.color }} />
                 <span className="campaign-name">{c.name}</span>
-                <span className="campaign-kind">{c.kind === 'underwater' ? 'UW' : 'SFC'}</span>
+                <span className="campaign-kind">{c.campaignKind === 'underwater' ? 'UW' : 'SFC'}</span>
               </label>
             )
           })}

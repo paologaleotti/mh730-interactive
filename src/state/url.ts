@@ -9,15 +9,14 @@
 
 import { useClock, type TimeScale } from './clock'
 import { useView, type Mode, type Camera } from './view'
-import { useSelection, resolveFeature, type FeatureKind } from './selection'
+import { useSelection, resolveFeature } from './selection'
 import { LAYERS } from '../config/layers'
-import searchAreas from '../data/search-areas.geojson.json'
+import { DATA_POINT_KINDS } from '../data/data-point'
+import { SEARCH_CAMPAIGNS } from '../data/collections'
 
-const FEATURE_KINDS: FeatureKind[] = [
-  'poi', 'debris', 'arc', 'aux', 'search', 'site', 'epoch1', 'epoch2', 'epoch3',
-]
+const FEATURE_KINDS = DATA_POINT_KINDS
 
-const CAMPAIGN_IDS = new Set(searchAreas.features.map((f) => String(f.properties?.id)))
+const CAMPAIGN_IDS = new Set(SEARCH_CAMPAIGNS.map((c) => c.id))
 /** Upper bound for the playback-speed URL value (above any UI preset). */
 const MAX_SPEED = 5_000_000
 
@@ -88,7 +87,7 @@ export const encodeState = (): string => {
     // Disabled search campaigns (FR-11.3); omitted when all enabled.
     ...(view.disabledCampaigns.length ? [`dc=${view.disabledCampaigns.join(',')}`] : []),
     // Open Detail Panel target (FR-13.1); omitted when nothing is selected.
-    ...(selected ? [`ft=${selected.kind}:${selected.id}`] : []),
+    ...(selected ? [`ft=${selected.point.kind}:${selected.point.id}`] : []),
   ].join('&')
 }
 

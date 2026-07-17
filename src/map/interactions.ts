@@ -1,9 +1,15 @@
 // Pointer interactions: cursor conventions (grab / grabbing / pointer),
 // instant hover tooltip, and click-to-select for the Detail Panel.
+//
+// Both hover and click resolve the typed DataPoint from the pristine collection
+// by (kind, id) - never from MapLibre's flattened feature.properties (which
+// stringifies nested objects like citation). Only the top-level `id` is read off
+// the picked feature, which survives flattening.
 
 import type maplibregl from 'maplibre-gl'
-import { useSelection, type FeatureKind, type Hover } from '../state/selection'
-import { fmtDate } from '../lib/format'
+import { useSelection, resolveFeature, type FeatureKind, type Hover } from '../state/selection'
+import { dataPointByKind } from '../data/collections'
+import { hoverText } from '../lib/data-display'
 
 /** maplibre layer id -> selection kind, in hover/click priority order
     (points beat lines beat fills when overlapping). */
@@ -17,7 +23,6 @@ const LAYER_KINDS: [string, FeatureKind][] = [
   ['mh-epoch3', 'epoch3'],
   ['mh-arc7', 'arc'],
   ['mh-arcs', 'arc'],
-  ['mh-aux-points', 'aux'],
   ['mh-aux-arcs', 'aux'],
   ['mh-search-fill', 'search'],
 ]
@@ -61,33 +66,14 @@ const pick = (map: maplibregl.Map, point: { x: number; y: number }): Picked | nu
   return kind ? { kind, feature: best } : null
 }
 
-const hoverText = (p: Picked): Hover => {
-  const props = p.feature.properties ?? {}
-  const name = String(props.name ?? props.partId ?? props.label ?? p.kind)
-  const sub =
-    p.kind === 'debris'
-      ? `${props.status} · found ${props.findDate}`
-      : p.kind === 'arc'
-        ? 'Satellite timing ring'
-        : p.kind === 'aux'
-          ? 'Extra Inmarsat constraint (CAPTIO)'
-          : p.kind === 'search'
-          ? `Search area · ${fmtDate(Date.parse(String(props.startDate)))}`
-          : p.kind === 'site'
-            ? `Candidate crash site · ${props.publishedBy ?? ''}`
-            : p.kind === 'epoch1'
-              ? 'Recorded flight path (ADS-B)'
-              : p.kind === 'epoch2'
-                ? 'Military radar path'
-                : p.kind === 'epoch3'
-                  ? 'Reconstructed path'
-                  : String(props.short ?? props.oneLiner ?? '')
-  return { name, sub, x: 0, y: 0 }
-}
+/** Feature id off the picked feature (top-level string, survives flattening). */
+const pickedId = (p: Picked): string => String(p.feature.properties?.id ?? '')
 
-const selectedId = (p: Picked): string => {
-  if (p.kind === 'epoch1' || p.kind === 'epoch2') return p.kind
-  return String(p.feature.properties?.id ?? '')
+const hoverFor = (p: Picked): Hover | null => {
+  const point = dataPointByKind(p.kind, pickedId(p))
+  if (!point) return null
+  const { name, sub } = hoverText(point)
+  return { name, sub, x: 0, y: 0 }
 }
 
 /** Wire cursor + hover + click. Call once after map creation. */
@@ -109,28 +95,22 @@ export const wireInteractions = (map: maplibregl.Map): void => {
   map.on('mousemove', (e) => {
     if (dragging) return
     const hit = pick(map, e.point)
-    if (!hit) {
+    const hover = hit ? hoverFor(hit) : null
+    if (!hover) {
       canvas.style.cursor = 'grab'
       if (useSelection.getState().hover) useSelection.getState().setHover(null)
       return
     }
     canvas.style.cursor = 'pointer'
-    useSelection.getState().setHover({ ...hoverText(hit), x: e.point.x, y: e.point.y })
+    useSelection.getState().setHover({ ...hover, x: e.point.x, y: e.point.y })
   })
   map.on('mouseout', () => useSelection.getState().setHover(null))
 
   map.on('click', (e) => {
     const hit = pick(map, e.point)
-    if (!hit) {
-      useSelection.getState().select(null)
-      return
-    }
-    useSelection.getState().select({
-      kind: hit.kind,
-      id: selectedId(hit),
-      props: { ...(hit.feature.properties ?? {}) },
-      lngLat: [e.lngLat.lng, e.lngLat.lat],
-    })
+    // resolveFeature returns null for unknown/unpicked -> closes the panel.
+    const selected = hit ? resolveFeature(hit.kind, pickedId(hit), [e.lngLat.lng, e.lngLat.lat]) : null
+    useSelection.getState().select(selected)
     // FR-9.2: the map's left padding shifts to clear the Detail Panel (see
     // the padding effect in globe-map.tsx), keeping the feature visible for
     // both click and deep-link, and honoring reduced-motion there.

@@ -13,8 +13,8 @@ describe('resolveFeature', () => {
     const anyId = String(debris.features[0].properties?.id)
     const sel = resolveFeature('debris', anyId)
     expect(sel).not.toBeNull()
-    expect(sel!.kind).toBe('debris')
-    expect(sel!.props.id).toBe(anyId)
+    expect(sel!.point.kind).toBe('debris')
+    expect(sel!.point.id).toBe(anyId)
     expect(sel!.lngLat[0]).toBeGreaterThan(20)
     expect(sel!.lngLat[1]).toBeLessThan(0)
   })
@@ -27,7 +27,7 @@ describe('resolveFeature', () => {
 
   it('resolves an arc by handshake id', () => {
     const sel = resolveFeature('arc', 'hs7')
-    expect(sel?.props.btoUs).toBe(18400)
+    expect(sel?.point.kind === 'arc' && sel.point.btoUs).toBe(18400)
   })
 
   it('returns null for unknown ids and kinds', () => {
@@ -39,7 +39,7 @@ describe('resolveFeature', () => {
 describe('useSelection', () => {
   it('selectById populates selected; unknown id clears it', () => {
     useSelection.getState().selectById('arc', 'hs1')
-    expect(useSelection.getState().selected?.id).toBe('hs1')
+    expect(useSelection.getState().selected?.point.id).toBe('hs1')
     useSelection.getState().selectById('arc', 'hs99')
     expect(useSelection.getState().selected).toBeNull()
   })

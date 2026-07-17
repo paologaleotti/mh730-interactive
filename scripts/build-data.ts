@@ -9,6 +9,7 @@ import { readFileSync, writeFileSync, existsSync } from 'node:fs'
 import { join, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { distEcef, btoRing, rangeFromBto, type Ecef } from '../src/lib/geo.ts'
+import { DataPointSchema } from '../src/data/data-point.ts'
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 const rawDir = join(root, 'data')
@@ -84,9 +85,16 @@ const readRaw = <T>(name: string): T | null => {
   return JSON.parse(readFileSync(p, 'utf8'))
 }
 
-const writeOut = (name: string, fc: unknown, count: number) => {
-  writeFileSync(join(outDir, name), JSON.stringify(fc))
-  console.log(`✓ src/data/${name} (${count} features)`)
+// Write a FeatureCollection, validating every feature's properties against the
+// shared DataPoint schema first. A shape/enum/rename drift throws here and fails
+// the build - the same schema the app parses these files back with at load.
+const writeOut = (name: string, features: { properties: unknown }[]) => {
+  features.forEach((f, i) => {
+    const r = DataPointSchema.safeParse(f.properties)
+    if (!r.success) fail(`${name} feature ${i}: ${r.error.issues.map((x) => `${x.path.join('.')} ${x.message}`).join('; ')}`)
+  })
+  writeFileSync(join(outDir, name), JSON.stringify({ type: 'FeatureCollection', features }))
+  console.log(`✓ src/data/${name} (${features.length} features)`)
 }
 
 // UTC ISO -> Kuala Lumpur local "HH:MM" (MYT = UTC+8). Times shown to users are
@@ -222,6 +230,7 @@ const buildArcs = (satcom: SatcomJson) => {
         type: 'Feature',
         geometry: { type: 'LineString', coordinates: coords },
         properties: {
+          kind: 'arc',
           id: h.id,
           label: `${h.id.toUpperCase()} ${hourLabel} (UTC+8)`,
           name: ARC_NAMES[h.id]?.name ?? `Handshake ${h.id}`,
@@ -235,19 +244,16 @@ const buildArcs = (satcom: SatcomJson) => {
       }))
     })
 
-  writeOut(
-    'arcs.geojson.json',
-    { type: 'FeatureCollection', features },
-    features.length,
-  )
+  writeOut('arcs.geojson.json', features)
 }
 
 // ---------------------------------------------------- auxiliary arcs (CAPTIO)
 
-// The three extra Inmarsat constraints CAPTIO uses beyond the official 7 arcs.
-// Only items with a usable BTO become a ring (LineString); the BFO-only phone
-// calls become a Point at CAPTIO's modelled crossing (clearly flagged). Drawn
-// in a distinct colour so they never read as an official arc.
+// The extra Inmarsat distance ring(s) CAPTIO uses beyond the official 7 arcs.
+// Each defines a BTO ring (LineString), drawn in a distinct colour so it never
+// reads as an official arc. BFO-only signals (the unanswered phone calls) are
+// not rendered: they fix only direction, not a position, so they would show as
+// misleading point markers - they live in the timeline instead.
 const buildAuxArcs = (satcom: SatcomJson) => {
   const aux = satcom.auxiliaryConstraints
   if (!aux?.items?.length) {
@@ -261,8 +267,12 @@ const buildAuxArcs = (satcom: SatcomJson) => {
     a.timeUtc.localeCompare(b.timeUtc),
   )
 
+  // Only distance-ring constraints are rendered; BFO-only calls are excluded
+  // upstream (data/satcom.json). Fail loudly if a non-ring item reappears.
   const features = aux.items.flatMap((c) => {
+    if (!c.definesRing) fail(`aux ${c.id}: BFO-only constraints are no longer rendered`)
     const base = {
+      kind: 'aux',
       id: c.id,
       label: c.label,
       name: c.name,
@@ -273,7 +283,6 @@ const buildAuxArcs = (satcom: SatcomJson) => {
       bfoHz: c.bfoHz,
       definesRing: c.definesRing,
       reason: c.reasonNotUsedOfficially,
-      messageTypeRaw: c.messageType,
       citation: {
         label: 'Blelly & Marchand (CAPTIO), Table 10; released Inmarsat log (davetaz CSV)',
         url: 'https://www.mh370-caption.net/index.php/caption-technical-documentation/',
@@ -281,37 +290,26 @@ const buildAuxArcs = (satcom: SatcomJson) => {
       confidence: 'modelled',
       desc: c.reasonNotUsedOfficially,
     }
-    if (c.definesRing) {
-      const bto = c.btoCorrectedUs ?? fail(`aux ${c.id}: btoCorrectedUs missing for a ring`)
-      const sat = satelliteAt(ephemeris, c.timeUtcExact ?? c.timeUtc)
-      const range = rangeFromBto(bto, biasUs, distEcef(sat, ges))
-      if (range < 36_000_000 || range > 40_000_000) {
-        fail(`aux ${c.id}: implausible range ${Math.round(range / 1000)} km`)
-      }
-      const ring = btoRing(sat, range, RING_ALT_M, 0.1).map(
-        ([lon, lat]): [number, number] => [
-          Math.round(lon * 10_000) / 10_000,
-          Math.round(lat * 10_000) / 10_000,
-        ],
-      )
-      return clipToBbox(ring).map((coords) => ({
-        type: 'Feature',
-        geometry: { type: 'LineString', coordinates: coords },
-        properties: base,
-      }))
+    const bto = c.btoCorrectedUs ?? fail(`aux ${c.id}: btoCorrectedUs missing for a ring`)
+    const sat = satelliteAt(ephemeris, c.timeUtcExact ?? c.timeUtc)
+    const range = rangeFromBto(bto, biasUs, distEcef(sat, ges))
+    if (range < 36_000_000 || range > 40_000_000) {
+      fail(`aux ${c.id}: implausible range ${Math.round(range / 1000)} km`)
     }
-    const pt = c.captioCrossing ?? fail(`aux ${c.id}: BFO-only item needs captioCrossing`)
-    assertLatLon(pt.lat, pt.lon, `aux ${c.id}`)
-    return [
-      {
-        type: 'Feature',
-        geometry: { type: 'Point', coordinates: [pt.lon, pt.lat] },
-        properties: base,
-      },
-    ]
+    const ring = btoRing(sat, range, RING_ALT_M, 0.1).map(
+      ([lon, lat]): [number, number] => [
+        Math.round(lon * 10_000) / 10_000,
+        Math.round(lat * 10_000) / 10_000,
+      ],
+    )
+    return clipToBbox(ring).map((coords) => ({
+      type: 'Feature',
+      geometry: { type: 'LineString', coordinates: coords },
+      properties: base,
+    }))
   })
 
-  writeOut('aux-arcs.geojson.json', { type: 'FeatureCollection', features }, features.length)
+  writeOut('aux-arcs.geojson.json', features)
 }
 
 // ---------------------------------------------------------------- track
@@ -351,46 +349,44 @@ const buildTrack = (track: { epoch1: TrackPoint[]; epoch2: TrackPoint[] }) => {
     },
   }
 
-  const toFc = (points: TrackPoint[], epoch: 1 | 2) => {
+  const toFeatures = (points: TrackPoint[], epoch: 1 | 2) => {
     for (const p of points) assertLatLon(p.lat, p.lon, `epoch${epoch} ${p.timeUtc}`)
     const sorted = [...points].sort((a, b) => a.timeUtc.localeCompare(b.timeUtc))
     const interpolated = sorted.filter((p) => p.source === 'interpolated').length
     const meta = EPOCH_META[epoch]
-    return {
-      type: 'FeatureCollection',
-      features: [
-        {
-          type: 'Feature',
-          geometry: {
-            type: 'LineString',
-            coordinates: sorted.map((p) => [p.lon, p.lat]),
-          },
-          properties: {
-            id: `epoch${epoch}`,
-            epoch,
-            name: meta.name,
-            desc: meta.desc,
-            citation: meta.citation,
-            confidence: 'recorded',
-            timeStart: sorted[0].timeUtc,
-            timeEnd: sorted[sorted.length - 1].timeUtc,
-            pointCount: sorted.length,
-            interpolatedCount: interpolated,
-            points: sorted.map((p) => ({
-              t: p.timeUtc,
-              alt: p.altFt,
-              label: p.label ?? null,
-              source: p.source,
-            })),
-          },
+    return [
+      {
+        type: 'Feature',
+        geometry: {
+          type: 'LineString',
+          coordinates: sorted.map((p) => [p.lon, p.lat]),
         },
-      ],
-    }
+        properties: {
+          kind: `epoch${epoch}`,
+          id: `epoch${epoch}`,
+          epoch,
+          name: meta.name,
+          desc: meta.desc,
+          citation: meta.citation,
+          confidence: 'recorded',
+          timeStart: sorted[0].timeUtc,
+          timeEnd: sorted[sorted.length - 1].timeUtc,
+          pointCount: sorted.length,
+          interpolatedCount: interpolated,
+          points: sorted.map((p) => ({
+            t: p.timeUtc,
+            alt: p.altFt,
+            label: p.label ?? null,
+            source: p.source,
+          })),
+        },
+      },
+    ]
   }
   if (track.epoch1.length < 2) fail('epoch1: need >= 2 points')
   if (track.epoch2.length < 2) fail('epoch2: need >= 2 points')
-  writeOut('flight-epoch1.geojson.json', toFc(track.epoch1, 1), 1)
-  writeOut('flight-epoch2.geojson.json', toFc(track.epoch2, 2), 1)
+  writeOut('flight-epoch1.geojson.json', toFeatures(track.epoch1, 1))
+  writeOut('flight-epoch2.geojson.json', toFeatures(track.epoch2, 2))
 }
 
 // ------------------------------------------------------- reconstructions
@@ -454,6 +450,7 @@ const buildReconstructions = (raw: { reconstructions: Reconstruction[] }) => {
         coordinates: anchored,
       },
       properties: {
+        kind: 'epoch3',
         id: r.id,
         name: r.name,
         label: `${r.name} · RECONSTRUCTION`,
@@ -469,7 +466,7 @@ const buildReconstructions = (raw: { reconstructions: Reconstruction[] }) => {
       },
     }
   })
-  writeOut('flight-epoch3.geojson.json', { type: 'FeatureCollection', features }, features.length)
+  writeOut('flight-epoch3.geojson.json', features)
 }
 
 // ---------------------------------------------------------------- debris
@@ -483,6 +480,7 @@ interface DebrisItem {
   partId: string
   status: string
   discoverer: string | null
+  examiner?: string
   source: string
   /** Why this piece matters to the investigation (optional, display-grade). */
   significance?: string
@@ -502,7 +500,16 @@ const buildDebris = (raw: { items: DebrisItem[] }) => {
       type: 'Feature',
       geometry: { type: 'Point', coordinates: [d.lon, d.lat] },
       properties: {
-        ...d,
+        kind: 'debris',
+        id: d.id,
+        partId: d.partId,
+        findDate: d.findDate,
+        locationName: d.locationName,
+        status: d.status,
+        discoverer: d.discoverer,
+        examiner: d.examiner,
+        source: d.source,
+        significance: d.significance,
         desc:
           `${d.partId}, found ${d.findDate} at ${d.locationName}` +
           `${d.discoverer ? ` by ${d.discoverer}` : ''}. ` +
@@ -512,7 +519,7 @@ const buildDebris = (raw: { items: DebrisItem[] }) => {
       },
     }
   })
-  writeOut('debris.geojson.json', { type: 'FeatureCollection', features }, features.length)
+  writeOut('debris.geojson.json', features)
 }
 
 // ---------------------------------------------------------------- search
@@ -558,9 +565,10 @@ const buildSearch = (raw: { campaigns: Campaign[] }) => {
       type: 'Feature',
       geometry: { type: 'Polygon', coordinates: [closed] },
       properties: {
+        kind: 'search',
         id: c.id,
         name: c.name,
-        kind: c.kind,
+        campaignKind: c.kind,
         startDate: c.startDate,
         endDate: c.endDate,
         areaKm2: c.areaKm2,
@@ -572,7 +580,7 @@ const buildSearch = (raw: { campaigns: Campaign[] }) => {
       },
     }
   })
-  writeOut('search-areas.geojson.json', { type: 'FeatureCollection', features }, features.length)
+  writeOut('search-areas.geojson.json', features)
 }
 
 // ------------------------------------------------------- candidate sites
@@ -588,6 +596,7 @@ interface CandidateSite {
   methodology: string
   status: string
   note?: string
+  caveat?: string
 }
 
 const buildCandidateSites = (raw: { sites: CandidateSite[] }) => {
@@ -596,10 +605,22 @@ const buildCandidateSites = (raw: { sites: CandidateSite[] }) => {
     return {
       type: 'Feature',
       geometry: { type: 'Point', coordinates: [s.lon, s.lat] },
-      properties: { ...s, confidence: 'modelled' },
+      properties: {
+        kind: 'site',
+        id: s.id,
+        name: s.name,
+        publishedBy: s.publishedBy,
+        date: s.date,
+        citation: s.citation,
+        methodology: s.methodology,
+        status: s.status,
+        note: s.note,
+        caveat: s.caveat,
+        confidence: 'modelled',
+      },
     }
   })
-  writeOut('candidate-sites.geojson.json', { type: 'FeatureCollection', features }, features.length)
+  writeOut('candidate-sites.geojson.json', features)
 }
 
 // ---------------------------------------------------------------- pois
@@ -613,6 +634,9 @@ interface Poi {
   rank: number
   oneLiner: string
   source: string
+  short?: string
+  plain?: string
+  caveat?: string
 }
 
 const buildPois = (raw: Poi[]) => {
@@ -622,10 +646,21 @@ const buildPois = (raw: Poi[]) => {
     return {
       type: 'Feature',
       geometry: { type: 'Point', coordinates: [p.lon, p.lat] },
-      properties: { ...p },
+      properties: {
+        kind: 'poi',
+        id: p.id,
+        name: p.name,
+        category: p.category,
+        rank: p.rank,
+        oneLiner: p.oneLiner,
+        source: p.source,
+        short: p.short,
+        plain: p.plain,
+        caveat: p.caveat,
+      },
     }
   })
-  writeOut('pois.geojson.json', { type: 'FeatureCollection', features }, features.length)
+  writeOut('pois.geojson.json', features)
 }
 
 // ------------------------------------------------------------------ media

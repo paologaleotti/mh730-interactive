@@ -128,7 +128,7 @@
     "rank": 3,
     "short": "Uncorroborated eyewitness: sailor reported a low aircraft with 'black smoke' from her yacht, ~03:10 (UTC+8)-03:25 (UTC+8).",
     "oneLiner": "Sailor Kate Tee reported a low-flying aircraft 'that appeared to be descending' with 'black smoke coming from the tail' from her yacht at ~6°37.7'N 94°26.4'E; her report gives initial sighting ~03:10 (UTC+8), closest approach ~03:20 (UTC+8)-03:25 (UTC+8) (the UGIB 2020 model instead puts MH370's closest approach at 02:53:46 (UTC+8)). Uncorroborated eyewitness account.",
-    "contested": true,
+    "caveat": "uncorroborated",
     "source": "Position and quotes: saucysailoress.wordpress.com/2017/02/02/2299/ (Gibson-assisted report, fetched 2026-07-16, HTTP 200); timing caveat per the same report vs UGIB 2020 App. E.3.5"
   },
   {
@@ -231,7 +231,7 @@
     "short": "MODEL-DEPENDENT (CAPTIO path only): ~12 NM below the Emirates EK407 / Etihad EY461 formation, ~04:02 (UTC+8).",
     "plain": "Around 04:02 (UTC+8) two airliners flying close together - an Emirates A380 bound for Dubai just above an Etihad jet bound for Abu Dhabi, both out of Melbourne - crossed this area. If MH370 was on the route proposed by the CAPTIO researchers, it passed roughly 12 nautical miles below them in the dark. The crews were close enough to have seen its lights, yet none reported anything, which the researchers take as a sign the aircraft was flying unlit. This matches only the CAPTIO route; on the other leading theories the plane was 100 to 260 nautical miles away at that moment.",
     "oneLiner": "MODEL-DEPENDENT. On the CAPTIO (Blelly/Marchand) reconstructed path, MH370 passed ~12 NM below two Melbourne-departing widebodies flying in vertical formation - Emirates EK407 (A380, to Dubai, FL360->380) directly above Etihad EY461 (to Abu Dhabi, FL320->340), near airway N509 at ~04:02 (UTC+8). Neither crew reported seeing MH370, consistent with lights off on a moonless night (CAPTIO's argument). The encounter EXISTS ONLY IF MH370 flew the CAPTIO route: under UGIB 2020 the aircraft would be ~266 NM away, under Ashton 2015 ~102 NM. It is a consistency check for CAPTIO's FL300 track, not independent proof.",
-    "contested": true,
+    "caveat": "model-dependent",
     "source": "CAPTIO, 'Was visual contact between MH370 and other flights possible after the FMT?' (Marchand & Blelly, v1.a, 6 Apr 2025), Table 1: ETD461 min 12 NM at 20:02:10, UAE407 min 12 NM at 20:02:15, both at 4.34 S 93.24 E, 'less than 2 Nm interval ... UAE407 directly above ETD461'. Distances measured against the Blelly/Marchand reference trajectory. FlightAware-derived traffic data. https://www.mh370-caption.net/wp-content/uploads/Caption-analysis-MH370-flights-after-FMT.pdf . Also nearby per CAPTIO Table 1: Emirates EK359 (~39 NM, 19:19) and Singapore SQ478 (>85 NM); South African SA280 eliminated (too far). Capt Martyn Smith's separately-reported EK407 sighting was on the 8 Mar (not 7 Mar UTC) flight and is not this encounter."
   },
   {
@@ -243,7 +243,7 @@
     "rank": 3,
     "short": "Uncorroborated eyewitness: oil-rig worker reported a burning object to the west; not substantiated (early false lead).",
     "oneLiner": "Uncorroborated. New Zealand oil-rig worker Mike McKay, aboard the Songa Mercur rig off Vung Tau, Vietnam, emailed his employer that on the night of the disappearance he saw a burning object at high altitude to the west (bearing ~265-275 deg) over ~10-15 seconds. Investigated and not substantiated; the position is in the South China Sea near the initial (wrong) search area, well east of the SATCOM-derived track. Kept as a documented early false lead.",
-    "contested": true,
+    "caveat": "uncorroborated",
     "source": "Rig surface position 08°22'30.2\"N 108°42'22.3\"E and account widely reported March 2014 (McKay's emailed report to his employer, forwarded to Vietnamese/Malaysian authorities); coordinate provenance flagged, eyewitness account unverified. Cross-check: Wikipedia MH370 / contemporary news coverage, retrieved 2026-07-17"
   },
   {
@@ -255,6 +255,7 @@
     "rank": 3,
     "short": "Debated: co-pilot Fariq's mobile briefly detected by a Penang tower during the flyby (~01:52 (UTC+8)). No call/text.",
     "oneLiner": "During the Strait of Malacca flyby, first officer Fariq Abdul Hamid's mobile phone was reportedly detected (a brief registration, not a call or text) by a telecommunications tower on Penang Island around 01:52 (UTC+8) - the only such contact from any of the 239 aboard. It indicates the phone was on and the aircraft flew low enough for line-of-sight to a tower, but yielded no location beyond 'near Penang'. Reported by Malaysian officials/media in 2014 and debated; not emphasised in the final SIR. Coordinate is Penang Island (specific tower not published).",
+    "caveat": "uncorroborated",
     "source": "Reported April-May 2014 (e.g. New Straits Times / Reuters coverage of the co-pilot's phone 'connecting' to a Penang tower ~01:52 MYT during the turnback); the SIR (2018) discusses cellular-registration analysis without confirming a firm detection. Coordinate = Penang Island centroid (tower not published), flagged. Retrieved 2026-07-17"
   }
 ]

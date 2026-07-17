@@ -88,8 +88,8 @@ describe('encodeState / applyStateFromHash roundtrip', () => {
     useSelection.setState({ selected: null, hover: null })
     setHash(encoded)
     applyStateFromHash()
-    expect(useSelection.getState().selected?.kind).toBe('arc')
-    expect(useSelection.getState().selected?.id).toBe('hs7')
+    expect(useSelection.getState().selected?.point.kind).toBe('arc')
+    expect(useSelection.getState().selected?.point.id).toBe('hs7')
   })
 
   it('ignores a hostile ft target', async () => {
