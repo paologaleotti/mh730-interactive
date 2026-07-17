@@ -82,3 +82,13 @@ Critical rules for **ALL** packages. **Non-compliance will not be tolerated.**
 
 - Prefer `Object.groupBy()` / `Map.groupBy()` over manual grouping loops or `es-toolkit/groupBy` when the logic is simple.
 - Prefer `Set` for uniqueness checks and set operations (`.union()`, `.intersection()`, `.difference()`).
+
+## Media & Licensing
+
+The **code** is open-source. **Media** (`public/media/`) is licensed **per file** - the repo intentionally mixes licenses. `MEDIA-CREDITS.md` (generated from `data/media.json`) is the authoritative per-asset record; keep it regenerated when media changes.
+
+- **Prefer** freely-licensed sources: Wikimedia Commons (CC / CC0 / public domain), government public-domain works. Verify each file's license via the Commons `imageinfo` API (`extmetadata`), record it in the manifest's `license`/`publisher`/`verified` fields, and set `pageUrl` to the source page (attribution is shown in the UI, so CC-BY/BY-SA is satisfied).
+- **Copyrighted originals are allowed** (e.g. official ATSB/MOT report figures) under documented **editorial / fair-dealing** use. Mark them honestly: `license` must say `(c) <owner> ... NOT open-source`, never a fake CC tag. These are the only non-OSS files and are listed as such in `MEDIA-CREDITS.md`.
+- **Representative images** (a component/scene *type*, not the actual object) are permitted **only if the `title` says so** - e.g. `"... (REPRESENTATIVE - not the recovered MH370 part)"`. Never let a representative image read as the real thing.
+- **Never invent** a URL, license, or attribution. If a specific real photo has no free license and no acceptable representative, leave the data point without media.
+- Payloads are mirrored locally (images -> WebP via `cwebp`, audio -> mp3) so there are no dead hotlinks; only video stays as a remote embed. ATC audio has no free-licensed file and is embed-only.

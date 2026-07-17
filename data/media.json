@@ -25,7 +25,11 @@
       "id": "atc-radio-final-comms",
       "kind": "audio",
       "title": "MH370 ATC radio — final communications with air traffic control",
-      "featureIds": ["wmkk", "igari"],
+      "featureIds": [
+        "wmkk",
+        "igari",
+        "final-voice-contact"
+      ],
       "directUrl": null,
       "embedUrl": "https://www.youtube.com/embed/CSEbGKiwDn0",
       "pageUrl": "https://www.nbcnews.com/storyline/missing-jet/listen-missing-jet-mh370-pilots-talking-air-traffic-control-n94716",
@@ -34,13 +38,16 @@
       "publisher": "The Telegraph (YouTube mirror of the publicly released ATC audio)",
       "license": "© publisher, embed only — no public-domain/CC file of the ATC audio exists",
       "verified": "YouTube embed HTTP/2 200 text/html; oEmbed title 'MH370: listen to final radio communications with air traffic controllers', channel 'The Telegraph'. NBC page HTTP/2 200 text/html.",
-      "notes": "No direct playable audio file survives on a stable host (archive.org has no recording — only a text transcript mirror and unrelated podcasts). Authoritative transcript = ICAO-hosted preliminary report PDF, verified HTTP 200 application/pdf 267,847 bytes: https://www.icao.int/sites/default/files/safety/airnavigation/AIG/Documents/Safety-Recommendations-to-ICAO/Final-Reports/MOT_KIKU_9M-MRO_01-2014_preliminary_report.pdf . NBC pageUrl carries both audio and a transcript. Spec B.5 credited the Guardian; actual channel is The Telegraph. Final transmission '17:19:30 Good night Malaysian Three Seven Zero' occurs near IGARI at the WMKK Lumpur Radar handoff."
+      "notes": "No direct playable audio file survives on a stable host (archive.org has no recording — only a text transcript mirror and unrelated podcasts). Authoritative transcript = ICAO-hosted preliminary report PDF, verified HTTP 200 application/pdf 267,847 bytes: https://www.icao.int/sites/default/files/safety/airnavigation/AIG/Documents/Safety-Recommendations-to-ICAO/Final-Reports/MOT_KIKU_9M-MRO_01-2014_preliminary_report.pdf . NBC pageUrl carries both audio and a transcript. Spec B.5 credited the Guardian; actual channel is The Telegraph. Final transmission '01:19:30 (UTC+8) Good night Malaysian Three Seven Zero' occurs near IGARI at the WMKK Lumpur Radar handoff."
     },
     {
       "id": "hydrophone-cmst-candidate-event",
       "kind": "audio",
       "title": "Hydroacoustic candidate-event clip (Curtin CMST, HA01 / Perth region)",
-      "featureIds": ["ha01-cape-leeuwin", "seventh-arc-csiro"],
+      "featureIds": [
+        "ha01-cape-leeuwin",
+        "seventh-arc-csiro"
+      ],
       "directUrl": "/media/hydrophone-cmst.mp3",
       "embedUrl": null,
       "pageUrl": "https://commons.wikimedia.org/wiki/File:MH370_Underwater_Sound.ogg",
@@ -55,7 +62,10 @@
       "id": "ga-search-area-flyover",
       "kind": "video",
       "title": "Overview of the MH370 search area (seabed fly-over)",
-      "featureIds": ["atsb-underwater-2014-2017", "seventh-arc-csiro"],
+      "featureIds": [
+        "atsb-underwater-2014-2017",
+        "seventh-arc-csiro"
+      ],
       "directUrl": null,
       "embedUrl": "https://www.youtube.com/embed/PAJdHx6QT5I",
       "pageUrl": "https://www.ga.gov.au/about/projects/marine/mh370-data-release",
@@ -70,7 +80,10 @@
       "id": "atsb-search-videos",
       "kind": "video",
       "title": "ATSB MH370 search videos (Fugro underwater footage + CSIRO drift animations)",
-      "featureIds": ["atsb-underwater-2014-2017", "seventh-arc-csiro"],
+      "featureIds": [
+        "atsb-underwater-2014-2017",
+        "seventh-arc-csiro"
+      ],
       "directUrl": null,
       "embedUrl": null,
       "pageUrl": "https://www.atsb.gov.au/mh370-search-videos",
@@ -85,7 +98,9 @@
       "id": "fugro-search-playlist",
       "kind": "video",
       "title": "Fugro — 'The search for MH370' (underwater search footage playlist)",
-      "featureIds": ["atsb-underwater-2014-2017"],
+      "featureIds": [
+        "atsb-underwater-2014-2017"
+      ],
       "directUrl": null,
       "embedUrl": "https://www.youtube.com/embed/videoseries?list=PL-iTTUJxPhy1Pzpkaxw_z68Uu6_zdlCex",
       "pageUrl": "https://www.youtube.com/playlist?list=PL-iTTUJxPhy1Pzpkaxw_z68Uu6_zdlCex",
@@ -100,7 +115,10 @@
       "id": "csiro-drift-animation",
       "kind": "video",
       "title": "CSIRO ocean-drift modelling animation (debris drift from the 7th arc)",
-      "featureIds": ["seventh-arc-csiro", "reunion-flaperon"],
+      "featureIds": [
+        "seventh-arc-csiro",
+        "reunion-flaperon"
+      ],
       "directUrl": null,
       "embedUrl": null,
       "pageUrl": "https://research.csiro.au/bluelink/atsb-reports-on-the-search-for-mh370/",
@@ -114,8 +132,11 @@
     {
       "id": "flaperon-657bb-photo",
       "kind": "image",
-      "title": "Boeing 777 wing flaperon (part 657BB) — reference photo",
-      "featureIds": ["reunion-flaperon", "right-flaperon-reunion"],
+      "title": "Boeing 777 flaperon, part 657BB (REPRESENTATIVE reference photo, not the recovered Reunion piece)",
+      "featureIds": [
+        "reunion-flaperon",
+        "right-flaperon-reunion"
+      ],
       "directUrl": "/media/flaperon-657bb.webp",
       "embedUrl": null,
       "pageUrl": "https://commons.wikimedia.org/wiki/File:Boeing_777_Wing_Flaperon_(Part_No._657_BB).jpg",
@@ -130,7 +151,10 @@
       "id": "mozambique-debris-photo-1",
       "kind": "image",
       "title": "MH370 debris washed ashore in Mozambique (ATSB photo 1)",
-      "featureIds": ["flap-support-fairing-676eb-daghatane", "no-step-stabiliser-panel-vilankulo"],
+      "featureIds": [
+        "flap-support-fairing-676eb-daghatane",
+        "no-step-stabiliser-panel-vilankulo"
+      ],
       "directUrl": "/media/mozambique-debris-1.webp",
       "embedUrl": null,
       "pageUrl": "https://commons.wikimedia.org/wiki/File:Debris_washed_ashore_in_Mozambique_(1).jpg",
@@ -145,7 +169,10 @@
       "id": "mozambique-debris-photo-2",
       "kind": "image",
       "title": "MH370 debris washed ashore in Mozambique (ATSB photo 2)",
-      "featureIds": ["no-step-stabiliser-panel-vilankulo", "flap-support-fairing-676eb-daghatane"],
+      "featureIds": [
+        "no-step-stabiliser-panel-vilankulo",
+        "flap-support-fairing-676eb-daghatane"
+      ],
       "directUrl": "/media/mozambique-debris-2.webp",
       "embedUrl": null,
       "pageUrl": "https://commons.wikimedia.org/wiki/File:Debris_washed_ashore_in_Mozambique_(2).jpg",
@@ -160,7 +187,10 @@
       "id": "debris-compiled-overview",
       "kind": "image",
       "title": "MH370 recovered debris — compiled overview",
-      "featureIds": ["reunion-flaperon", "seventh-arc-csiro"],
+      "featureIds": [
+        "reunion-flaperon",
+        "seventh-arc-csiro"
+      ],
       "directUrl": "/media/debris-compiled.webp",
       "embedUrl": null,
       "pageUrl": "https://commons.wikimedia.org/wiki/File:MH370_Debris_compiled.png",
@@ -175,7 +205,15 @@
       "id": "9m-mro-airborne-cdg",
       "kind": "image",
       "title": "9M-MRO — the aircraft lost as MH370, at Paris-CDG (December 2011)",
-      "featureIds": ["wmkk", "epoch1"],
+      "featureIds": [
+        "wmkk",
+        "epoch1",
+        "epoch2",
+        "ashton-2015",
+        "ugib-2020",
+        "captio-2022",
+        "wspr-gdtaaa-2023"
+      ],
       "directUrl": "/media/9m-mro-errera.webp",
       "embedUrl": null,
       "pageUrl": "https://commons.wikimedia.org/wiki/File:Boeing_777-200ER_Malaysia_AL_(MAS)_9M-MRO_-_MSN_28420_404_(9272090094).jpg",
@@ -191,7 +229,9 @@
       "id": "9m-mro-ground-zurich",
       "kind": "image",
       "title": "9M-MRO on the ground at Zurich (December 2006)",
-      "featureIds": ["wmkk"],
+      "featureIds": [
+        "wmkk"
+      ],
       "directUrl": "/media/9m-mro-zurich.webp",
       "embedUrl": null,
       "pageUrl": "https://commons.wikimedia.org/wiki/File:Malaysia_Airlines_Boeing_777,_9M-MRO@ZRH,22.12.2006-442dg_-_Flickr_-_Aero_Icarus.jpg",
@@ -207,7 +247,9 @@
       "id": "klia-control-tower",
       "kind": "image",
       "title": "Kuala Lumpur International Airport control tower",
-      "featureIds": ["wmkk"],
+      "featureIds": [
+        "wmkk"
+      ],
       "directUrl": "/media/klia-tower.webp",
       "embedUrl": null,
       "pageUrl": "https://commons.wikimedia.org/wiki/File:KLIA_control_tower_2_2016_October.jpg",
@@ -223,7 +265,9 @@
       "id": "ocean-shield-bluefin21-photo",
       "kind": "image",
       "title": "ADV Ocean Shield deploying the Bluefin-21 AUV (April 2014)",
-      "featureIds": ["ocean-shield-acoustic-2014"],
+      "featureIds": [
+        "ocean-shield-acoustic-2014"
+      ],
       "directUrl": "/media/ocean-shield-bluefin21.webp",
       "embedUrl": null,
       "pageUrl": "https://commons.wikimedia.org/wiki/File:Ocean_Shield_deploys_the_Bluefin_21_underwater_vehicle.jpg",
@@ -239,7 +283,9 @@
       "id": "towed-pinger-locator-photo",
       "kind": "image",
       "title": "U.S. Navy Towed Pinger Locator (TPL-25)",
-      "featureIds": ["ocean-shield-acoustic-2014"],
+      "featureIds": [
+        "ocean-shield-acoustic-2014"
+      ],
       "directUrl": "/media/tpl-25.webp",
       "embedUrl": null,
       "pageUrl": "https://commons.wikimedia.org/wiki/File:Navy_Towed_Pinger_Locator.jpg",
@@ -255,7 +301,9 @@
       "id": "seabed-constructor-photo",
       "kind": "image",
       "title": "Seabed Constructor — Ocean Infinity's 2018 search vessel",
-      "featureIds": ["ocean-infinity-2018"],
+      "featureIds": [
+        "ocean-infinity-2018"
+      ],
       "directUrl": "/media/seabed-constructor.webp",
       "embedUrl": null,
       "pageUrl": "https://commons.wikimedia.org/wiki/File:Seabed_Constructor.jpg",
@@ -271,7 +319,11 @@
       "id": "inmarsat-3-satellite-photo",
       "kind": "image",
       "title": "Inmarsat-3 series satellite",
-      "featureIds": ["inmarsat-3f1-ssp", "hs1", "hs7"],
+      "featureIds": [
+        "inmarsat-3f1-ssp",
+        "hs1",
+        "hs7"
+      ],
       "directUrl": "/media/inmarsat-3.webp",
       "embedUrl": null,
       "pageUrl": "https://commons.wikimedia.org/wiki/File:Inmarsat-3_crop.jpg",
@@ -287,7 +339,13 @@
       "id": "search-ops-p8a-poseidon",
       "kind": "image",
       "title": "Search operations — P-8A Poseidon crew scanning the water for debris (Mar 2014)",
-      "featureIds": ["sio-surface-initial-2014"],
+      "featureIds": [
+        "sio-surface-initial-2014",
+        "south-china-sea-2014",
+        "malacca-andaman-2014",
+        "sio-surface-refined-2014",
+        "sio-surface-final-2014"
+      ],
       "directUrl": "/media/search-ops-p8a-poseidon.webp",
       "embedUrl": null,
       "pageUrl": "https://commons.wikimedia.org/wiki/File:Searches_the_water_for_debris_on_a_P-8A_Poseidon_during_a_mission_to_assist_in_search_and_rescue_operations_for_Malaysia_Airlines_flight_MH370_March_20_140320-N-XY761-105.jpg",
@@ -302,7 +360,9 @@
       "id": "fugro-discovery-vessel",
       "kind": "image",
       "title": "Fugro Discovery - ATSB underwater-search vessel (Fremantle, 2016)",
-      "featureIds": ["atsb-underwater-2014-2017"],
+      "featureIds": [
+        "atsb-underwater-2014-2017"
+      ],
       "directUrl": "/media/fugro-discovery.webp",
       "embedUrl": null,
       "pageUrl": "https://commons.wikimedia.org/wiki/File:Fugro_Discovery,_Fremantle,_2016_(02).JPG",
@@ -318,7 +378,9 @@
       "id": "fugro-equator-vessel",
       "kind": "image",
       "title": "Fugro Equator surveying the southern Indian Ocean search area",
-      "featureIds": ["atsb-underwater-2014-2017"],
+      "featureIds": [
+        "atsb-underwater-2014-2017"
+      ],
       "directUrl": "/media/fugro-equator.webp",
       "embedUrl": null,
       "pageUrl": "https://commons.wikimedia.org/wiki/File:Fugro_Equator_operating_in_the_search_area_in_the_southern_Indian_Ocean_(1).jpg",
@@ -334,7 +396,9 @@
       "id": "hugin-4500-auv",
       "kind": "image",
       "title": "HUGIN 4500 AUV deployed from Fugro Supporter (Jan 2015)",
-      "featureIds": ["atsb-underwater-2014-2017"],
+      "featureIds": [
+        "atsb-underwater-2014-2017"
+      ],
       "directUrl": "/media/hugin-4500-auv.webp",
       "embedUrl": null,
       "pageUrl": "https://commons.wikimedia.org/wiki/File:The_HUGIN_4500_AUV_in_the_water.jpg",
@@ -350,7 +414,9 @@
       "id": "go-phoenix-vessel",
       "kind": "image",
       "title": "GO Phoenix in heavy seas, southern Indian Ocean search",
-      "featureIds": ["atsb-underwater-2014-2017"],
+      "featureIds": [
+        "atsb-underwater-2014-2017"
+      ],
       "directUrl": "/media/go-phoenix.webp",
       "embedUrl": null,
       "pageUrl": "https://commons.wikimedia.org/wiki/File:GO_Phoenix_experiences_rough_sea_conditions_in_the_southern_Indian_Ocean_(1).jpg",
@@ -366,7 +432,9 @@
       "id": "sas-sonar-seafloor",
       "kind": "image",
       "title": "Synthetic-aperture sonar image of the SIO seafloor (GO Phoenix)",
-      "featureIds": ["atsb-underwater-2014-2017"],
+      "featureIds": [
+        "atsb-underwater-2014-2017"
+      ],
       "directUrl": "/media/sas-sonar-seafloor.webp",
       "embedUrl": null,
       "pageUrl": "https://commons.wikimedia.org/wiki/File:Synthetic_aperture_sonar_acoustic_image_of_the_seafloor_gathered_by_GO_Phoenix.jpg",
@@ -382,7 +450,10 @@
       "id": "hms-echo-vessel",
       "kind": "image",
       "title": "HMS Echo (H87) - Royal Navy survey ship, 2014 acoustic search",
-      "featureIds": ["ocean-shield-acoustic-2014", "atsb-underwater-2014-2017"],
+      "featureIds": [
+        "ocean-shield-acoustic-2014",
+        "atsb-underwater-2014-2017"
+      ],
       "directUrl": "/media/hms-echo.webp",
       "embedUrl": null,
       "pageUrl": "https://commons.wikimedia.org/wiki/File:HMS_Echo_H87.jpg",
@@ -398,7 +469,9 @@
       "id": "armada-78-vessel",
       "kind": "image",
       "title": "Ocean Infinity Armada-class robotic survey ship (2025-26 search)",
-      "featureIds": ["ocean-infinity-2025-26"],
+      "featureIds": [
+        "ocean-infinity-2025-26"
+      ],
       "directUrl": "/media/armada-78.webp",
       "embedUrl": null,
       "pageUrl": "https://commons.wikimedia.org/wiki/File:Armada_78_05_(ship,_2023)_in_Esbjerg.jpg",
@@ -414,7 +487,9 @@
       "id": "diamantina-bathymetry",
       "kind": "image",
       "title": "SE Indian Ocean deep terrain (Diamantina / Broken Ridge region)",
-      "featureIds": ["broken-ridge"],
+      "featureIds": [
+        "broken-ridge"
+      ],
       "directUrl": "/media/diamantina-bathymetry.webp",
       "embedUrl": null,
       "pageUrl": "https://commons.wikimedia.org/wiki/File:Stewart_Jamieson_2019_bathymetry_Diamantina.jpg",
@@ -430,7 +505,9 @@
       "id": "vilankulo-find-region",
       "kind": "image",
       "title": "Vilankulo, Mozambique - 'NO STEP' panel find region",
-      "featureIds": ["no-step-stabiliser-panel-vilankulo"],
+      "featureIds": [
+        "no-step-stabiliser-panel-vilankulo"
+      ],
       "directUrl": "/media/vilankulo.webp",
       "embedUrl": null,
       "pageUrl": "https://commons.wikimedia.org/wiki/File:Vilankulo,_Mozambique_-_panoramio.jpg",
@@ -446,7 +523,9 @@
       "id": "pemba-find-region",
       "kind": "image",
       "title": "Pemba Island, Tanzania - right outboard flap find region",
-      "featureIds": ["right-outboard-flap-pemba"],
+      "featureIds": [
+        "right-outboard-flap-pemba"
+      ],
       "directUrl": "/media/pemba-island.webp",
       "embedUrl": null,
       "pageUrl": "https://commons.wikimedia.org/wiki/File:Pemba_island,_Tanzania._View_from_Chake_Chake_town_center_over_the_mangroves_towards_the_sea.JPG",
@@ -462,7 +541,10 @@
       "id": "madagascar-find-region",
       "kind": "image",
       "title": "Sainte-Marie, Madagascar - eastern debris-find coastline",
-      "featureIds": ["right-wing-trailing-edge-panel-riake", "nose-landing-gear-door-antsiraka"],
+      "featureIds": [
+        "right-wing-trailing-edge-panel-riake",
+        "nose-landing-gear-door-antsiraka"
+      ],
       "directUrl": "/media/sainte-marie-madagascar.webp",
       "embedUrl": null,
       "pageUrl": "https://commons.wikimedia.org/wiki/File:Plage_de_l%27ile_aux_Nattes,_Sainte-Marie,_Madagascar.jpg",
@@ -473,6 +555,339 @@
       "retrieved": "2026-07-17",
       "verified": "curl -sI source HTTP/2 200 image/jpeg 4,787,031 b (3872x2592); mirrored locally as WebP.",
       "notes": "Beach at Ile aux Nattes, Sainte-Marie (Nosy Boraha), Madagascar - representative of the eastern Madagascar coastline (Riake Beach and the Antsiraka peninsula are on Nosy Boraha / nearby) that produced more MH370 debris than any other region. Region/context photo, attached to representative Madagascar finds. BATCH 3."
+    },
+    {
+      "id": "penang-airport-terminal",
+      "kind": "image",
+      "title": "Penang International Airport (WMKP) terminal",
+      "featureIds": [
+        "wmkp"
+      ],
+      "directUrl": "/media/penang-airport.webp",
+      "embedUrl": null,
+      "pageUrl": "https://commons.wikimedia.org/wiki/File:Cmglee_Penang_airport_2012_terminal.jpg",
+      "mimeType": "image/webp",
+      "durationS": null,
+      "publisher": "Cmglee, via Wikimedia Commons",
+      "license": "CC BY-SA 3.0",
+      "verified": "Commons imageinfo license CC BY-SA 3.0; source image/jpeg 786,115 b; file page HTTP 200; mirrored locally as WebP 75,776 b. BATCH 4.",
+      "notes": "Penang International Airport terminal. Military radar tracked MH370 passing 6 NM south of Penang at 01:52:35 (UTC+8) on the turnback. OSS media expansion (BATCH 4)."
+    },
+    {
+      "id": "kota-bharu-airport-terminal",
+      "kind": "image",
+      "title": "Sultan Ismail Petra Airport, Kota Bharu (WMKC)",
+      "featureIds": [
+        "wmkc-kota-bharu"
+      ],
+      "directUrl": "/media/kota-bharu-airport.webp",
+      "embedUrl": null,
+      "pageUrl": "https://commons.wikimedia.org/wiki/File:Sultan_Ismail_Petra_Airport,_IATA,_KBR,_ICAO,_WMKC.jpg",
+      "mimeType": "image/webp",
+      "durationS": null,
+      "publisher": "Cycloneopp, via Wikimedia Commons",
+      "license": "CC BY-SA 3.0",
+      "verified": "Commons imageinfo license CC BY-SA 3.0; source image/jpeg 2,920,174 b; file page HTTP 200; mirrored locally as WebP 96,146 b. BATCH 4.",
+      "notes": "Kota Bharu airport. Its own primary radar recorded MH370 crossing the peninsula coast at ~01:37 (UTC+8) on the turnback leg. OSS media expansion (BATCH 4)."
+    },
+    {
+      "id": "learmonth-raaf-base",
+      "kind": "image",
+      "title": "RAAF Base Learmonth, Western Australia",
+      "featureIds": [
+        "learmonth"
+      ],
+      "directUrl": "/media/learmonth-raaf.webp",
+      "embedUrl": null,
+      "pageUrl": "https://commons.wikimedia.org/wiki/File:25_Squadron_at_Learmonth.jpg",
+      "mimeType": "image/webp",
+      "durationS": null,
+      "publisher": "Susan Anonstrom / RAAF, via Wikimedia Commons",
+      "license": "CC BY-SA 4.0",
+      "verified": "Commons imageinfo license CC BY-SA 4.0; source image/jpeg 1,196,266 b; file page HTTP 200; mirrored locally as WebP 79,430 b. BATCH 4.",
+      "notes": "RAAF Base Learmonth, the forward staging point for RAAF/RNZAF search sorties over the southern Indian Ocean. OSS media expansion (BATCH 4)."
+    },
+    {
+      "id": "emirates-a380-type",
+      "kind": "image",
+      "title": "Emirates Airbus A380 (EK407 aircraft type)",
+      "featureIds": [
+        "emirates-etihad-near-miss"
+      ],
+      "directUrl": "/media/emirates-a380-ek.webp",
+      "embedUrl": null,
+      "pageUrl": "https://commons.wikimedia.org/wiki/File:EK_UAE_Emirates_Airbus_A380_A6-EES_(29797908543).jpg",
+      "mimeType": "image/webp",
+      "durationS": null,
+      "publisher": "Riik@mctr, via Wikimedia Commons",
+      "license": "CC BY-SA 2.0",
+      "verified": "Commons imageinfo license CC BY-SA 2.0; source image/jpeg 795,670 b; file page HTTP 200; mirrored locally as WebP 78,100 b. BATCH 4.",
+      "notes": "Emirates EK407 (Melbourne to Dubai) was an Airbus A380. On the CAPTIO route, MH370 passed ~12 NM below it and Etihad EY461 near 04:02 (UTC+8). Representative type photo (Emirates A380), not the exact airframe. OSS media expansion (BATCH 4)."
+    },
+    {
+      "id": "etihad-a340-type",
+      "kind": "image",
+      "title": "Etihad Airways Airbus A340 (EY461 aircraft type)",
+      "featureIds": [
+        "emirates-etihad-near-miss"
+      ],
+      "directUrl": "/media/etihad-a340-ey.webp",
+      "embedUrl": null,
+      "pageUrl": "https://commons.wikimedia.org/wiki/File:Etihad_Airways_Airbus_A340-541_A6-EHA_MUC_2015_01.jpg",
+      "mimeType": "image/webp",
+      "durationS": null,
+      "publisher": "Julian Herzog, via Wikimedia Commons",
+      "license": "CC BY 4.0",
+      "verified": "Commons imageinfo license CC BY 4.0; source image/jpeg 4,458,351 b; file page HTTP 200; mirrored locally as WebP 70,058 b. BATCH 4.",
+      "notes": "Etihad EY461 (Melbourne to Abu Dhabi) operated the Airbus A340-500 in 2014. Representative type photo (Etihad A340), not the exact airframe. OSS media expansion (BATCH 4)."
+    },
+    {
+      "id": "cape-leeuwin-landmark",
+      "kind": "image",
+      "title": "Cape Leeuwin, Western Australia (near hydrophone station HA01)",
+      "featureIds": [
+        "ha01-cape-leeuwin"
+      ],
+      "directUrl": "/media/cape-leeuwin.webp",
+      "embedUrl": null,
+      "pageUrl": "https://commons.wikimedia.org/wiki/File:CapeLeeuwinLighthouse_gobeirne.jpg",
+      "mimeType": "image/webp",
+      "durationS": null,
+      "publisher": "Greg O'Beirne, via Wikimedia Commons",
+      "license": "CC BY 2.5",
+      "verified": "Commons imageinfo license CC BY 2.5; source image/jpeg 1,716,024 b; file page HTTP 200; mirrored locally as WebP 192,772 b. BATCH 4.",
+      "notes": "The CTBTO IMS hydrophone triad HA01 lies ~100 km SW of Cape Leeuwin (the landmark shown). Curtin University analysed its recordings for MH370 impact signals. Context/landmark photo. OSS media expansion (BATCH 4)."
+    },
+    {
+      "id": "debris-fan-cowl-chidenguele",
+      "kind": "image",
+      "title": "Right engine fan cowl fragment, Chidenguele (official MH370 debris report photo)",
+      "featureIds": [
+        "engine-fan-cowling-chidenguele"
+      ],
+      "directUrl": "/media/debris-fan-cowl-chidenguele.webp",
+      "embedUrl": null,
+      "pageUrl": "https://www.mot.gov.my/en/Laporan%20MH%20370/Debris%20Examination%20Reports%20-%2028Feb2017.pdf",
+      "mimeType": "image/webp",
+      "durationS": null,
+      "publisher": "Malaysia Ministry of Transport (MOT), MH370 Debris Examination Reports (2017)",
+      "license": "(c) Malaysia MOT - official report figure; included under editorial / fair-dealing use, NOT open-source",
+      "verified": "Extracted from the MOT Debris Examination Reports PDF (curl HTTP 200, 2,020,973 b); item mapped by find-location + part id; converted to WebP. BATCH 5.",
+      "notes": "Item 6: right fan cowl, recovered south of Chidenguele, Mozambique, 24 Apr 2016. Genuine official photograph of the recovered piece. Copyright Malaysia MOT; used editorially with attribution, not under an OSS/CC licence."
+    },
+    {
+      "id": "debris-wing-body-anvil-bay",
+      "kind": "image",
+      "title": "Wing-to-body fairing piece, Anvil Bay (official MH370 debris report photo)",
+      "featureIds": [
+        "wing-body-fairing-anvil-bay"
+      ],
+      "directUrl": "/media/debris-wing-body-anvil-bay.webp",
+      "embedUrl": null,
+      "pageUrl": "https://www.mot.gov.my/en/Laporan%20MH%20370/Debris%20Examination%20Reports%20-%2028Feb2017.pdf",
+      "mimeType": "image/webp",
+      "durationS": null,
+      "publisher": "Malaysia Ministry of Transport (MOT), MH370 Debris Examination Reports (2017)",
+      "license": "(c) Malaysia MOT - official report figure; included under editorial / fair-dealing use, NOT open-source",
+      "verified": "Extracted from the MOT Debris Examination Reports PDF (curl HTTP 200, 2,020,973 b); item mapped by find-location + part id; converted to WebP. BATCH 5.",
+      "notes": "Item 7: wing-to-body fairing, recovered at Anvil Bay, Chemucane, Mozambique, 30 Apr 2016. Genuine official photograph of the recovered piece. Copyright Malaysia MOT; used editorially with attribution, not under an OSS/CC licence."
+    },
+    {
+      "id": "debris-flap-tailcone-gris-gris",
+      "kind": "image",
+      "title": "No. 1 flap track fairing tail cone, Gris Gris (official MH370 debris report photo)",
+      "featureIds": [
+        "flap-fairing-tail-cone-gris-gris"
+      ],
+      "directUrl": "/media/debris-flap-tailcone-gris-gris.webp",
+      "embedUrl": null,
+      "pageUrl": "https://www.mot.gov.my/en/Laporan%20MH%20370/Debris%20Examination%20Reports%20-%2028Feb2017.pdf",
+      "mimeType": "image/webp",
+      "durationS": null,
+      "publisher": "Malaysia Ministry of Transport (MOT), MH370 Debris Examination Reports (2017)",
+      "license": "(c) Malaysia MOT - official report figure; included under editorial / fair-dealing use, NOT open-source",
+      "verified": "Extracted from the MOT Debris Examination Reports PDF (curl HTTP 200, 2,020,973 b); item mapped by find-location + part id; converted to WebP. BATCH 5.",
+      "notes": "Item 8: No.1 flap track fairing tail cone, recovered at Gris Gris Beach, Mauritius, 24 May 2016. Genuine official photograph of the recovered piece. Copyright Malaysia MOT; used editorially with attribution, not under an OSS/CC licence."
+    },
+    {
+      "id": "debris-macaneta-panel",
+      "kind": "image",
+      "title": "Left-wing panel fragments, Macaneta (official MH370 debris report photo)",
+      "featureIds": [
+        "left-wing-trailing-edge-panel-macaneta"
+      ],
+      "directUrl": "/media/debris-macaneta-panel.webp",
+      "embedUrl": null,
+      "pageUrl": "https://www.mot.gov.my/en/Laporan%20MH%20370/Debris%20Examination%20Reports%20-%2028Feb2017.pdf",
+      "mimeType": "image/webp",
+      "durationS": null,
+      "publisher": "Malaysia Ministry of Transport (MOT), MH370 Debris Examination Reports (2017)",
+      "license": "(c) Malaysia MOT - official report figure; included under editorial / fair-dealing use, NOT open-source",
+      "verified": "Extracted from the MOT Debris Examination Reports PDF (curl HTTP 200, 2,020,973 b); item mapped by find-location + part id; converted to WebP. BATCH 5.",
+      "notes": "Item 9: upper fixed panel forward of the flaperon (left wing), recovered at Macaneta Peninsula, Mozambique, 22 May 2016. Genuine official photograph of the recovered piece. Copyright Malaysia MOT; used editorially with attribution, not under an OSS/CC licence."
+    },
+    {
+      "id": "rep-777-gear-flaps",
+      "kind": "image",
+      "title": "Boeing 777 landing gear and flaps (REPRESENTATIVE - not the recovered MH370 part)",
+      "featureIds": [
+        "door-r1-stowage-closet-rodrigues",
+        "left-outboard-flap-ilot-bernache",
+        "flap-support-fairing-mpame",
+        "nose-wheel-door-2019-antsiraka",
+        "tataly-trunnion-door-claim",
+        "nose-landing-gear-door-antsiraka"
+      ],
+      "directUrl": "/media/rep-777-gear-flaps.webp",
+      "embedUrl": null,
+      "pageUrl": "https://commons.wikimedia.org/wiki/File:American_Airlines_Boeing_777-200ER_N788AN_landing_gear_and_flaps.jpg",
+      "mimeType": "image/webp",
+      "durationS": null,
+      "publisher": "Adrian Pingstone (Arpingstone), via Wikimedia Commons",
+      "license": "Public domain",
+      "verified": "Commons imageinfo license Public domain; file page HTTP 200; mirrored locally as WebP. BATCH 5.",
+      "notes": "REPRESENTATIVE image of the Boeing 777 component type, NOT a photograph of the actual recovered MH370 fragment (no free-licensed photo of the specific piece exists). Shown for illustration only."
+    },
+    {
+      "id": "rep-777-ge90-engine",
+      "kind": "image",
+      "title": "Boeing 777 GE90 engine and cowling (REPRESENTATIVE - not the recovered MH370 part)",
+      "featureIds": [
+        "engine-nose-cowl-roy-mossel-bay"
+      ],
+      "directUrl": "/media/rep-777-ge90-engine.webp",
+      "embedUrl": null,
+      "pageUrl": "https://commons.wikimedia.org/wiki/File:Air_Canada_GE90_Boeing_777-200LR.jpg",
+      "mimeType": "image/webp",
+      "durationS": null,
+      "publisher": "Kristoferb, via Wikimedia Commons",
+      "license": "CC BY-SA 3.0",
+      "verified": "Commons imageinfo license CC BY-SA 3.0; file page HTTP 200; mirrored locally as WebP. BATCH 5.",
+      "notes": "REPRESENTATIVE image of the Boeing 777 component type, NOT a photograph of the actual recovered MH370 fragment (no free-licensed photo of the specific piece exists). Shown for illustration only."
+    },
+    {
+      "id": "rep-777-cabin",
+      "kind": "image",
+      "title": "Boeing 777 cabin interior (REPRESENTATIVE - not the recovered MH370 part)",
+      "featureIds": [
+        "seat-back-trim-panel-riake",
+        "cabin-interior-panel-antsiraka",
+        "mas-towelette-cervantes"
+      ],
+      "directUrl": "/media/rep-777-cabin.webp",
+      "embedUrl": null,
+      "pageUrl": "https://commons.wikimedia.org/wiki/File:Air_Canada_Economy_interior_777.jpg",
+      "mimeType": "image/webp",
+      "durationS": null,
+      "publisher": "jo3hug (Flickr), via Wikimedia Commons",
+      "license": "CC BY 2.0",
+      "verified": "Commons imageinfo license CC BY 2.0; file page HTTP 200; mirrored locally as WebP. BATCH 5.",
+      "notes": "REPRESENTATIVE image of the Boeing 777 component type, NOT a photograph of the actual recovered MH370 fragment (no free-licensed photo of the specific piece exists). Shown for illustration only."
+    },
+    {
+      "id": "rep-777-wing",
+      "kind": "image",
+      "title": "Boeing 777 wing and control surfaces (REPRESENTATIVE - not the recovered MH370 part)",
+      "featureIds": [
+        "right-aileron-nautilus-bay",
+        "spoiler-fragment-jeffreys-bay",
+        "vertical-stabiliser-panel-linga-linga",
+        "wing-body-fairing-kosi-bay",
+        "right-wing-trailing-edge-panel-riake",
+        "panel-linga-linga-2016-08",
+        "panel-saint-luce-2015-12",
+        "panel-saint-luce-2016-02-b",
+        "panel-antsiraka-2016-09",
+        "panel-riake-2018-08",
+        "broken-o-panel-antsiraka",
+        "no-step-2-evatra",
+        "vortex-generator-antsiraka",
+        "unidentified-part-riake-2016-06-06",
+        "unidentified-part-riake-2016-06-12-a",
+        "unidentified-part-riake-2016-06-12-b",
+        "unidentified-part-riake-2016-10",
+        "unidentified-part-riake-2016-07",
+        "unidentified-part-antsiraka",
+        "unidentified-part-northern-kzn",
+        "unidentified-part-saint-luce-2016-02"
+      ],
+      "directUrl": "/media/rep-777-wing.webp",
+      "embedUrl": null,
+      "pageUrl": "https://commons.wikimedia.org/wiki/File:Boeing_777_wing.jpg",
+      "mimeType": "image/webp",
+      "durationS": null,
+      "publisher": "Vivan755, via Wikimedia Commons",
+      "license": "CC BY-SA 4.0",
+      "verified": "Commons imageinfo license CC BY-SA 4.0; file page HTTP 200; mirrored locally as WebP. BATCH 5.",
+      "notes": "REPRESENTATIVE image of the Boeing 777 component type, NOT a photograph of the actual recovered MH370 fragment (no free-licensed photo of the specific piece exists). Shown for illustration only."
+    },
+    {
+      "id": "rep-oil-rig",
+      "kind": "image",
+      "title": "Offshore semi-submersible drilling rig (REPRESENTATIVE, not the Songa Mercur)",
+      "featureIds": [
+        "mike-mckay-sighting"
+      ],
+      "directUrl": "/media/rep-oil-rig.webp",
+      "embedUrl": null,
+      "pageUrl": "https://commons.wikimedia.org/wiki/File:ENSCO_8506_Offshore_Semi-Submersible_Oil_Drilling_Rig_(47504222982).jpg",
+      "mimeType": "image/webp",
+      "durationS": null,
+      "publisher": "Tony Webster, via Wikimedia Commons",
+      "license": "CC BY 2.0",
+      "verified": "Commons imageinfo license CC BY 2.0; file page HTTP 200; mirrored locally as WebP. BATCH 5.",
+      "notes": "Representative offshore drilling rig. Mike McKay reported the sighting from the Songa Mercur rig off Vietnam. Illustration only, not that rig."
+    },
+    {
+      "id": "rep-telecom-tower",
+      "kind": "image",
+      "title": "Telecommunications mast (REPRESENTATIVE, not the Penang tower)",
+      "featureIds": [
+        "penang-cell-registration"
+      ],
+      "directUrl": "/media/rep-telecom-tower.webp",
+      "embedUrl": null,
+      "pageUrl": "https://commons.wikimedia.org/wiki/File:Telecommunications_Mast-1330230,_Petone,_Wellington,_New_Zealand.jpg",
+      "mimeType": "image/webp",
+      "durationS": null,
+      "publisher": "Wainuio, via Wikimedia Commons",
+      "license": "CC BY-SA 4.0",
+      "verified": "Commons imageinfo license CC BY-SA 4.0; file page HTTP 200; mirrored locally as WebP. BATCH 5.",
+      "notes": "Representative telecom mast. The specific Penang tower that registered the co-pilot phone is not published. Illustration only."
+    },
+    {
+      "id": "rep-ssr-radar",
+      "kind": "image",
+      "title": "Secondary surveillance radar installation (REPRESENTATIVE)",
+      "featureIds": [
+        "last-secondary-radar"
+      ],
+      "directUrl": "/media/rep-ssr-radar.webp",
+      "embedUrl": null,
+      "pageUrl": "https://commons.wikimedia.org/wiki/File:GBH_SSR_radar_installation.jpg",
+      "mimeType": "image/webp",
+      "durationS": null,
+      "publisher": "Lnbogoda, via Wikimedia Commons",
+      "license": "CC0",
+      "verified": "Commons imageinfo license CC0; file page HTTP 200; mirrored locally as WebP. BATCH 5.",
+      "notes": "Representative secondary surveillance radar (SSR), the system that tracked MH370 until the transponder stopped. Illustration only."
+    },
+    {
+      "id": "rep-psr-radar",
+      "kind": "image",
+      "title": "Primary surveillance radar antenna (REPRESENTATIVE)",
+      "featureIds": [
+        "last-primary-radar"
+      ],
+      "directUrl": "/media/rep-psr-radar.webp",
+      "embedUrl": null,
+      "pageUrl": "https://commons.wikimedia.org/wiki/File:ASR-9_Radar_Antenna.jpg",
+      "mimeType": "image/webp",
+      "durationS": null,
+      "publisher": "US FAA, via Wikimedia Commons",
+      "license": "Public domain",
+      "verified": "Commons imageinfo license Public domain; file page HTTP 200; mirrored locally as WebP. BATCH 5.",
+      "notes": "Representative primary surveillance radar (PSR), the military-radar type that held MH370 after the transponder stopped. Illustration only."
     }
   ]
 }

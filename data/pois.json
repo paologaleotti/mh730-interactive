@@ -257,5 +257,16 @@
     "oneLiner": "During the Strait of Malacca flyby, first officer Fariq Abdul Hamid's mobile phone was reportedly detected (a brief registration, not a call or text) by a telecommunications tower on Penang Island around 01:52 (UTC+8) - the only such contact from any of the 239 aboard. It indicates the phone was on and the aircraft flew low enough for line-of-sight to a tower, but yielded no location beyond 'near Penang'. Reported by Malaysian officials/media in 2014 and debated; not emphasised in the final SIR. Coordinate is Penang Island (specific tower not published).",
     "caveat": "uncorroborated",
     "source": "Reported April-May 2014 (e.g. New Straits Times / Reuters coverage of the co-pilot's phone 'connecting' to a Penang tower ~01:52 MYT during the turnback); the SIR (2018) discusses cellular-registration analysis without confirming a firm detection. Coordinate = Penang Island centroid (tower not published), flagged. Retrieved 2026-07-17"
+  },
+  {
+    "id": "final-voice-contact",
+    "name": "Final voice contact (01:19:30 UTC+8)",
+    "category": "event",
+    "lat": 6.85,
+    "lon": 103.48,
+    "rank": 1,
+    "short": "Last words from the cockpit, at the KL-to-Ho-Chi-Minh ATC handoff, ~90 s before the transponder stopped.",
+    "oneLiner": "At 01:19:30 (UTC+8) Kuala Lumpur Area Control told MH370 to contact Ho Chi Minh City radio on 120.9 MHz; the reply 'Good night, Malaysian Three Seven Zero' was the aircraft's last transmission. About 90 seconds later, near waypoint IGARI (01:21 UTC+8), the transponder ceased and the turnback began. The released ATC recording is third-party/copyrighted (no public-domain audio file exists), so it is linked rather than mirrored; the authoritative transcript is in the ICAO-hosted preliminary report.",
+    "source": "ATC transcript: Malaysia MOT / ICAO Preliminary Report (2014), verified PDF HTTP 200; handoff frequency and wording per the released DCA ATC recording (May 2014). Retrieved 2026-07-17"
   }
 ]

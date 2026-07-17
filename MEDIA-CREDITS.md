@@ -1,0 +1,155 @@
+# Media credits & licensing
+
+The **code** in this repository is open-source (see LICENSE). **Media assets** under `public/media/` are licensed **individually** - this file is the authoritative per-asset record. Most are Creative Commons or public domain; a few are copyrighted official report figures included under editorial / fair-dealing use and are **clearly marked as not OSS**. "Representative" images illustrate a component/scene type and are **not** photographs of the specific object; their titles say so.
+
+Source of truth is `data/media.json` (mirrored to `src/data/media.manifest.json`); this file is generated from it.
+
+## Copyrighted (editorial / fair-dealing use, NOT OSS)
+
+- **MH370 ATC radio — final communications with air traffic control** (`https://www.youtube.com/embed/CSEbGKiwDn0`)
+  - © publisher, embed only — no public-domain/CC file of the ATC audio exists - The Telegraph (YouTube mirror of the publicly released ATC audio)
+  - Source: https://www.nbcnews.com/storyline/missing-jet/listen-missing-jet-mh370-pilots-talking-air-traffic-control-n94716
+- **Right engine fan cowl fragment, Chidenguele (official MH370 debris report photo)** (`public/media/debris-fan-cowl-chidenguele.webp`)
+  - (c) Malaysia MOT - official report figure; included under editorial / fair-dealing use, NOT open-source - Malaysia Ministry of Transport (MOT), MH370 Debris Examination Reports (2017)
+  - Source: https://www.mot.gov.my/en/Laporan%20MH%20370/Debris%20Examination%20Reports%20-%2028Feb2017.pdf
+- **No. 1 flap track fairing tail cone, Gris Gris (official MH370 debris report photo)** (`public/media/debris-flap-tailcone-gris-gris.webp`)
+  - (c) Malaysia MOT - official report figure; included under editorial / fair-dealing use, NOT open-source - Malaysia Ministry of Transport (MOT), MH370 Debris Examination Reports (2017)
+  - Source: https://www.mot.gov.my/en/Laporan%20MH%20370/Debris%20Examination%20Reports%20-%2028Feb2017.pdf
+- **Left-wing panel fragments, Macaneta (official MH370 debris report photo)** (`public/media/debris-macaneta-panel.webp`)
+  - (c) Malaysia MOT - official report figure; included under editorial / fair-dealing use, NOT open-source - Malaysia Ministry of Transport (MOT), MH370 Debris Examination Reports (2017)
+  - Source: https://www.mot.gov.my/en/Laporan%20MH%20370/Debris%20Examination%20Reports%20-%2028Feb2017.pdf
+- **Wing-to-body fairing piece, Anvil Bay (official MH370 debris report photo)** (`public/media/debris-wing-body-anvil-bay.webp`)
+  - (c) Malaysia MOT - official report figure; included under editorial / fair-dealing use, NOT open-source - Malaysia Ministry of Transport (MOT), MH370 Debris Examination Reports (2017)
+  - Source: https://www.mot.gov.my/en/Laporan%20MH%20370/Debris%20Examination%20Reports%20-%2028Feb2017.pdf
+- **Fugro — 'The search for MH370' (underwater search footage playlist)** (`https://www.youtube.com/embed/videoseries?list=PL-iTTUJxPhy1Pzpkaxw_z68Uu6_zdlCex`)
+  - © Fugro — embed only - Fugro
+  - Source: https://www.youtube.com/playlist?list=PL-iTTUJxPhy1Pzpkaxw_z68Uu6_zdlCex
+
+## Creative Commons (attribution)
+
+- **9M-MRO — the aircraft lost as MH370, at Paris-CDG (December 2011)** (`public/media/9m-mro-errera.webp`)
+  - CC BY-SA 2.0 - Laurent ERRERA (Wikimedia Commons)
+  - Source: https://commons.wikimedia.org/wiki/File:Boeing_777-200ER_Malaysia_AL_(MAS)_9M-MRO_-_MSN_28420_404_(9272090094).jpg
+- **9M-MRO on the ground at Zurich (December 2006)** (`public/media/9m-mro-zurich.webp`)
+  - CC BY-SA 2.0 - Aero Icarus (Wikimedia Commons)
+  - Source: https://commons.wikimedia.org/wiki/File:Malaysia_Airlines_Boeing_777,_9M-MRO@ZRH,22.12.2006-442dg_-_Flickr_-_Aero_Icarus.jpg
+- **Ocean Infinity Armada-class robotic survey ship (2025-26 search)** (`public/media/armada-78.webp`)
+  - CC BY 4.0 - Tdn70 (Wikimedia Commons)
+  - Source: https://commons.wikimedia.org/wiki/File:Armada_78_05_(ship,_2023)_in_Esbjerg.jpg
+- **ATSB MH370 search videos (Fugro underwater footage + CSIRO drift animations)** (`https://www.atsb.gov.au/mh370-search-videos`)
+  - CC BY (Commonwealth of Australia) - Australian Transport Safety Bureau (Commonwealth of Australia)
+  - Source: https://www.atsb.gov.au/mh370-search-videos
+- **Cape Leeuwin, Western Australia (near hydrophone station HA01)** (`public/media/cape-leeuwin.webp`)
+  - CC BY 2.5 - Greg O'Beirne, via Wikimedia Commons
+  - Source: https://commons.wikimedia.org/wiki/File:CapeLeeuwinLighthouse_gobeirne.jpg
+- **CSIRO ocean-drift modelling animation (debris drift from the 7th arc)** (`https://research.csiro.au/bluelink/atsb-reports-on-the-search-for-mh370/`)
+  - CC BY (Commonwealth of Australia / CSIRO) - CSIRO (for ATSB)
+  - Source: https://research.csiro.au/bluelink/atsb-reports-on-the-search-for-mh370/
+- **SE Indian Ocean deep terrain (Diamantina / Broken Ridge region)** (`public/media/diamantina-bathymetry.webp`)
+  - CC BY 4.0 - Heather A. Stewart & Alan J. Jamieson (2019)
+  - Source: https://commons.wikimedia.org/wiki/File:Stewart_Jamieson_2019_bathymetry_Diamantina.jpg
+- **Emirates Airbus A380 (EK407 aircraft type)** (`public/media/emirates-a380-ek.webp`)
+  - CC BY-SA 2.0 - Riik@mctr, via Wikimedia Commons
+  - Source: https://commons.wikimedia.org/wiki/File:EK_UAE_Emirates_Airbus_A380_A6-EES_(29797908543).jpg
+- **Etihad Airways Airbus A340 (EY461 aircraft type)** (`public/media/etihad-a340-ey.webp`)
+  - CC BY 4.0 - Julian Herzog, via Wikimedia Commons
+  - Source: https://commons.wikimedia.org/wiki/File:Etihad_Airways_Airbus_A340-541_A6-EHA_MUC_2015_01.jpg
+- **Fugro Discovery - ATSB underwater-search vessel (Fremantle, 2016)** (`public/media/fugro-discovery.webp`)
+  - CC BY-SA 4.0 - Bahnfrend (Wikimedia Commons)
+  - Source: https://commons.wikimedia.org/wiki/File:Fugro_Discovery,_Fremantle,_2016_(02).JPG
+- **Fugro Equator surveying the southern Indian Ocean search area** (`public/media/fugro-equator.webp`)
+  - CC BY 4.0 - Australian Transport Safety Bureau (photo Justin Baulch)
+  - Source: https://commons.wikimedia.org/wiki/File:Fugro_Equator_operating_in_the_search_area_in_the_southern_Indian_Ocean_(1).jpg
+- **Overview of the MH370 search area (seabed fly-over)** (`https://www.youtube.com/embed/PAJdHx6QT5I`)
+  - CC BY 4.0 - Geoscience Australia
+  - Source: https://www.ga.gov.au/about/projects/marine/mh370-data-release
+- **GO Phoenix in heavy seas, southern Indian Ocean search** (`public/media/go-phoenix.webp`)
+  - CC BY 4.0 - Australian Transport Safety Bureau (Rayn Galloway / Joshua Philips)
+  - Source: https://commons.wikimedia.org/wiki/File:GO_Phoenix_experiences_rough_sea_conditions_in_the_southern_Indian_Ocean_(1).jpg
+- **HMS Echo (H87) - Royal Navy survey ship, 2014 acoustic search** (`public/media/hms-echo.webp`)
+  - CC BY-SA 4.0 - Lee Hemmings (Wikimedia Commons)
+  - Source: https://commons.wikimedia.org/wiki/File:HMS_Echo_H87.jpg
+- **HUGIN 4500 AUV deployed from Fugro Supporter (Jan 2015)** (`public/media/hugin-4500-auv.webp`)
+  - CC BY 4.0 - Australian Transport Safety Bureau (photo Fugro)
+  - Source: https://commons.wikimedia.org/wiki/File:The_HUGIN_4500_AUV_in_the_water.jpg
+- **Kuala Lumpur International Airport control tower** (`public/media/klia-tower.webp`)
+  - CC BY-SA 4.0 - Morio (Wikimedia Commons)
+  - Source: https://commons.wikimedia.org/wiki/File:KLIA_control_tower_2_2016_October.jpg
+- **Sultan Ismail Petra Airport, Kota Bharu (WMKC)** (`public/media/kota-bharu-airport.webp`)
+  - CC BY-SA 3.0 - Cycloneopp, via Wikimedia Commons
+  - Source: https://commons.wikimedia.org/wiki/File:Sultan_Ismail_Petra_Airport,_IATA,_KBR,_ICAO,_WMKC.jpg
+- **RAAF Base Learmonth, Western Australia** (`public/media/learmonth-raaf.webp`)
+  - CC BY-SA 4.0 - Susan Anonstrom / RAAF, via Wikimedia Commons
+  - Source: https://commons.wikimedia.org/wiki/File:25_Squadron_at_Learmonth.jpg
+- **Sainte-Marie, Madagascar - eastern debris-find coastline** (`public/media/sainte-marie-madagascar.webp`)
+  - CC BY-SA 4.0 - Anai171 (Wikimedia Commons)
+  - Source: https://commons.wikimedia.org/wiki/File:Plage_de_l%27ile_aux_Nattes,_Sainte-Marie,_Madagascar.jpg
+- **MH370 debris washed ashore in Mozambique (ATSB photo 1)** (`public/media/mozambique-debris-1.webp`)
+  - CC BY 4.0 - Australian Government — Australian Transport Safety Bureau (ATSB)
+  - Source: https://commons.wikimedia.org/wiki/File:Debris_washed_ashore_in_Mozambique_(1).jpg
+- **MH370 debris washed ashore in Mozambique (ATSB photo 2)** (`public/media/mozambique-debris-2.webp`)
+  - CC BY 4.0 - Australian Government — Australian Transport Safety Bureau (ATSB)
+  - Source: https://commons.wikimedia.org/wiki/File:Debris_washed_ashore_in_Mozambique_(2).jpg
+- **Pemba Island, Tanzania - right outboard flap find region** (`public/media/pemba-island.webp`)
+  - CC BY-SA 3.0 - Vincent van Zeijst (Wikimedia Commons)
+  - Source: https://commons.wikimedia.org/wiki/File:Pemba_island,_Tanzania._View_from_Chake_Chake_town_center_over_the_mangroves_towards_the_sea.JPG
+- **Penang International Airport (WMKP) terminal** (`public/media/penang-airport.webp`)
+  - CC BY-SA 3.0 - Cmglee, via Wikimedia Commons
+  - Source: https://commons.wikimedia.org/wiki/File:Cmglee_Penang_airport_2012_terminal.jpg
+- **Boeing 777 cabin interior (REPRESENTATIVE - not the recovered MH370 part)** (`public/media/rep-777-cabin.webp`)
+  - CC BY 2.0 - jo3hug (Flickr), via Wikimedia Commons
+  - Source: https://commons.wikimedia.org/wiki/File:Air_Canada_Economy_interior_777.jpg
+- **Boeing 777 GE90 engine and cowling (REPRESENTATIVE - not the recovered MH370 part)** (`public/media/rep-777-ge90-engine.webp`)
+  - CC BY-SA 3.0 - Kristoferb, via Wikimedia Commons
+  - Source: https://commons.wikimedia.org/wiki/File:Air_Canada_GE90_Boeing_777-200LR.jpg
+- **Boeing 777 wing and control surfaces (REPRESENTATIVE - not the recovered MH370 part)** (`public/media/rep-777-wing.webp`)
+  - CC BY-SA 4.0 - Vivan755, via Wikimedia Commons
+  - Source: https://commons.wikimedia.org/wiki/File:Boeing_777_wing.jpg
+- **Offshore semi-submersible drilling rig (REPRESENTATIVE, not the Songa Mercur)** (`public/media/rep-oil-rig.webp`)
+  - CC BY 2.0 - Tony Webster, via Wikimedia Commons
+  - Source: https://commons.wikimedia.org/wiki/File:ENSCO_8506_Offshore_Semi-Submersible_Oil_Drilling_Rig_(47504222982).jpg
+- **Telecommunications mast (REPRESENTATIVE, not the Penang tower)** (`public/media/rep-telecom-tower.webp`)
+  - CC BY-SA 4.0 - Wainuio, via Wikimedia Commons
+  - Source: https://commons.wikimedia.org/wiki/File:Telecommunications_Mast-1330230,_Petone,_Wellington,_New_Zealand.jpg
+- **Synthetic-aperture sonar image of the SIO seafloor (GO Phoenix)** (`public/media/sas-sonar-seafloor.webp`)
+  - CC BY 4.0 - Australian Transport Safety Bureau
+  - Source: https://commons.wikimedia.org/wiki/File:Synthetic_aperture_sonar_acoustic_image_of_the_seafloor_gathered_by_GO_Phoenix.jpg
+- **Seabed Constructor — Ocean Infinity's 2018 search vessel** (`public/media/seabed-constructor.webp`)
+  - CC BY-SA 2.5 AR - Argentina.gob.ar
+  - Source: https://commons.wikimedia.org/wiki/File:Seabed_Constructor.jpg
+- **Vilankulo, Mozambique - 'NO STEP' panel find region** (`public/media/vilankulo.webp`)
+  - CC BY-SA 3.0 - hermansm (Panoramio, via Wikimedia Commons)
+  - Source: https://commons.wikimedia.org/wiki/File:Vilankulo,_Mozambique_-_panoramio.jpg
+
+## Public domain / CC0
+
+- **MH370 recovered debris — compiled overview** (`public/media/debris-compiled.webp`)
+  - CC0 (public domain dedication) - Wikimedia Commons contributor
+  - Source: https://commons.wikimedia.org/wiki/File:MH370_Debris_compiled.png
+- **Boeing 777 wing flaperon (part 657BB) — reference photo** (`public/media/flaperon-657bb.webp`)
+  - Public domain - Wikimedia Commons (uploader Bruce C. Cooper)
+  - Source: https://commons.wikimedia.org/wiki/File:Boeing_777_Wing_Flaperon_(Part_No._657_BB).jpg
+- **Hydroacoustic candidate-event clip (Curtin CMST, HA01 / Perth region)** (`public/media/hydrophone-cmst.mp3`)
+  - Public domain (released by Curtin CMST; via Wikimedia Commons) - Curtin University Centre for Marine Science and Technology (CMST)
+  - Source: https://commons.wikimedia.org/wiki/File:MH370_Underwater_Sound.ogg
+- **Inmarsat-3 series satellite** (`public/media/inmarsat-3.webp`)
+  - Public domain (NASA) - NASA
+  - Source: https://commons.wikimedia.org/wiki/File:Inmarsat-3_crop.jpg
+- **ADV Ocean Shield deploying the Bluefin-21 AUV (April 2014)** (`public/media/ocean-shield-bluefin21.webp`)
+  - Public domain (U.S. federal government work) - U.S. Navy
+  - Source: https://commons.wikimedia.org/wiki/File:Ocean_Shield_deploys_the_Bluefin_21_underwater_vehicle.jpg
+- **Boeing 777 landing gear and flaps (REPRESENTATIVE - not the recovered MH370 part)** (`public/media/rep-777-gear-flaps.webp`)
+  - Public domain - Adrian Pingstone (Arpingstone), via Wikimedia Commons
+  - Source: https://commons.wikimedia.org/wiki/File:American_Airlines_Boeing_777-200ER_N788AN_landing_gear_and_flaps.jpg
+- **Primary surveillance radar antenna (REPRESENTATIVE)** (`public/media/rep-psr-radar.webp`)
+  - Public domain - US FAA, via Wikimedia Commons
+  - Source: https://commons.wikimedia.org/wiki/File:ASR-9_Radar_Antenna.jpg
+- **Secondary surveillance radar installation (REPRESENTATIVE)** (`public/media/rep-ssr-radar.webp`)
+  - CC0 - Lnbogoda, via Wikimedia Commons
+  - Source: https://commons.wikimedia.org/wiki/File:GBH_SSR_radar_installation.jpg
+- **Search operations — P-8A Poseidon crew scanning the water for debris (Mar 2014)** (`public/media/search-ops-p8a-poseidon.webp`)
+  - Public domain (U.S. federal government work) - U.S. Navy (MC2 Eric A. Pastor)
+  - Source: https://commons.wikimedia.org/wiki/File:Searches_the_water_for_debris_on_a_P-8A_Poseidon_during_a_mission_to_assist_in_search_and_rescue_operations_for_Malaysia_Airlines_flight_MH370_March_20_140320-N-XY761-105.jpg
+- **U.S. Navy Towed Pinger Locator (TPL-25)** (`public/media/tpl-25.webp`)
+  - Public domain (U.S. federal government work) - U.S. Navy
+  - Source: https://commons.wikimedia.org/wiki/File:Navy_Towed_Pinger_Locator.jpg

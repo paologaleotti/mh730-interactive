@@ -7,12 +7,14 @@ import debris from './debris.geojson.json'
 import pois from './pois.geojson.json'
 import searchAreas from './search-areas.geojson.json'
 import candidateSites from './candidate-sites.geojson.json'
+import epoch3 from './flight-epoch3.geojson.json'
 
 const featureIds = new Set([
   ...pois.features.map((f) => String(f.properties?.id)),
   ...debris.features.map((f) => String(f.properties?.id)),
   ...searchAreas.features.map((f) => String(f.properties?.id)),
   ...candidateSites.features.map((f) => String(f.properties?.id)),
+  ...epoch3.features.map((f) => String(f.properties?.id)),
   'epoch1',
   'epoch2',
   'hs1', 'hs2', 'hs3', 'hs4', 'hs5', 'hs6', 'hs7',

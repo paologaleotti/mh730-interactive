@@ -747,6 +747,7 @@ if (media) {
     ...(search?.campaigns ?? []).map((c) => c.id),
     ...(sites?.sites ?? []).map((s) => s.id),
     ...(satcom?.handshakes ?? []).map((h) => h.id),
+    ...(recon?.reconstructions ?? []).map((r) => r.id),
     'epoch1',
     'epoch2',
   ])
