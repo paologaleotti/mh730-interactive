@@ -107,6 +107,22 @@
       "methodology": "Piloted-flight reconstruction: constant FL300 / Mach 0.706 (ICAO holding speed) southern leg fitting all 7 arcs plus 3 extra Inmarsat constraints (02:28 (UTC+8) BTO + 02:40 (UTC+8)/07:14 (UTC+8) BFO), followed by a manual engine shutdown, APU-powered glide and controlled ditching south of the 7th arc. The POI is the northern end of a ~22 NM crash-zone segment; the reconstructed track is the captio-2022 Epoch 3 path.",
       "status": "partially-searched",
       "note": "The terminus of the CAPTIO reconstruction, ~55 NM SW of the UGIB LEP. Because CAPTIO model a powered glide PAST the 7th arc, the POI lies ~45 NM beyond (SW of) the arc - outside the classic 'within ~25 NM' constraint. Much of the surrounding 33-36 S band was covered by the failed 2025-26 Ocean Infinity search; CAPTIO propose a specific southern extension (see the captio-blelly-marchand-proposed search zone) they argue was not fully scanned."
+    },
+    {
+      "id": "dstg-2015-hotspot",
+      "name": "DSTG 2015 Bayesian hotspot (~38 deg S)",
+      "lat": -38.0,
+      "lon": 88.3,
+      "publishedBy": "Australian Defence Science and Technology Group (DSTG)",
+      "date": "2015-12-03",
+      "citation": {
+        "label": "DSTG, 'Bayesian Methods in the Search for MH370' (ATSB, 2015): posterior probability density along the 7th arc peaking near 38 deg S",
+        "url": "https://www.atsb.gov.au/sites/default/files/media/5733804/Bayesian_Methods_MH370_Search_3Dec2015.pdf"
+      },
+      "methodology": "Bayesian filter combining a radar-derived prior for the 02:22 (UTC+8) position and speed, an aircraft-dynamics motion model, and the Inmarsat BTO/BFO measurements at each handshake; the posterior probability density along the 7th arc peaks near 38 deg S at the 08:19 (UTC+8) final handshake. Longitude snapped to the rendered FL350 7th arc at that latitude.",
+      "status": "searched-2014-2017",
+      "note": "The formal statistical basis for the original ATSB priority zone. The 2014-17 wide underwater search covered this southern band and found nothing, which (together with drift modelling) shifted later estimates north: CSIRO ~35.6 deg S, UGIB ~34.2 deg S.",
+      "caveat": "model-dependent"
     }
   ]
 }

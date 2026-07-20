@@ -268,5 +268,29 @@
     "short": "Last words from the cockpit, at the KL-to-Ho-Chi-Minh ATC handoff, ~90 s before the transponder stopped.",
     "oneLiner": "At 01:19:30 (UTC+8) Kuala Lumpur Area Control told MH370 to contact Ho Chi Minh City radio on 120.9 MHz; the reply 'Good night, Malaysian Three Seven Zero' was the aircraft's last transmission. About 90 seconds later, near waypoint IGARI (01:21 UTC+8), the transponder ceased and the turnback began. The released ATC recording is third-party/copyrighted (no public-domain audio file exists), so it is linked rather than mirrored; the authoritative transcript is in the ICAO-hosted preliminary report.",
     "source": "ATC transcript: Malaysia MOT / ICAO Preliminary Report (2014), verified PDF HTTP 200; handoff frequency and wording per the released DCA ATC recording (May 2014). Retrieved 2026-07-17"
+  },
+  {
+    "id": "bedax",
+    "name": "Waypoint BEDAX",
+    "category": "waypoint",
+    "lat": 5.36433,
+    "lon": 93.78758,
+    "rank": 2,
+    "short": "Waypoint ~100 NM west of Banda Aceh. In the leading southern-route model (UGIB 2020) the aircraft turns due south here, its longitude (E93.79) coinciding with the 7th-arc crash estimate.",
+    "oneLiner": "Air-navigation waypoint about 100 NM west of Banda Aceh, Sumatra, near longitude E93.79. In the leading southern-route reconstructions (UGIB 2020) the final major turn ends at BEDAX and the aircraft then tracks due south (180 deg true, toward the South Pole) along this meridian to fuel exhaustion, so the waypoint's longitude coincides with the estimated 7th-arc impact longitude. It sits beyond the recorded radar epochs: a route-model anchor, not a recorded fix.",
+    "caveat": "model-dependent",
+    "source": "OpenNav / mh370wiki.net Waypoints (BEDAX 5.364330N 93.78758E, ~100 NM west of Banda Aceh); role as final-major-turn / due-south anchor per UGIB 2020, 'The Final Resting Place of MH370' (mh370.radiantphysics.com/papers). Retrieved 2026-07-17"
+  },
+  {
+    "id": "zaharie-sim-sio-endpoint",
+    "name": "Captain's home-simulator southern-Indian-Ocean endpoint (recovered sim data)",
+    "category": "event",
+    "lat": -45.0,
+    "lon": 104.0,
+    "rank": 2,
+    "short": "Deleted data recovered from Captain Zaharie's home flight simulator held a saved session up the Malacca Strait then deep into the southern Indian Ocean, ending near here with fuel exhausted. Significance contested.",
+    "oneLiner": "FBI/RMP forensics recovered deleted Microsoft Flight Simulator files (reconstructed from a 3 Feb 2014 volume shadow copy, about five weeks before the flight) from Captain Zaharie Ahmad Shah's home simulator. The saved points ran northwest up the Malacca Strait, turned south, and ended in the deep southern Indian Ocean; the final points (labelled 45S1/45S2) lie near 45 deg S 104 deg E with the simulated altitude manually set low and the fuel exhausted. It is the only documented instance of the captain simulating a southern-ocean flight to fuel exhaustion, central to the human-intervention hypothesis, but the saved points are a discontinuous manual simulation, not a flight plan or a recorded track, and their significance is contested.",
+    "caveat": "contested",
+    "source": "RMP forensic report as detailed by the ATSB and reported by Simon Hradecky (Aviation Herald) / FlightGlobal, 2016; recovered simulator points 45S1/45S2 near 45S 104E. Cross-check: 'The Atlantic' (William Langewiesche, 2019) and New York Magazine coverage of the RMP simulator data. Coordinates are simulator artifacts, not a claimed impact point. Retrieved 2026-07-17"
   }
 ]

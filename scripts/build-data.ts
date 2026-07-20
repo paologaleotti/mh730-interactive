@@ -9,7 +9,8 @@ import { readFileSync, writeFileSync, existsSync } from 'node:fs'
 import { join, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { distEcef, btoRing, rangeFromBto, type Ecef } from '../src/lib/geo.ts'
-import { DataPointSchema } from '../src/data/data-point.ts'
+import { DataPointSchema, ArcFitSchema } from '../src/data/data-point.ts'
+import type { ZodType } from 'zod'
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 const rawDir = join(root, 'data')
@@ -88,9 +89,13 @@ const readRaw = <T>(name: string): T | null => {
 // Write a FeatureCollection, validating every feature's properties against the
 // shared DataPoint schema first. A shape/enum/rename drift throws here and fails
 // the build - the same schema the app parses these files back with at load.
-const writeOut = (name: string, features: { properties: unknown }[]) => {
+const writeOut = (
+  name: string,
+  features: { properties: unknown }[],
+  schema: ZodType = DataPointSchema,
+) => {
   features.forEach((f, i) => {
-    const r = DataPointSchema.safeParse(f.properties)
+    const r = schema.safeParse(f.properties)
     if (!r.success) fail(`${name} feature ${i}: ${r.error.issues.map((x) => `${x.path.join('.')} ${x.message}`).join('; ')}`)
   })
   writeFileSync(join(outDir, name), JSON.stringify({ type: 'FeatureCollection', features }))
@@ -197,7 +202,72 @@ const ARC_NAMES: Record<string, { name: string; desc: string }> = {
   },
 }
 
-const buildArcs = (satcom: SatcomJson) => {
+// The whole ring is a locus; the aircraft sat at one point on it. BFO resolved
+// the southern hemisphere, and the published southern-route reconstructions,
+// each independently forced to satisfy every BTO/BFO measurement, pin WHERE on
+// each ring the aircraft was at that handshake's clock time. Their spread is the
+// honest along-track uncertainty: wide right after the turn south, narrowing to
+// a tight band on the 7th arc. The contested WSPR/GDTAAA track is excluded so a
+// disputed path never widens the "likely position" band.
+const FIT_RECON_IDS = ['ashton-2015', 'ugib-2020', 'captio-2022']
+// Ring padding each side of the reconstruction spread (0.1 deg azimuth per step,
+// so ~0.8 deg total visual margin), just enough to keep a tight cluster legible
+// without materially overstating the reported convergence band.
+const FIT_PAD_STEPS = 4
+
+const r4 = (n: number) => Math.round(n * 10_000) / 10_000
+
+interface TimedPoint {
+  t: number
+  lat: number
+  lon: number
+}
+
+// A reconstruction's timed vertices, parsed + sorted once (reused across every
+// handshake) so posAtTime does no per-call parsing or sorting.
+const toTimed = (points: { timeUtc: string | null; lat: number; lon: number }[]): TimedPoint[] =>
+  points
+    .filter((p) => p.timeUtc !== null)
+    .map((p) => ({ t: Date.parse(p.timeUtc ?? ''), lat: p.lat, lon: p.lon }))
+    .sort((a, b) => a.t - b.t)
+
+// Aircraft position at an epoch, linearly interpolated along a timed
+// reconstruction polyline. Null if the epoch is outside the covered interval.
+const posAtTime = (timed: TimedPoint[], isoTime: string): [number, number] | null => {
+  if (timed.length < 2) return null
+  // Reconstruction points are tabulated to whole seconds at the nominal handshake
+  // times; a 2 s boundary tolerance absorbs sub-second rounding (00:19:29 vs a
+  // 00:19:29.416 epoch) without ever clamping to a point the track never reached.
+  const TOL_MS = 2_000
+  const raw = Date.parse(isoTime)
+  if (raw < timed[0].t - TOL_MS || raw > timed[timed.length - 1].t + TOL_MS) return null
+  const t = Math.min(Math.max(raw, timed[0].t), timed[timed.length - 1].t)
+  const i = timed.findIndex((p) => p.t >= t)
+  const b = timed[i]
+  if (i === 0 || b.t === t) return [b.lon, b.lat]
+  const a = timed[i - 1]
+  const s = (t - a.t) / (b.t - a.t)
+  return [a.lon + (b.lon - a.lon) * s, a.lat + (b.lat - a.lat) * s]
+}
+
+// Index of the ring vertex nearest a point (equirectangular metric; the ring is
+// dense enough that vertex snapping stays well below the display precision). One
+// distance evaluation per vertex.
+const nearestRingIndex = (ring: [number, number][], [lon, lat]: [number, number]): number => {
+  const cos = Math.cos((lat * Math.PI) / 180)
+  const d2 = ([rlon, rlat]: [number, number]) => ((rlon - lon) * cos) ** 2 + (rlat - lat) ** 2
+  return ring.reduce(
+    (best, p, i) => {
+      const d = d2(p)
+      return d < best.d ? { i, d } : best
+    },
+    { i: 0, d: d2(ring[0]) },
+  ).i
+}
+
+const hemi = (lat: number) => `${Math.abs(lat).toFixed(1)}°${lat < 0 ? 'S' : 'N'}`
+
+const buildArcs = (satcom: SatcomJson, reconstructions: Reconstruction[]) => {
   const { biasUs } = satcom.btoModel
   if (!Number.isFinite(biasUs)) fail('satcom: biasUs missing')
   // Published ECEF for the Perth GES (Ashton Table 2); no altitude published.
@@ -207,11 +277,22 @@ const buildArcs = (satcom: SatcomJson) => {
   const ephemeris = [...satcom.satelliteEphemeris.rows].sort((a, b) =>
     a.timeUtc.localeCompare(b.timeUtc),
   )
-  const features = satcom.handshakes
+  const fitRecons = reconstructions
+    .filter((r) => FIT_RECON_IDS.includes(r.id))
+    .map((r) => ({ id: r.id, timed: toTimed(r.points) }))
+  // Reconstructions present but none matched the hardcoded id list -> drift; fail
+  // loudly rather than silently emit an empty arc-fit.geojson. (An entirely
+  // absent reconstructions.json is a separate, already-warned missing input.)
+  if (reconstructions.length && !fitRecons.length) {
+    fail(`arc-fit: none of FIT_RECON_IDS [${FIT_RECON_IDS.join(', ')}] match the ${reconstructions.length} reconstructions - id drift?`)
+  }
+
+  const built = satcom.handshakes
     .filter((h) => !h.excluded)
-    .flatMap((h) => {
+    .map((h) => {
       const bto = h.btoCorrectedUs ?? fail(`handshake ${h.id}: btoCorrectedUs missing`)
-      const sat = satelliteAt(ephemeris, h.timeUtcExact ?? h.timeUtc)
+      const time = h.timeUtcExact ?? h.timeUtc
+      const sat = satelliteAt(ephemeris, time)
       const dDown = distEcef(sat, ges)
       const range = rangeFromBto(bto, biasUs, dDown)
       if (range < 36_000_000 || range > 40_000_000) {
@@ -220,13 +301,10 @@ const buildArcs = (satcom: SatcomJson) => {
       // 0.1 deg azimuth step ~ 70 km spacing on the ring; coordinates rounded
       // to 4 dp (~11 m), an order of magnitude below the data's precision.
       const ring = btoRing(sat, range, RING_ALT_M, 0.1).map(
-        ([lon, lat]): [number, number] => [
-          Math.round(lon * 10_000) / 10_000,
-          Math.round(lat * 10_000) / 10_000,
-        ],
+        ([lon, lat]): [number, number] => [r4(lon), r4(lat)],
       )
       const hourLabel = localHM(h.timeUtc)
-      return clipToBbox(ring).map((coords) => ({
+      const arcs = clipToBbox(ring).map((coords) => ({
         type: 'Feature',
         geometry: { type: 'LineString', coordinates: coords },
         properties: {
@@ -242,9 +320,55 @@ const buildArcs = (satcom: SatcomJson) => {
           confidence: 'derived',
         },
       }))
+
+      // Bolder "likely position" sub-segment: where the credible southern-route
+      // reconstructions place the aircraft on this ring at this clock time.
+      // Anchor on the nominal handshake second (reconstruction tables are keyed
+      // to it), not the sub-second exact epoch used for the ring geometry.
+      const hits = fitRecons
+        .map((r) => ({ id: r.id, pos: posAtTime(r.timed, h.timeUtc) }))
+        .filter((x) => x.pos !== null)
+      // A fit reconstruction set exists but none covers this handshake time ->
+      // coverage gap/drift; fail loudly instead of dropping the ring's band.
+      if (fitRecons.length && !hits.length) {
+        fail(`arc-fit ${h.id}: no fit reconstruction covers ${h.timeUtc}`)
+      }
+      const anchors = hits.map((x) => x.pos ?? [0, 0])
+      const idxs = anchors.map((p) => nearestRingIndex(ring, p))
+      const lats = anchors.map((p) => p[1]).sort((a, b) => a - b)
+      const [latLo, latHi] = [lats[0], lats[lats.length - 1]]
+      const fits = idxs.length
+        ? clipToBbox(
+            ring.slice(
+              Math.max(0, Math.min(...idxs) - FIT_PAD_STEPS),
+              Math.min(ring.length, Math.max(...idxs) + FIT_PAD_STEPS + 1),
+            ),
+          ).map((coords) => ({
+            type: 'Feature',
+            geometry: { type: 'LineString', coordinates: coords },
+            properties: {
+              kind: 'arc-fit',
+              id: `${h.id}-fit`,
+              refId: h.id,
+              label: `${h.id.toUpperCase()} ${hourLabel} (UTC+8) · likely position`,
+              name: `${ARC_NAMES[h.id]?.name ?? h.id}: likely aircraft position`,
+              desc:
+                `The credible southern-route reconstructions (${hits.map((x) => x.id).join(', ')}) ` +
+                `converge on ~${hemi(latLo)} to ${hemi(latHi)} on the ${hourLabel} (UTC+8) ring; ` +
+                `the bold stretch marks that likely aircraft position (drawn with a small margin ` +
+                `for legibility). The band tightens toward the 7th arc as the along-track solution firms up.`,
+              timeUtc: h.timeUtc,
+              latBand: [r4(latLo), r4(latHi)],
+              reconIds: hits.map((x) => x.id),
+              confidence: 'derived',
+            },
+          }))
+        : []
+      return { arcs, fits }
     })
 
-  writeOut('arcs.geojson.json', features)
+  writeOut('arcs.geojson.json', built.flatMap((b) => b.arcs))
+  writeOut('arc-fit.geojson.json', built.flatMap((b) => b.fits), ArcFitSchema)
 }
 
 // ---------------------------------------------------- auxiliary arcs (CAPTIO)
@@ -715,16 +839,17 @@ const buildMedia = (
 
 // ---------------------------------------------------------------- main
 
+const recon = readRaw<{ reconstructions: Reconstruction[] }>('reconstructions.json')
+
 const satcom = readRaw<SatcomJson>('satcom.json')
 if (satcom) {
-  buildArcs(satcom)
+  buildArcs(satcom, recon?.reconstructions ?? [])
   buildAuxArcs(satcom)
 }
 
 const track = readRaw<{ epoch1: TrackPoint[]; epoch2: TrackPoint[] }>('flight-track.json')
 if (track) buildTrack(track)
 
-const recon = readRaw<{ reconstructions: Reconstruction[] }>('reconstructions.json')
 if (recon) buildReconstructions(recon)
 
 const debris = readRaw<{ items: DebrisItem[] }>('debris.json')

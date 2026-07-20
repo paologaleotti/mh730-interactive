@@ -4,6 +4,7 @@
 
 import { describe, it, expect } from 'vitest'
 import arcs from './arcs.geojson.json'
+import arcFit from './arc-fit.geojson.json'
 import auxArcs from './aux-arcs.geojson.json'
 import epoch1 from './flight-epoch1.geojson.json'
 import epoch2 from './flight-epoch2.geojson.json'
@@ -23,6 +24,7 @@ const lineCoords = (f: Feature): [number, number][] =>
 describe('discriminant + reshaped properties', () => {
   const byKind = [
     { kind: 'arc', fc: arcs },
+    { kind: 'arc-fit', fc: arcFit },
     { kind: 'aux', fc: auxArcs },
     { kind: 'epoch1', fc: epoch1 },
     { kind: 'epoch2', fc: epoch2 },
@@ -76,6 +78,7 @@ describe('discriminant + reshaped properties', () => {
 describe('feature ids (highlight + deep-link reliability)', () => {
   const collections = [
     { label: 'arcs', fc: arcs },
+    { label: 'arc-fit', fc: arcFit },
     { label: 'epoch1', fc: epoch1 },
     { label: 'epoch2', fc: epoch2 },
     { label: 'epoch3', fc: epoch3 },
@@ -108,6 +111,7 @@ describe('display-grade properties (every clickable feature)', () => {
   it('every feature carries a human-readable name/partId and a description', () => {
     const collections = [
       { label: 'arcs', fc: arcs },
+      { label: 'arc-fit', fc: arcFit },
       { label: 'epoch1', fc: epoch1 },
       { label: 'epoch2', fc: epoch2 },
       { label: 'epoch3', fc: epoch3 },
@@ -181,6 +185,61 @@ describe('arcs.geojson', () => {
         expect(lon).toBeGreaterThanOrEqual(20)
         expect(lon).toBeLessThanOrEqual(150)
       }
+    }
+  })
+})
+
+describe('arc-fit.geojson (likely-position bands)', () => {
+  const bandOf = (refId: string): [number, number] => {
+    const f = arcFit.features.find((x) => x.properties?.refId === refId)
+    const band = f?.properties?.latBand
+    expect(Array.isArray(band), `${refId}: missing latBand`).toBe(true)
+    return band
+  }
+
+  it('carries one likely-position band per handshake, keyed to its ring', () => {
+    const refs = arcFit.features.map((f) => f.properties?.refId).sort()
+    expect(refs).toEqual(['hs1', 'hs2', 'hs3', 'hs4', 'hs5', 'hs6', 'hs7'])
+    for (const f of arcFit.features) {
+      const p = f.properties ?? {}
+      expect(p.id).toBe(`${p.refId}-fit`)
+      const band = p.latBand
+      expect(band[0]).toBeLessThanOrEqual(band[1])
+      expect(Array.isArray(p.reconIds)).toBe(true)
+      expect(p.reconIds.length).toBeGreaterThanOrEqual(1)
+    }
+  })
+
+  it('every band vertex lies on its parent ring (sliced from the same geometry)', () => {
+    for (const f of arcFit.features) {
+      const ring = arcs.features.find((a) => a.properties?.id === f.properties?.refId)
+      const ringSet = new Set(lineCoords(ring ?? f).map(([lon, lat]) => `${lon},${lat}`))
+      for (const [lon, lat] of lineCoords(f)) {
+        expect(ringSet.has(`${lon},${lat}`), `${f.properties?.id}: vertex off-ring`).toBe(true)
+      }
+    }
+  })
+
+  it('the band tightens toward the 7th arc (along-track solution firms up)', () => {
+    const width = (refId: string) => {
+      const b = bandOf(refId)
+      return b[1] - b[0]
+    }
+    // Early, post-turn rings are loosely constrained; the 7th arc is the tight one.
+    expect(width('hs7')).toBeLessThan(width('hs2'))
+    expect(width('hs7')).toBeLessThan(1) // sub-degree LEP band
+  })
+
+  it('the 7th-arc band brackets the published UGIB LEP latitude (34.2342 S)', () => {
+    const b = bandOf('hs7')
+    expect(b[0]).toBeLessThanOrEqual(-34.2342)
+    expect(b[1]).toBeGreaterThanOrEqual(-34.2342)
+  })
+
+  it('excludes the contested WSPR/GDTAAA track from every band', () => {
+    for (const f of arcFit.features) {
+      const ids = f.properties?.reconIds ?? []
+      expect(ids).not.toContain('wspr-gdtaaa-2023')
     }
   })
 })

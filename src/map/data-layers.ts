@@ -6,6 +6,7 @@
 
 import maplibregl from 'maplibre-gl'
 import arcs from '../data/arcs.geojson.json'
+import arcFit from '../data/arc-fit.geojson.json'
 import auxArcs from '../data/aux-arcs.geojson.json'
 import epoch1 from '../data/flight-epoch1.geojson.json'
 import epoch2 from '../data/flight-epoch2.geojson.json'
@@ -31,6 +32,7 @@ const C = {
   recordedDim: '#b7c2cc',
   derived: '#c9a35b',
   arcHi: '#e8c987',
+  arcFitHi: '#f4d58d',
   auxArc: '#5fb89a',
   green: '#6faf7d',
   amber: '#c9a35b',
@@ -44,7 +46,7 @@ export const REGISTRY_TO_MAP_LAYERS: Record<string, string[]> = {
   'flight-epoch1': ['mh-epoch1'],
   'flight-epoch2': ['mh-epoch2'],
   'flight-epoch3': ['mh-epoch3', 'mh-epoch3-labels'],
-  arcs: ['mh-arcs', 'mh-arc7', 'mh-arc-labels', 'mh-arc7-label'],
+  arcs: ['mh-arcs', 'mh-arc-fit', 'mh-arc7', 'mh-arc7-fit', 'mh-arc-labels', 'mh-arc7-label'],
   'aux-arcs': ['mh-aux-arcs', 'mh-aux-labels'],
   search: ['mh-search-fill', 'mh-search-line', 'mh-search-labels'],
   debris: ['mh-debris', 'mh-debris-labels'],
@@ -176,6 +178,7 @@ export const registerDataLayers = (map: maplibregl.Map): void => {
       '<a href="https://registry.opendata.aws/terrain-tiles/" target="_blank" rel="noopener">Terrain Tiles (ETOPO1/SRTM)</a>',
   })
   addSourceOnce(map, 'mh-arcs', { type: 'geojson', data: arcs })
+  addSourceOnce(map, 'mh-arc-fit', { type: 'geojson', data: arcFit })
   addSourceOnce(map, 'mh-aux-arcs', { type: 'geojson', data: auxArcs })
   addSourceOnce(map, 'mh-epoch1', { type: 'geojson', data: epoch1 })
   addSourceOnce(map, 'mh-epoch2', { type: 'geojson', data: epoch2 })
@@ -275,6 +278,21 @@ export const registerDataLayers = (map: maplibregl.Map): void => {
       'line-opacity': 0.6,
     },
   })
+  // Bolder "likely position" band on HS1-HS6: where the credible southern-route
+  // reconstructions converge on each ring (solid + brighter, over the dashed
+  // context ring). Purely visual; the dashed ring underneath stays clickable.
+  map.addLayer({
+    id: 'mh-arc-fit',
+    type: 'line',
+    source: 'mh-arc-fit',
+    filter: ['!=', ['get', 'refId'], 'hs7'],
+    layout: { 'line-cap': 'round', 'line-join': 'round' },
+    paint: {
+      'line-color': C.arcHi,
+      'line-width': ['interpolate', ['linear'], ['zoom'], 1, 2.2, 6, 4.5],
+      'line-opacity': 0.95,
+    },
+  })
   map.addLayer({
     id: 'mh-arc7',
     type: 'line',
@@ -285,6 +303,20 @@ export const registerDataLayers = (map: maplibregl.Map): void => {
       'line-width': ['interpolate', ['linear'], ['zoom'], 1, 2, 6, 3.5],
       'line-dasharray': [4, 2],
       'line-opacity': 0.95,
+    },
+  })
+  // The 7th-arc likely-position band: the tightest, most-studied stretch (the
+  // LEP zone every deep search has followed). Boldest line on the map.
+  map.addLayer({
+    id: 'mh-arc7-fit',
+    type: 'line',
+    source: 'mh-arc-fit',
+    filter: ['==', ['get', 'refId'], 'hs7'],
+    layout: { 'line-cap': 'round', 'line-join': 'round' },
+    paint: {
+      'line-color': C.arcFitHi,
+      'line-width': ['interpolate', ['linear'], ['zoom'], 1, 2.4, 6, 4.2],
+      'line-opacity': 0.92,
     },
   })
   map.addLayer({

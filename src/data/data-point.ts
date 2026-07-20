@@ -165,6 +165,25 @@ const Epoch3 = z.object({
   confidence: z.literal('modelled'),
 })
 
+// Visual-emphasis geometry, NOT a clickable DataPoint (deliberately outside the
+// union so exhaustive matches over selectable kinds stay closed). The bolder
+// sub-segment of a handshake ring where the credible southern-route
+// reconstructions converge: the aircraft's likely along-track position at that
+// clock time. build-data validates arc-fit.geojson against this; the ring below
+// carries the interactive Arc detail.
+export const ArcFitSchema = z.object({
+  kind: z.literal('arc-fit'),
+  id: z.string(),
+  refId: z.string(),
+  label: z.string(),
+  name: z.string(),
+  desc: z.string(),
+  timeUtc: z.string(),
+  latBand: z.tuple([z.number(), z.number()]),
+  reconIds: z.array(z.string()),
+  confidence: z.literal('derived'),
+})
+
 export const DataPointSchema = z.discriminatedUnion('kind', [
   Poi,
   Debris,

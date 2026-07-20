@@ -66,7 +66,7 @@ export const LAYERS: LayerDef[] = [
     id: 'arcs',
     label: 'Inmarsat arcs (HS1–HS7)',
     group: 'Satellite',
-    desc: 'Seven BTO-derived handshake rings. The 7th arc constrains every search area.',
+    desc: 'Seven BTO-derived handshake rings. The bold stretch on each marks where the credible southern-route reconstructions place the aircraft; it tightens to a sub-degree band on the 7th arc, which constrains every search area.',
     confidence: 'derived',
     citation: {
       label: 'Ashton et al. 2015 (J. Navigation, open access)',
